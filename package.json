@@ -1,0 +1,10 @@
+{
+  "name": "la-expedicion",
+  "version": "8.0.0",
+  "private": true,
+  "type": "module",
+  "description": "La Expedición - refuerzo matemático con NOVA y suscripción mensual por Mercado Pago",
+  "engines": {
+    "node": ">=20"
+  }
+}

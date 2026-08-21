@@ -1,0 +1,674 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#07112f" />
+  <title>La Expedición | Refuerzo de Matemáticas</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <section id="accessGate" class="access-gate" aria-label="Acceso familiar">
+    <div class="access-shell">
+      <div class="access-brand">
+        <div class="access-logo">÷</div>
+        <div>
+          <p class="eyebrow">LA EXPEDICIÓN</p>
+          <h1>Aprender jugando,<br><span>con progreso visible.</span></h1>
+        </div>
+      </div>
+
+      <p class="access-lead">
+        Una experiencia de refuerzo de matemáticas para que cada niño practique a su ritmo,
+        reciba ayuda de NOVA y avance por misiones.
+      </p>
+
+      <div class="access-plan">
+        <div>
+          <span>PLAN FAMILIAR</span>
+          <strong id="subscriptionPrice">$24.900 <small>COP / mes</small></strong>
+        </div>
+        <ul>
+          <li>✓ Acceso a la Expedición y la Academia</li>
+          <li>✓ NOVA como tutor durante la práctica</li>
+          <li>✓ Progreso guardado en este dispositivo</li>
+        </ul>
+      </div>
+
+      <form id="subscriptionForm" class="access-form">
+        <label>
+          <span>Correo del adulto</span>
+          <input id="parentEmailInput" type="email" inputmode="email" autocomplete="email" maxlength="120"
+            placeholder="adulto@correo.com" required />
+        </label>
+        <label>
+          <span>Nombre del niño</span>
+          <input id="childNameInput" type="text" autocomplete="off" maxlength="28"
+            placeholder="Ej.: Mateo" required />
+        </label>
+        <button id="subscribeBtn" class="access-primary" type="submit">
+          Suscribirme con Mercado Pago
+        </button>
+      </form>
+
+      <button id="verifySubscriptionBtn" class="access-secondary" type="button" hidden>
+        Ya pagué · verificar acceso
+      </button>
+
+      <div id="accessStatus" class="access-status" role="status" aria-live="polite"></div>
+
+      <div class="access-divider"><span>pruebas internas</span></div>
+
+      <button id="ownerAccessBtn" class="access-owner-btn" type="button">🧪 Entrar como adulto</button>
+      <form id="ownerPinForm" class="access-owner-form" hidden>
+        <input id="ownerPinInput" type="password" inputmode="numeric" maxlength="6" placeholder="Clave de pruebas" />
+        <button type="submit">Entrar</button>
+      </form>
+
+      <p class="access-note">
+        El pago se procesa en Mercado Pago. La Expedición nunca recibe ni almacena los datos de tu tarjeta.
+      </p>
+    </div>
+  </section>
+
+
+  <section id="learningHub" class="learning-hub" hidden aria-label="Materias">
+    <div class="hub-shell">
+      <header class="hub-head">
+        <div>
+          <p class="eyebrow">LA EXPEDICIÓN</p>
+          <h1>Hola, <span id="hubChildName">Explorador</span> 👋</h1>
+          <p>¿Qué quieres reforzar hoy?</p>
+        </div>
+        <button id="hubSettingsBtn" class="icon-btn" type="button" aria-label="Abrir configuración">⚙️</button>
+      </header>
+
+      <div class="subject-grid">
+        <button id="mathSubjectBtn" class="subject-card subject-card-active" type="button">
+          <span class="subject-icon">➗</span>
+          <span class="subject-copy">
+            <small>DISPONIBLE</small>
+            <strong>Matemáticas</strong>
+            <em>Misiones, división y Academia con NOVA</em>
+          </span>
+          <span class="subject-arrow">→</span>
+        </button>
+
+        <article class="subject-card subject-card-soon">
+          <span class="subject-icon">📖</span>
+          <span class="subject-copy">
+            <small>PRÓXIMAMENTE</small>
+            <strong>Lenguaje</strong>
+            <em>Lectura, comprensión y escritura</em>
+          </span>
+        </article>
+
+        <article class="subject-card subject-card-soon">
+          <span class="subject-icon">🔬</span>
+          <span class="subject-copy">
+            <small>PRÓXIMAMENTE</small>
+            <strong>Ciencias</strong>
+            <em>Explorar, observar y comprender</em>
+          </span>
+        </article>
+      </div>
+
+      <section class="hub-note">
+        <span>✨</span>
+        <p><strong>Una sola suscripción.</strong> Las nuevas materias se podrán sumar aquí sin cambiar la Expedición que ya funciona.</p>
+      </section>
+    </div>
+  </section>
+
+
+  <div class="stars" aria-hidden="true"></div>
+
+  <section id="intro" class="intro" aria-label="Introducción a la expedición">
+    <div class="intro-orbit orbit-one"></div>
+    <div class="intro-orbit orbit-two"></div>
+    <div class="intro-card">
+      <div class="intro-badge">⚡ MENSAJE URGENTE DEL ATLAS</div>
+      <div class="intro-atlas" aria-hidden="true">
+        <span>🦎</span><span>🐙</span><span>🦊</span><span>🦈</span><span>🐧</span>
+        <div class="atlas-core">÷</div>
+      </div>
+      <p class="intro-kicker"><span id="introChildName">EXPLORADOR</span>...</p>
+      <h1>El Atlas Animal<br><span>te necesita.</span></h1>
+      <p class="intro-copy">
+        Una tormenta de números cerró los caminos que conectan los hábitats del planeta.
+        Cada puerta esconde un <strong>código de división</strong> y una criatura con secretos sobre su vida esperándote.
+      </p>
+      <div class="intro-mission">
+        <span>Tu misión</span>
+        <strong>Resolver • Descubrir • Aprender • Avanzar</strong>
+      </div>
+      <p class="intro-promise">No hay cronómetro. Puedes probar, pedir pistas y volver a intentarlo.</p>
+      <button id="startBtn" class="start-btn">🚀 Entrar al Atlas</button>
+      <button id="skipIntroBtn" class="intro-text-btn">Ya conozco la misión</button>
+    </div>
+  </section>
+
+  <main id="app" class="app-shell" hidden>
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">LA EXPEDICIÓN</p>
+        <h1>Atlas Animal</h1>
+      </div>
+      <div class="top-actions">
+        <button id="fieldGuideBtn" class="icon-btn" aria-label="Abrir bestiario">📖</button>
+        <button id="mapBtn" class="icon-btn" aria-label="Ver ruta de mundos">🗺️</button>
+        <button id="settingsBtn" class="icon-btn" aria-label="Abrir configuración">⚙️</button>
+      </div>
+    </header>
+
+    <section class="world-strip" aria-label="Mundo actual">
+      <div class="world-icon" id="worldIcon">🌿</div>
+      <div>
+        <p id="chapterText">CAPÍTULO 1</p>
+        <strong id="worldName">Bosque de los Repartos</strong>
+      </div>
+      <span id="worldProgress">1/6</span>
+    </section>
+
+    <section class="hero-card" aria-labelledby="missionTitle">
+      <div class="hero-copy">
+        <span class="pill">Misión <span id="missionNumber">1</span> de <span id="missionTotal">36</span></span>
+        <h2 id="missionTitle">El primer código</h2>
+        <p id="missionPrompt">El Atlas está buscando una señal...</p>
+        <div class="story-line" id="storyLine"></div>
+      </div>
+      <button id="animalCardBtn" class="mission-animal" type="button" aria-label="Conocer al animal de esta misión">
+        <span class="animal-role">GUARDIÁN</span>
+        <span id="animalEmoji" class="animal-visual">🦎</span>
+        <small id="animalName">Gecko</small>
+        <span class="animal-learn">🔎 Conóceme</span>
+      </button>
+    </section>
+
+    <section class="progress-wrap" aria-label="Progreso del explorador">
+      <div class="progress-label"><span>Atlas recuperado</span><strong id="progressText">0%</strong></div>
+      <div class="progress-track"><div id="progressBar" class="progress-bar"></div></div>
+    </section>
+
+    <section id="gameArea" class="game-card" aria-live="polite"></section>
+
+    <section class="actions">
+      <button id="hintBtn" class="secondary-btn">💡 Pista</button>
+      <button id="aiTutorBtn" class="secondary-btn ai-btn">💬 Preguntar a NOVA</button>
+      <button id="checkBtn" class="primary-btn">Comprobar</button>
+    </section>
+
+    <section id="aiTutorCard" class="ai-tutor-card" hidden>
+      <div class="ai-tutor-head">
+        <div class="nova-orb">N</div>
+        <div>
+          <p class="eyebrow">NOVA · TU TUTOR</p>
+          <strong id="aiTutorTitle">Estoy aquí</strong>
+        </div>
+        <span id="aiStatus" class="ai-status">LISTO</span>
+      </div>
+
+      <div id="aiTutorChat" class="tutor-chat" aria-live="polite" aria-label="Conversación con NOVA">
+        <div class="tutor-message nova-message">
+          <span>NOVA</span>
+          <p>Pregúntame, yo puedo ayudarte.</p>
+        </div>
+      </div>
+
+      <div class="tutor-quick-actions" aria-label="Formas rápidas de pedir ayuda">
+        <button type="button" data-tutor-prompt="No entiendo cómo empezar esta división." data-reason="help">No entiendo</button>
+        <button type="button" data-tutor-prompt="Muéstramelo con objetos o grupos." data-reason="visual">🧩 Con objetos</button>
+        <button type="button" data-tutor-prompt="Dame solamente el siguiente paso." data-reason="step">Un paso</button>
+        <button type="button" data-tutor-prompt="Explícamelo de otra forma." data-reason="another">Otra forma</button>
+      </div>
+
+      <form id="aiTutorForm" class="tutor-input-row">
+        <label for="aiTutorInput" class="sr-only">Pregúntale a NOVA</label>
+        <input id="aiTutorInput" type="text" maxlength="180" autocomplete="off" placeholder="Ej.: ¿Por qué tengo que repartir entre 2?" />
+        <button id="aiTutorSendBtn" type="submit">Enviar</button>
+      </form>
+    </section>
+
+    <section class="reward-card" id="rewardCard" hidden>
+      <div class="reward-animal" id="rewardEmoji">✨</div>
+      <div class="reward-copy">
+        <p class="eyebrow">CRIATURA DESBLOQUEADA</p>
+        <h3 id="rewardTitle">¡Código recuperado!</h3>
+        <p id="rewardText"></p>
+
+        <div id="novaFeedbackCard" class="nova-feedback-card" aria-live="polite">
+          <div class="nova-feedback-head">
+            <div class="nova-mini-orb">N</div>
+            <div>
+              <span>NOVA · LO QUE ACABAS DE DESCUBRIR</span>
+              <strong id="novaFeedbackStatus">Preparando la idea...</strong>
+            </div>
+          </div>
+          <p id="novaFeedbackText">NOVA está conectando esta misión con la lógica de dividir.</p>
+        </div>
+
+        <div id="nextTeaser" class="next-teaser" hidden></div>
+
+        <div class="fact-chip"><span>🔎 Dato animal</span><strong id="animalFact"></strong></div>
+        <div class="field-card" id="fieldCard">
+          <div class="field-card-head"><span>📋 FICHA DE CAMPO</span><strong id="fieldAnimalName"></strong></div>
+          <div class="field-grid">
+            <div><span>¿QUÉ ES?</span><strong id="profileType"></strong></div>
+            <div><span>¿DÓNDE VIVE?</span><strong id="profileHabitat"></strong></div>
+            <div><span>¿QUÉ COME?</span><strong id="profileDiet"></strong></div>
+            <div><span>SUPERPODER</span><strong id="profilePower"></strong></div>
+          </div>
+        </div>
+
+        <button id="rewardNextBtn" class="reward-next-btn" type="button">Descubrir siguiente misión →</button>
+      </div>
+    </section>
+
+    <section id="finalCard" class="final-card" hidden>
+      <div class="final-glow"></div>
+      <div class="final-icon">🏆</div>
+      <p class="eyebrow">ATLAS RESTAURADO</p>
+      <h2>¡<span id="finalChildName">Explorador</span>, completaste la expedición!</h2>
+      <p>Recuperaste los 36 códigos y atravesaste todos los hábitats. El Atlas Animal vuelve a estar conectado.</p>
+      <div class="final-actions">
+        <button id="notebookStartBtn" class="primary-btn notebook-launch-btn">🎓 Entrar a la Academia de División</button>
+        <button id="replayBtn" class="secondary-btn">Volver a explorar</button>
+      </div>
+    </section>
+
+
+    <section id="notebookModule" class="notebook-module academy-module" hidden>
+      <div class="notebook-top academy-top">
+        <button id="notebookBackBtn" class="notebook-back-btn" type="button">← Atlas</button>
+        <div>
+          <p class="eyebrow">AVENTURA 2</p>
+          <h2>Academia de División con NOVA</h2>
+        </div>
+        <button id="academyHomeBtn" class="notebook-back-btn academy-home-btn" type="button" hidden>⌂ Academia</button>
+      </div>
+
+      <section id="academyHome" class="academy-home">
+        <section class="academy-welcome">
+          <div class="academy-welcome-orb">N</div>
+          <div>
+            <p class="eyebrow">NOVA · PLAN DE ENTRENAMIENTO</p>
+            <h3>Vamos a fortalecer cada pieza de la división</h3>
+            <p>No todas las dificultades son iguales. Practicaremos una habilidad a la vez y NOVA irá detectando cuáles necesitan más entrenamiento.</p>
+          </div>
+        </section>
+
+        <section class="academy-status-card">
+          <div>
+            <span>PROGRESO DE HABILIDADES</span>
+            <strong id="academyMasteryText">Empezando</strong>
+          </div>
+          <div class="academy-status-bar"><div id="academyMasteryBar"></div></div>
+          <p id="academyRecommendation">Empieza por “¿Cuántas veces cabe?” y después practica la división en el cuaderno.</p>
+        </section>
+
+        <div id="academyRouteGrid" class="academy-route-grid"></div>
+
+        <section class="academy-skill-report">
+          <div class="academy-section-head">
+            <div>
+              <span>LO QUE NOVA VA OBSERVANDO</span>
+              <h3>Mapa de habilidades</h3>
+            </div>
+            <small>Se actualiza mientras practica</small>
+          </div>
+          <div id="academySkillGrid" class="academy-skill-grid"></div>
+        </section>
+      </section>
+
+      <section id="academyPracticeView" class="academy-practice-view" hidden>
+        <div class="academy-practice-head">
+          <div id="academyPracticeIcon" class="academy-practice-icon">🎯</div>
+          <div>
+            <span id="academyPracticeKicker">ENTRENAMIENTO</span>
+            <h3 id="academyPracticeTitle">Habilidad</h3>
+            <p id="academyPracticeGoal"></p>
+          </div>
+          <div id="academyPracticeCounter" class="notebook-counter">1 / 6</div>
+        </div>
+
+        <div class="academy-mini-progress">
+          <div id="academyPracticeBar"></div>
+        </div>
+
+        <section class="academy-nova-explain">
+          <div class="nova-orb">N</div>
+          <div>
+            <span>NOVA · ANTES DE RESPONDER</span>
+            <p id="academyNovaExplain"></p>
+          </div>
+        </section>
+
+        <section id="academyChallenge" class="academy-challenge"></section>
+
+        <section id="academyFeedback" class="academy-feedback" hidden>
+          <span id="academyFeedbackLabel">MIRA LA LÓGICA</span>
+          <strong id="academyFeedbackTitle"></strong>
+          <p id="academyFeedbackText"></p>
+          <button id="academyContinueBtn" class="primary-btn" type="button">Siguiente reto →</button>
+        </section>
+
+        <button id="academyAskNovaBtn" class="notebook-help-btn" type="button">💬 Preguntarle a NOVA</button>
+        <div id="academyChat" class="notebook-chat" hidden>
+          <div id="academyChatMessages" class="tutor-chat">
+            <div class="tutor-message nova-message">
+              <span>NOVA</span>
+              <p>Pregúntame, yo puedo ayudarte a entender este reto.</p>
+            </div>
+          </div>
+          <form id="academyChatForm" class="tutor-input-row">
+            <label for="academyChatInput" class="sr-only">Pregúntale a NOVA</label>
+            <input id="academyChatInput" maxlength="180" autocomplete="off" placeholder="Ej.: ¿Cómo sé cuál número usar?" />
+            <button type="submit">Enviar</button>
+          </form>
+        </div>
+      </section>
+
+      <section id="notebookLessonView" hidden>
+        <div class="notebook-lesson-route-head">
+          <div>
+            <span>RUTA · DIVISIÓN EN MI CUADERNO</span>
+            <strong>La regla de NOVA: DIVIDO → MULTIPLICO → RESTO → BAJO → REPITO</strong>
+          </div>
+          <div id="notebookLessonCounter" class="notebook-counter">1 / 12</div>
+        </div>
+
+        <section class="notebook-hero">
+          <div class="notebook-animal" id="notebookAnimal">🔬</div>
+          <div>
+            <span id="notebookMissionLabel" class="notebook-kicker">MISIÓN DE CUADERNO</span>
+            <h3 id="notebookTitle">La primera división escrita</h3>
+            <p id="notebookStory">NOVA te acompañará mientras haces la división a mano.</p>
+          </div>
+        </section>
+
+        <div class="notebook-progress-wrap">
+          <div class="progress-label">
+            <span>Progreso de esta ruta</span>
+            <strong id="notebookProgressText">0%</strong>
+          </div>
+          <div class="progress-track">
+            <div id="notebookProgressBar" class="progress-bar"></div>
+          </div>
+        </div>
+
+        <section class="procedure-guide-card" aria-label="Regla de NOVA para dividir">
+          <div class="procedure-guide-title">
+            <span>LA REGLA DE NOVA</span>
+            <strong>Haz siempre el mismo ciclo</strong>
+          </div>
+          <section class="procedure-strip" aria-label="Pasos de la división">
+            <div class="procedure-step" data-procedure="divide"><span>➗</span><strong>DIVIDO</strong><small>¿Cuántas veces cabe?</small></div>
+            <div class="procedure-step" data-procedure="multiply"><span>✖️</span><strong>MULTIPLICO</strong><small>¿Cuánto usé?</small></div>
+            <div class="procedure-step" data-procedure="subtract"><span>➖</span><strong>RESTO</strong><small>¿Cuánto quedó?</small></div>
+            <div class="procedure-step" data-procedure="bring"><span>⬇️</span><strong>BAJO</strong><small>Traigo otra cifra</small></div>
+            <div class="procedure-step" data-procedure="repeat"><span>🔁</span><strong>REPITO</strong><small>Vuelvo a dividir</small></div>
+          </section>
+        </section>
+
+        <section class="paper-layout-card">
+          <div class="paper-layout-head">
+            <div>
+              <span>MODELO DE UBICACIÓN</span>
+              <strong>Hazlo tú en el cuaderno</strong>
+            </div>
+            <button id="showPlacementBtn" class="paper-help-btn" type="button">👀 ¿Dónde lo escribo?</button>
+          </div>
+
+          <div class="division-layout" aria-label="Modelo de división escrita">
+            <div id="notebookDividend" class="division-dividend">84</div>
+            <div class="division-bracket"></div>
+            <div id="notebookDivisor" class="division-divisor">4</div>
+            <div id="notebookQuotient" class="division-quotient" aria-label="Cociente">?</div>
+          </div>
+
+          <p id="placementHelp" class="placement-help" hidden></p>
+
+          <div class="cycle-summary">
+            <span>CICLO ACTUAL</span>
+            <strong id="notebookCycleLabel">Preparando la división</strong>
+          </div>
+
+          <div id="notebookJournal" class="notebook-journal"></div>
+        </section>
+
+        <section class="nova-notebook-card" aria-live="polite">
+          <div class="nova-notebook-head">
+            <div class="nova-orb">N</div>
+            <div>
+              <p class="eyebrow">NOVA · A TU LADO</p>
+              <strong id="notebookStepTitle">Vamos a escribir la división</strong>
+            </div>
+            <span id="notebookStepCount" class="ai-status">PASO 1</span>
+          </div>
+
+          <div class="nova-three">
+            <article>
+              <span>¿QUÉ HAGO?</span>
+              <p id="notebookWhy"></p>
+            </article>
+            <article class="notebook-how-card">
+              <span>¿CÓMO LO HAGO?</span>
+              <p id="notebookHow"></p>
+            </article>
+            <article>
+              <span>¿QUÉ DESCUBRO?</span>
+              <p id="notebookForWhat"></p>
+            </article>
+          </div>
+
+          <div id="notebookDiscovery" class="notebook-discovery" hidden></div>
+
+          <div class="notebook-prompt-box">
+            <strong id="notebookPrompt"></strong>
+            <div id="notebookAnswerArea"></div>
+          </div>
+
+          <button id="notebookHelpBtn" class="notebook-help-btn" type="button">💬 Preguntarle a NOVA</button>
+
+          <div id="notebookChat" class="notebook-chat" hidden>
+            <div id="notebookChatMessages" class="tutor-chat">
+              <div class="tutor-message nova-message">
+                <span>NOVA</span>
+                <p>Pregúntame, yo puedo ayudarte con este paso.</p>
+              </div>
+            </div>
+            <form id="notebookChatForm" class="tutor-input-row">
+              <label for="notebookChatInput" class="sr-only">Pregúntale a NOVA sobre la división del cuaderno</label>
+              <input id="notebookChatInput" maxlength="180" autocomplete="off" placeholder="Ej.: ¿Por qué escribo este número aquí?" />
+              <button id="notebookChatSend" type="submit">Enviar</button>
+            </form>
+          </div>
+        </section>
+
+        <section id="notebookLessonDone" class="notebook-done-card" hidden>
+          <div class="notebook-done-icon">✏️</div>
+          <p class="eyebrow">DIVISIÓN COMPLETADA EN EL CUADERNO</p>
+          <h3 id="notebookDoneTitle">Terminaste 84 ÷ 4</h3>
+          <p id="notebookDoneFeedback"></p>
+          <button id="notebookNextBtn" class="primary-btn" type="button">Siguiente división →</button>
+        </section>
+      </section>
+    </section>
+
+  </main>
+
+  <div id="worldModal" class="modal" hidden>
+    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="routeTitle">
+      <div class="modal-head">
+        <div><p class="eyebrow">TU RUTA</p><h2 id="routeTitle">Los 6 mundos</h2></div>
+        <button id="closeMapBtn" class="icon-btn" aria-label="Cerrar ruta">✕</button>
+      </div>
+      <div id="worldMap" class="world-map"></div>
+    </div>
+  </div>
+
+  <div id="animalModal" class="modal" hidden>
+    <div class="modal-card animal-modal-card" role="dialog" aria-modal="true" aria-labelledby="animalModalTitle">
+      <div class="modal-head">
+        <div><p class="eyebrow">ARCHIVO DE CAMPO</p><h2 id="animalModalTitle">Animal</h2></div>
+        <button id="closeAnimalBtn" class="icon-btn" aria-label="Cerrar ficha del animal">✕</button>
+      </div>
+      <div id="animalProfile" class="animal-profile"></div>
+    </div>
+  </div>
+
+  <div id="guideModal" class="modal" hidden>
+    <div class="modal-card guide-modal-card" role="dialog" aria-modal="true" aria-labelledby="guideTitle">
+      <div class="modal-head">
+        <div><p class="eyebrow">TU COLECCIÓN</p><h2 id="guideTitle">Bestiario del Atlas</h2></div>
+        <button id="closeGuideBtn" class="icon-btn" aria-label="Cerrar bestiario">✕</button>
+      </div>
+      <p class="guide-copy">Cada división correcta recupera una ficha. Toca una criatura desbloqueada para volver a estudiarla.</p>
+      <div id="guideProgress" class="guide-progress"></div>
+      <div id="fieldGuideGrid" class="field-guide-grid"></div>
+    </div>
+  </div>
+
+
+  <div id="settingsModal" class="modal" hidden>
+    <div class="modal-card settings-modal-card" role="dialog" aria-modal="true" aria-labelledby="settingsTitle">
+      <div class="modal-head">
+        <div>
+          <p class="eyebrow">AJUSTES</p>
+          <h2 id="settingsTitle">Configuración</h2>
+        </div>
+        <button id="closeSettingsBtn" class="icon-btn" aria-label="Cerrar configuración">✕</button>
+      </div>
+
+      <div class="settings-list">
+        <div class="settings-row">
+          <div class="settings-copy">
+            <strong>Sonido</strong>
+            <span>Activa o desactiva los sonidos de la expedición.</span>
+          </div>
+          <button id="soundBtn" class="settings-toggle" type="button" aria-label="Activar o desactivar sonido" aria-pressed="true">🔊 Activado</button>
+        </div>
+
+        <div class="settings-divider"></div>
+
+        <div class="settings-row">
+          <div class="settings-copy">
+            <strong>Suscripción familiar</strong>
+            <span id="subscriptionSettingsText">Comprobando acceso...</span>
+          </div>
+          <button id="subscriptionSettingsBtn" class="settings-toggle" type="button">💳 Verificar</button>
+        </div>
+
+        <div class="settings-divider"></div>
+
+        <div class="settings-row">
+          <div class="settings-copy">
+            <strong>Modo de pruebas</strong>
+            <span>Permite a un adulto abrir cualquier misión sin modificar el progreso real del niño.</span>
+          </div>
+          <button id="testerSettingsBtn" class="settings-toggle" type="button">🧪 Abrir</button>
+        </div>
+
+        <div class="settings-divider"></div>
+
+        <div class="settings-row">
+          <div class="settings-copy">
+            <strong>Módulo de cuaderno</strong>
+            <span>Vuelve a la última división escrita o reinicia solo este módulo.</span>
+          </div>
+          <button id="notebookSettingsBtn" class="settings-toggle" type="button">✏️ Abrir</button>
+        </div>
+
+        <div class="settings-divider"></div>
+
+        <div class="settings-row settings-row-danger">
+          <div class="settings-copy">
+            <strong>Reiniciar aventura</strong>
+            <span>Borra el progreso guardado y vuelve a la misión 1.</span>
+          </div>
+          <button id="resetBtn" class="settings-danger-btn" type="button">Reiniciar</button>
+        </div>
+
+        <p class="settings-warning">Esta opción borra el progreso del niño en este dispositivo.</p>
+      </div>
+    </div>
+  </div>
+
+
+  <div id="testerModal" class="modal" hidden>
+    <div class="modal-card tester-modal-card" role="dialog" aria-modal="true" aria-labelledby="testerTitle">
+      <div class="modal-head">
+        <div>
+          <p class="eyebrow">SOLO ADULTOS</p>
+          <h2 id="testerTitle">Modo de pruebas</h2>
+        </div>
+        <button id="closeTesterBtn" class="icon-btn" aria-label="Cerrar modo de pruebas">✕</button>
+      </div>
+
+      <div id="testerAuthView" class="tester-auth">
+        <div class="tester-lock">🔐</div>
+        <h3>Ingresa la clave</h3>
+        <p>Este panel permite saltar entre misiones para revisar y probar la app.</p>
+
+        <form id="testerPinForm" class="tester-pin-form">
+          <label for="testerPinInput">Clave de acceso</label>
+          <div class="tester-pin-row">
+            <input
+              id="testerPinInput"
+              type="password"
+              inputmode="numeric"
+              autocomplete="off"
+              maxlength="6"
+              pattern="[0-9]*"
+              placeholder="••••••"
+              aria-describedby="testerPinError"
+            />
+            <button type="submit" class="primary-btn tester-unlock-btn">Entrar</button>
+          </div>
+          <p id="testerPinError" class="tester-pin-error" hidden>La clave no es correcta.</p>
+        </form>
+      </div>
+
+      <div id="testerNavigatorView" class="tester-navigator" hidden>
+        <div class="tester-active-banner">
+          <span>🧪</span>
+          <div>
+            <strong>Modo de pruebas activo</strong>
+            <small>Lo que hagas aquí no cambia el progreso guardado del niño.</small>
+          </div>
+        </div>
+
+        <section class="tester-section">
+          <div class="tester-section-head">
+            <div>
+              <span>AVENTURA 1</span>
+              <h3>Atlas Animal</h3>
+            </div>
+            <b>36 misiones</b>
+          </div>
+          <div id="testerMissionGrid" class="tester-mission-grid"></div>
+        </section>
+
+        <section class="tester-section">
+          <div class="tester-section-head">
+            <div>
+              <span>AVENTURA 2</span>
+              <h3>Academia de División</h3>
+            </div>
+            <b>8 rutas + 12 cuaderno</b>
+          </div>
+          <div id="testerNotebookGrid" class="tester-mission-grid"></div>
+        </section>
+
+        <button id="exitTesterModeBtn" class="tester-exit-btn" type="button">
+          Salir del modo de pruebas y volver al progreso real
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <script src="app.js"></script>
+</body>
+</html>
