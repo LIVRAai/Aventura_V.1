@@ -1,20 +1,32 @@
-# Qué debes hacer
+# La Expedición v9
 
-1. Copia estos archivos sobre tu repositorio actual.
-2. **No borres** tu `api/tutor.js` ni tu `api/health.js`: no venían en los archivos enviados y esta actualización no los reemplaza.
-3. Agrega en Vercel las variables de `CONFIGURA_VERCEL.md`.
-4. Haz redeploy.
-5. Para revisar sin pagar: **Entrar como adulto → 123456**.
+## Ya incluye
 
-## Qué cambia en la experiencia
+- Cuenta familiar con Supabase Auth.
+- Perfil del niño en `children`.
+- Sincronización de Atlas, cuaderno y Academia con `child_progress`.
+- Migración automática del progreso histórico de `localStorage` cuando la nube está vacía.
+- Suscripción de Mercado Pago asociada al usuario autenticado.
+- Registro de webhooks en `subscription_events`.
+- Selector de materias preparado para crecer.
+- Modo interno `123456` conservado.
 
-`Suscripción → Selector de materias → Matemáticas → Atlas actual → Academia actual`
+## Antes de desplegar
 
-- Matemáticas funciona con todo lo que ya tenías.
-- Lenguaje y Ciencias aparecen como “Próximamente”.
-- El nombre visible se personaliza con el nombre del niño.
-- El progreso antiguo no se borra.
+Asegúrate de tener en Vercel:
 
-## Nota de seguridad
+`SUPABASE_URL`
 
-El bloqueo comercial del frontend ya funciona contra el estado de la suscripción de Mercado Pago. Para una versión comercial pública, también debes proteger `api/tutor.js` en servidor para que nadie pueda consumir NOVA llamando directamente al endpoint. Para hacer ese último ajuste necesito el archivo `api/tutor.js` actual.
+`SUPABASE_PUBLISHABLE_KEY`
+
+`SUPABASE_SECRET_KEY`
+
+`MERCADOPAGO_ACCESS_TOKEN`
+
+`OPENAI_API_KEY`
+
+Además de las variables de precio y `APP_URL` descritas en `CONFIGURA_VERCEL.md`.
+
+## No reemplaces por accidente
+
+Si tu repositorio ya tiene `api/tutor.js` y `api/health.js`, consérvalos. Este paquete no los incluye porque no fueron suministrados en el código base.

@@ -1,107 +1,114 @@
-# La Expedición — versión 8.0 · Suscripción mensual
+# La Expedición — versión 9.0 · Supabase + Mercado Pago
 
-Esta versión conserva el Atlas, las 36 misiones, la Academia de División, NOVA, el modo de pruebas y las claves antiguas de `localStorage` para no borrar el progreso existente.
+Esta versión conserva el Atlas, las 36 misiones, la Academia de División, NOVA, el modo de pruebas y las claves históricas de `localStorage`. La diferencia es que ahora existe una cuenta familiar real con Supabase y el progreso se sincroniza con `child_progress`.
 
-## Qué se agregó
+## 1. Variables de Supabase en Vercel
 
-- Pantalla de acceso familiar antes de entrar al juego.
-- Nombre del niño configurable para personalizar la experiencia.
-- Suscripción mensual con Mercado Pago.
-- Verificación del estado de la suscripción contra la API de Mercado Pago.
-- Acceso interno para adultos con la misma clave de pruebas `123456`.
-- Estado de la suscripción dentro de Configuración.
-- Precio configurable desde Vercel, sin editar el frontend.
+En **Vercel → Project → Settings → Environment Variables** agrega:
 
-## Archivos del repositorio
+- `SUPABASE_URL` = `https://TU-PROYECTO.supabase.co`
+- `SUPABASE_PUBLISHABLE_KEY` = `sb_publishable_...`
+- `SUPABASE_SECRET_KEY` = `sb_secret_...`
 
-Mantén tus archivos actuales y agrega/reemplaza estos:
+La `SUPABASE_PUBLISHABLE_KEY` se entrega al navegador y trabaja junto con RLS.
+
+La `SUPABASE_SECRET_KEY` es privada y se usa solamente en las funciones de Vercel para asociar y actualizar las suscripciones de Mercado Pago. **Nunca la pongas en `app.js`, `index.html` ni GitHub.**
+
+Si tu proyecto todavía usa las claves antiguas, el backend acepta `SUPABASE_SERVICE_ROLE_KEY` como respaldo, pero para proyectos nuevos es preferible `SUPABASE_SECRET_KEY`.
+
+## 2. OpenAI
+
+Conserva:
+
+- `OPENAI_API_KEY`
+- `OPENAI_MODEL` (opcional)
+
+Esta versión no reemplaza `api/tutor.js`; conserva el que ya existe en tu repositorio.
+
+## 3. Mercado Pago
+
+Agrega o conserva:
+
+- `MERCADOPAGO_ACCESS_TOKEN`
+- `SUBSCRIPTION_AMOUNT` = por ejemplo `24900`
+- `SUBSCRIPTION_CURRENCY` = `COP`
+- `SUBSCRIPTION_REASON` = `La Expedición - Plan familiar mensual`
+- `SUBSCRIPTIONS_ENABLED` = `true`
+- `APP_URL` = URL pública exacta del proyecto, por ejemplo `https://la-expedicion.vercel.app`
+
+## 4. Qué archivos subir
+
+Reemplaza/agrega:
 
 - `index.html`
 - `styles.css`
 - `app.js`
 - `package.json`
+- `api/_supabase-server.js`
+- `api/public-config.js`
 - `api/subscription-config.js`
 - `api/subscription-create.js`
 - `api/subscription-status.js`
 - `api/subscription-webhook.js`
-- `api/tutor.js` **se conserva el que ya tienes**
-- `api/health.js` **se conserva el que ya tienes**
 
-## Variables de entorno en Vercel
+Mantén en el repositorio tus archivos existentes:
 
-En **Project → Settings → Environment Variables** agrega:
+- `api/tutor.js`
+- `api/health.js`
 
-### OpenAI
+## 5. Flujo nuevo
 
-- `OPENAI_API_KEY` = tu clave actual.
-- `OPENAI_MODEL` = opcional, conserva el valor actual si ya lo usas.
+1. El adulto crea una cuenta con correo y contraseña.
+2. Supabase Auth crea el usuario.
+3. La app crea o recupera el perfil del niño en `children`.
+4. La app compara `localStorage` con `child_progress`.
+5. Si este dispositivo tiene el progreso antiguo y la nube está vacía, lo migra automáticamente a Supabase.
+6. Si Supabase tiene progreso de otro dispositivo, lo descarga y recarga la app.
+7. El adulto activa la suscripción mensual.
+8. `/api/subscription-create` exige una sesión válida de Supabase antes de crear el `preapproval` en Mercado Pago.
+9. La suscripción queda asociada al `parent_id` en `subscriptions`.
+10. `/api/subscription-status` vuelve a consultar Mercado Pago y actualiza Supabase.
+11. Si el estado es `authorized`, se desbloquea La Expedición.
 
-### Mercado Pago
+## 6. Webhook
 
-- `MERCADOPAGO_ACCESS_TOKEN` = Access Token de producción de tu aplicación de Mercado Pago.
-- `SUBSCRIPTION_AMOUNT` = valor mensual en pesos, por ejemplo `24900`.
-- `SUBSCRIPTION_CURRENCY` = `COP`.
-- `SUBSCRIPTION_REASON` = por ejemplo `La Expedición - Plan familiar mensual`.
-- `SUBSCRIPTIONS_ENABLED` = `true`.
-- `APP_URL` = URL pública exacta de Vercel, por ejemplo `https://tu-dominio.vercel.app`.
-
-**Nunca pongas `MERCADOPAGO_ACCESS_TOKEN` ni `OPENAI_API_KEY` dentro de `app.js`, `index.html` o GitHub.**
-
-## Flujo de pago
-
-1. El adulto escribe su correo y el nombre del niño.
-2. El navegador llama a `/api/subscription-create`.
-3. Vercel crea una suscripción `pending` en Mercado Pago con periodicidad mensual.
-4. La API devuelve `init_point` y la app redirige al checkout de Mercado Pago.
-5. Mercado Pago devuelve al usuario a `APP_URL/?subscription=return`.
-6. La app consulta `/api/subscription-status`.
-7. Si Mercado Pago devuelve `status: authorized`, se desbloquea La Expedición.
-8. En aperturas posteriores se vuelve a consultar el estado; si está pausada o cancelada, no se concede el acceso normal.
-
-## Configurar Webhook en Mercado Pago
-
-Puedes registrar esta URL en el panel de notificaciones de tu integración:
+Configura en Mercado Pago:
 
 `https://TU-DOMINIO/api/subscription-webhook`
 
-Activa, como mínimo, eventos relacionados con suscripciones (`subscription_preapproval`) y pagos autorizados de suscripción (`subscription_authorized_payment`).
+El endpoint guarda las notificaciones en `subscription_events`. Cuando la notificación corresponde a un `preapproval`, también intenta refrescar el estado de `subscriptions`.
 
-En esta primera versión el webhook solo recibe y registra el evento. El acceso se valida consultando directamente a Mercado Pago, por lo que no depende del webhook para funcionar.
+## 7. Confirmación de correo
 
-## Modo de pruebas del dueño
+Supabase puede exigir confirmación de email. Si está habilitada, al crear la cuenta la app mostrará que el adulto debe abrir el correo y confirmar el enlace antes de iniciar sesión.
 
-Antes de pagar aparece **🧪 Entrar como adulto**.
+En Supabase revisa **Authentication → URL Configuration** y deja como Site URL la URL de producción de Vercel.
 
-- Clave: `123456`.
-- El bypass vive solo en `sessionStorage`: al cerrar completamente la sesión del navegador desaparece.
-- No cambia el estado real de Mercado Pago.
-- Dentro del juego se conserva el Modo de pruebas existente para saltar misiones sin alterar el progreso.
+## 8. Prueba rápida
 
-## Importante para convertirlo en producto completo
+Después de subir los archivos y hacer Redeploy:
 
-Esta versión está pensada como MVP con pocos cambios estructurales. El progreso sigue guardándose localmente en el dispositivo, igual que en la versión actual.
+1. Abre `/api/public-config`.
+2. Debes ver `supabase.configured: true`.
+3. Si ya agregaste la Secret key, `subscription.serverDatabaseConfigured` debe ser `true`.
+4. Crea una cuenta de prueba.
+5. Confirma el correo si Supabase lo solicita.
+6. Inicia sesión.
+7. Verifica en Supabase que aparezca el adulto en `parent_profiles` y el niño en `children`.
+8. Entra con el modo de adulto `123456` si todavía no quieres pagar.
+9. Haz una misión y espera un par de segundos.
+10. Revisa `child_progress`: los campos `atlas_state`, `notebook_state` y `academy_state` deben empezar a actualizarse.
 
-Para la siguiente fase comercial conviene agregar Supabase o una base similar para:
+## 9. Importante sobre el progreso previo de Emiliano
 
-- cuentas reales del adulto;
-- recuperar acceso desde otro dispositivo;
-- guardar progreso del niño en la nube;
-- asociar la suscripción a un usuario autenticado;
-- almacenar eventos del webhook;
-- proteger `/api/tutor` del consumo directo por usuarios no suscritos.
+Las claves antiguas siguen siendo:
 
-No se modificó `api/tutor.js` porque no venía incluido entre los archivos enviados. El frontend queda bloqueado, pero para producción también se debe validar la suscripción dentro de ese endpoint para impedir llamadas directas a NOVA.
+- `emilianoGameStateV2`
+- `emilianoNotebookV1`
+- `emilianoAcademyV1`
 
-## Prueba rápida
+No se renombraron para evitar perder el progreso ya existente. La primera cuenta que se use en ese dispositivo puede migrar ese progreso a su perfil en Supabase.
 
-1. Sube los archivos al repositorio.
-2. Configura las variables de entorno.
-3. Haz Redeploy en Vercel.
-4. Abre `/api/subscription-config` y comprueba que `paymentConfigured` sea `true`.
-5. Abre la app.
-6. Para revisar el juego sin cobrar, usa **Entrar como adulto → 123456**.
-7. Para probar el flujo real, usa un correo válido y completa el checkout de Mercado Pago.
+## 10. Siguiente mejora recomendada
 
-## Compatibilidad con el progreso anterior
-
-Las claves antiguas (`emilianoGameStateV2`, `emilianoNotebookV1`, `emilianoAcademyV1`, etc.) se mantienen intencionalmente. Esto evita que una actualización borre el avance que ya existe en la tablet.
+El frontend ya exige cuenta y suscripción, pero `api/tutor.js` no venía dentro de los archivos originales que recibimos. Antes de producción conviene modificar ese endpoint para que también valide el token de Supabase y la suscripción activa antes de consumir OpenAI.

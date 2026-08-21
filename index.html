@@ -21,40 +21,88 @@
 
       <p class="access-lead">
         Una experiencia de refuerzo de matemáticas para que cada niño practique a su ritmo,
-        reciba ayuda de NOVA y avance por misiones.
+        reciba ayuda de NOVA y continúe su progreso desde cualquier dispositivo.
       </p>
 
-      <div class="access-plan">
-        <div>
-          <span>PLAN FAMILIAR</span>
-          <strong id="subscriptionPrice">$24.900 <small>COP / mes</small></strong>
+      <div id="authView" class="auth-view">
+        <div class="auth-tabs" role="tablist" aria-label="Acceso a la cuenta">
+          <button id="signupTabBtn" class="auth-tab active" type="button" role="tab" aria-selected="true">Crear cuenta</button>
+          <button id="loginTabBtn" class="auth-tab" type="button" role="tab" aria-selected="false">Ya tengo cuenta</button>
         </div>
-        <ul>
-          <li>✓ Acceso a la Expedición y la Academia</li>
-          <li>✓ NOVA como tutor durante la práctica</li>
-          <li>✓ Progreso guardado en este dispositivo</li>
-        </ul>
+
+        <form id="authForm" class="access-form auth-form">
+          <label>
+            <span>Correo del adulto</span>
+            <input id="parentEmailInput" type="email" inputmode="email" autocomplete="email" maxlength="120"
+              placeholder="adulto@correo.com" required />
+          </label>
+          <label>
+            <span>Contraseña</span>
+            <input id="parentPasswordInput" type="password" autocomplete="current-password" minlength="6" maxlength="72"
+              placeholder="Mínimo 6 caracteres" required />
+          </label>
+          <label id="childNameField">
+            <span>Nombre del niño</span>
+            <input id="childNameInput" type="text" autocomplete="off" maxlength="40"
+              placeholder="Ej.: Mateo" />
+          </label>
+          <button id="authSubmitBtn" class="access-primary" type="submit">Crear cuenta familiar</button>
+        </form>
+
+        <div id="authStatus" class="access-status" role="status" aria-live="polite"></div>
       </div>
 
-      <form id="subscriptionForm" class="access-form">
-        <label>
-          <span>Correo del adulto</span>
-          <input id="parentEmailInput" type="email" inputmode="email" autocomplete="email" maxlength="120"
-            placeholder="adulto@correo.com" required />
-        </label>
-        <label>
-          <span>Nombre del niño</span>
-          <input id="childNameInput" type="text" autocomplete="off" maxlength="28"
-            placeholder="Ej.: Mateo" required />
-        </label>
-        <button id="subscribeBtn" class="access-primary" type="submit">
-          Suscribirme con Mercado Pago
-        </button>
-      </form>
+      <div id="childSetupView" class="child-setup" hidden>
+        <div class="account-chip">
+          <span>👤</span>
+          <div>
+            <small>CUENTA DEL ADULTO</small>
+            <strong id="childSetupEmail">—</strong>
+          </div>
+        </div>
+        <h2>¿Quién va a explorar?</h2>
+        <p>Crea el perfil del niño. Este nombre personaliza la experiencia y conecta su progreso.</p>
+        <form id="childProfileForm" class="access-form">
+          <label>
+            <span>Nombre del niño</span>
+            <input id="childProfileNameInput" type="text" autocomplete="off" maxlength="40" placeholder="Ej.: Mateo" required />
+          </label>
+          <button id="createChildBtn" class="access-primary" type="submit">Crear perfil y continuar</button>
+        </form>
+      </div>
 
-      <button id="verifySubscriptionBtn" class="access-secondary" type="button" hidden>
-        Ya pagué · verificar acceso
-      </button>
+      <div id="subscriberView" class="subscriber-view" hidden>
+        <div class="account-chip">
+          <span>👨‍👩‍👧</span>
+          <div>
+            <small>CUENTA FAMILIAR</small>
+            <strong id="accountEmailText">—</strong>
+            <em>Perfil: <span id="accountChildText">Explorador</span></em>
+          </div>
+        </div>
+
+        <div class="access-plan">
+          <div>
+            <span>PLAN FAMILIAR</span>
+            <strong id="subscriptionPrice">$24.900 <small>COP / mes</small></strong>
+          </div>
+          <ul>
+            <li>✓ Acceso a la Expedición y la Academia</li>
+            <li>✓ NOVA como tutor durante la práctica</li>
+            <li>✓ Progreso sincronizado con Supabase</li>
+          </ul>
+        </div>
+
+        <form id="subscriptionForm" class="access-form compact-form">
+          <button id="subscribeBtn" class="access-primary" type="submit">Suscribirme con Mercado Pago</button>
+        </form>
+
+        <button id="verifySubscriptionBtn" class="access-secondary" type="button" hidden>
+          Ya pagué · verificar acceso
+        </button>
+
+        <button id="accessSignOutBtn" class="access-text-btn" type="button">Cerrar sesión</button>
+      </div>
 
       <div id="accessStatus" class="access-status" role="status" aria-live="polite"></div>
 
@@ -67,7 +115,7 @@
       </form>
 
       <p class="access-note">
-        El pago se procesa en Mercado Pago. La Expedición nunca recibe ni almacena los datos de tu tarjeta.
+        La cuenta y el progreso se gestionan con Supabase. El pago se procesa en Mercado Pago; La Expedición no almacena datos de tarjeta.
       </p>
     </div>
   </section>
@@ -554,6 +602,16 @@
 
         <div class="settings-row">
           <div class="settings-copy">
+            <strong>Cuenta familiar</strong>
+            <span id="accountSettingsText">Sin sesión iniciada.</span>
+          </div>
+          <button id="accountSignOutBtn" class="settings-toggle" type="button">↪ Salir</button>
+        </div>
+
+        <div class="settings-divider"></div>
+
+        <div class="settings-row">
+          <div class="settings-copy">
             <strong>Suscripción familiar</strong>
             <span id="subscriptionSettingsText">Comprobando acceso...</span>
           </div>
@@ -669,6 +727,7 @@
   </div>
 
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="app.js"></script>
 </body>
 </html>

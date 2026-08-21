@@ -72,6 +72,25 @@
   const hubChildName = $('#hubChildName');
   const mathSubjectBtn = $('#mathSubjectBtn');
   const hubSettingsBtn = $('#hubSettingsBtn');
+  const authView = $('#authView');
+  const signupTabBtn = $('#signupTabBtn');
+  const loginTabBtn = $('#loginTabBtn');
+  const authForm = $('#authForm');
+  const parentPasswordInput = $('#parentPasswordInput');
+  const childNameField = $('#childNameField');
+  const authSubmitBtn = $('#authSubmitBtn');
+  const authStatus = $('#authStatus');
+  const childSetupView = $('#childSetupView');
+  const childSetupEmail = $('#childSetupEmail');
+  const childProfileForm = $('#childProfileForm');
+  const childProfileNameInput = $('#childProfileNameInput');
+  const createChildBtn = $('#createChildBtn');
+  const subscriberView = $('#subscriberView');
+  const accountEmailText = $('#accountEmailText');
+  const accountChildText = $('#accountChildText');
+  const accessSignOutBtn = $('#accessSignOutBtn');
+  const accountSettingsText = $('#accountSettingsText');
+  const accountSignOutBtn = $('#accountSignOutBtn');
   const finalCard = $('#finalCard');
   const replayBtn = $('#replayBtn');
   const mapBtn = $('#mapBtn');
@@ -166,13 +185,33 @@
 
 
   // ---------------------------------------------------------------------------
-  // ACCESO FAMILIAR + MERCADO PAGO
-  // Mantiene las claves antiguas de progreso para no borrar el avance existente.
+  // CUENTA FAMILIAR + SUPABASE + MERCADO PAGO
+  //
+  // La lógica pedagógica sigue intacta. Supabase se usa como capa de cuenta,
+  // perfil del niño y sincronización en la nube de los mismos objetos que hoy
+  // guarda localStorage.
   // ---------------------------------------------------------------------------
   const FAMILY_PROFILE_KEY = 'expeditionFamilyProfileV1';
   const SUBSCRIPTION_KEY = 'expeditionSubscriptionV1';
   const OWNER_DEMO_KEY = 'expeditionOwnerDemoSession';
+  const CLOUD_PROGRESS_KEYS = {
+    atlas: 'emilianoGameStateV2',
+    notebook: 'emilianoNotebookV1',
+    academy: 'emilianoAcademyV1'
+  };
+
   let commercialAccessGranted = false;
+  let supabaseClient = null;
+  let currentSession = null;
+  let currentUser = null;
+  let activeChild = null;
+  let cloudReady = false;
+  let cloudSyncTimer = null;
+  let cloudSyncInFlight = false;
+  let cloudSyncQueued = false;
+  let authMode = 'signup';
+  let familyLoadPromise = null;
+
   let subscriptionConfig = {
     enabled: true,
     paymentConfigured: false,
@@ -199,7 +238,8 @@
   }
 
   function explorerName() {
-    const name = String(familyProfile().childName || 'Explorador').trim();
+    const dbName = activeChild?.name;
+    const name = String(dbName || familyProfile().childName || 'Explorador').trim();
     return name || 'Explorador';
   }
 
@@ -213,8 +253,20 @@
     if (finalChildName) finalChildName.textContent = name;
     if (hubChildName) hubChildName.textContent = name;
     if (aiTutorTitle) aiTutorTitle.textContent = `Estoy aquí, ${name}`;
-    if (parentEmailInput && !parentEmailInput.value) parentEmailInput.value = familyProfile().email || '';
-    if (childNameInput && !childNameInput.value) childNameInput.value = familyProfile().childName || '';
+
+    const profile = familyProfile();
+    if (parentEmailInput && !parentEmailInput.value) parentEmailInput.value = currentUser?.email || profile.email || '';
+    if (childNameInput && !childNameInput.value) childNameInput.value = profile.childName || '';
+    if (childProfileNameInput && !childProfileNameInput.value) childProfileNameInput.value = profile.childName || '';
+
+    if (accountEmailText) accountEmailText.textContent = currentUser?.email || profile.email || '—';
+    if (accountChildText) accountChildText.textContent = name;
+    if (childSetupEmail) childSetupEmail.textContent = currentUser?.email || '—';
+    if (accountSettingsText) {
+      accountSettingsText.textContent = currentUser
+        ? `${currentUser.email} · Perfil: ${name}`
+        : 'Sin sesión iniciada.';
+    }
   }
 
   function formatCop(amount) {
@@ -235,8 +287,35 @@
     accessStatus.className = `access-status${kind ? ` ${kind}` : ''}`;
   }
 
+  function setAuthStatus(message = '', kind = '') {
+    if (!authStatus) return;
+    authStatus.textContent = message;
+    authStatus.className = `access-status${kind ? ` ${kind}` : ''}`;
+  }
+
   function setSubscriptionSettings(message) {
     if (subscriptionSettingsText) subscriptionSettingsText.textContent = message;
+  }
+
+  function setAuthMode(mode = 'signup') {
+    authMode = mode === 'login' ? 'login' : 'signup';
+    const signingUp = authMode === 'signup';
+    signupTabBtn?.classList.toggle('active', signingUp);
+    loginTabBtn?.classList.toggle('active', !signingUp);
+    signupTabBtn?.setAttribute('aria-selected', String(signingUp));
+    loginTabBtn?.setAttribute('aria-selected', String(!signingUp));
+    if (childNameField) childNameField.hidden = !signingUp;
+    if (childNameInput) childNameInput.required = signingUp;
+    if (parentPasswordInput) parentPasswordInput.autocomplete = signingUp ? 'new-password' : 'current-password';
+    if (authSubmitBtn) authSubmitBtn.textContent = signingUp ? 'Crear cuenta familiar' : 'Iniciar sesión';
+    setAuthStatus('');
+  }
+
+  function showAccountStage(stage = 'auth') {
+    if (authView) authView.hidden = stage !== 'auth';
+    if (childSetupView) childSetupView.hidden = stage !== 'child';
+    if (subscriberView) subscriberView.hidden = stage !== 'subscriber';
+    updatePersonalization();
   }
 
   function grantCommercialAccess(reason = 'subscription') {
@@ -244,12 +323,13 @@
     updatePersonalization();
     if (accessGate) accessGate.hidden = true;
     document.body.classList.remove('access-locked');
-    if (learningHub && app?.hidden && !intro?.hidden) learningHub.hidden = false;
+    if (learningHub && app?.hidden) learningHub.hidden = false;
+
     const profile = familyProfile();
     if (reason === 'owner') {
       setSubscriptionSettings('Modo de pruebas del adulto. No representa una suscripción pagada.');
-    } else if (profile.email) {
-      setSubscriptionSettings(`Activa · ${profile.email}`);
+    } else if (profile.email || currentUser?.email) {
+      setSubscriptionSettings(`Activa · ${currentUser?.email || profile.email}`);
     } else {
       setSubscriptionSettings('Suscripción activa.');
     }
@@ -268,13 +348,38 @@
     return readLocalJson(SUBSCRIPTION_KEY) || {};
   }
 
-  async function loadSubscriptionConfig() {
+  function currentAuthHeaders(extra = {}) {
+    const token = currentSession?.access_token;
+    return token ? { ...extra, Authorization: `Bearer ${token}` } : extra;
+  }
+
+  async function loadPublicConfig() {
     try {
-      const res = await fetch('/api/subscription-config', { headers: { Accept: 'application/json' } });
+      const res = await fetch('/api/public-config', { headers: { Accept: 'application/json' }, cache: 'no-store' });
       const data = await res.json().catch(() => ({}));
-      if (res.ok) subscriptionConfig = { ...subscriptionConfig, ...data };
-    } catch {
-      // La pantalla sigue siendo utilizable para el modo de pruebas local.
+      if (!res.ok) throw new Error(data.error || 'No fue posible cargar la configuración.');
+
+      subscriptionConfig = {
+        ...subscriptionConfig,
+        ...(data.subscription || {})
+      };
+
+      if (data.supabase?.url && data.supabase?.publishableKey && window.supabase?.createClient) {
+        supabaseClient = window.supabase.createClient(
+          data.supabase.url,
+          data.supabase.publishableKey,
+          {
+            auth: {
+              persistSession: true,
+              autoRefreshToken: true,
+              detectSessionInUrl: true
+            }
+          }
+        );
+      }
+    } catch (error) {
+      console.error('public config error', error);
+      setAuthStatus('No pudimos conectar la cuenta familiar. Revisa las variables de Supabase en Vercel.', 'error');
     }
 
     if (subscriptionPrice) {
@@ -283,10 +388,225 @@
     }
   }
 
+  function captureLocalProgress() {
+    return {
+      atlas: readLocalJson(CLOUD_PROGRESS_KEYS.atlas) || {},
+      notebook: readLocalJson(CLOUD_PROGRESS_KEYS.notebook) || {},
+      academy: readLocalJson(CLOUD_PROGRESS_KEYS.academy) || {}
+    };
+  }
+
+  function jsonHasContent(value) {
+    return Boolean(value && typeof value === 'object' && Object.keys(value).length);
+  }
+
+  function progressHasContent(progress) {
+    return jsonHasContent(progress?.atlas) || jsonHasContent(progress?.notebook) || jsonHasContent(progress?.academy);
+  }
+
+  function progressLatestTimestamp(progress) {
+    return Math.max(
+      Number(progress?.atlas?.savedAt || 0),
+      Number(progress?.notebook?.savedAt || 0),
+      Number(progress?.academy?.savedAt || 0)
+    );
+  }
+
+  function sameProgress(local, remote) {
+    try {
+      return JSON.stringify(local.atlas || {}) === JSON.stringify(remote.atlas_state || {})
+        && JSON.stringify(local.notebook || {}) === JSON.stringify(remote.notebook_state || {})
+        && JSON.stringify(local.academy || {}) === JSON.stringify(remote.academy_state || {});
+    } catch {
+      return false;
+    }
+  }
+
+  function applyRemoteProgress(remote) {
+    if (remote?.atlas_state && typeof remote.atlas_state === 'object') writeLocalJson(CLOUD_PROGRESS_KEYS.atlas, remote.atlas_state);
+    if (remote?.notebook_state && typeof remote.notebook_state === 'object') writeLocalJson(CLOUD_PROGRESS_KEYS.notebook, remote.notebook_state);
+    if (remote?.academy_state && typeof remote.academy_state === 'object') writeLocalJson(CLOUD_PROGRESS_KEYS.academy, remote.academy_state);
+  }
+
+  async function hydrateCloudProgress() {
+    if (!supabaseClient || !currentUser || !activeChild) return { ready: false };
+
+    const { data: remote, error } = await supabaseClient
+      .from('child_progress')
+      .select('child_id, atlas_state, notebook_state, academy_state, updated_at')
+      .eq('child_id', activeChild.id)
+      .maybeSingle();
+
+    if (error) throw error;
+
+    const local = captureLocalProgress();
+    const localHas = progressHasContent(local);
+
+    if (!remote) {
+      const { error: insertError } = await supabaseClient
+        .from('child_progress')
+        .insert({
+          child_id: activeChild.id,
+          atlas_state: local.atlas,
+          notebook_state: local.notebook,
+          academy_state: local.academy,
+          last_device: String(navigator.userAgent || '').slice(0, 240)
+        });
+      if (insertError) throw insertError;
+      cloudReady = true;
+      return { ready: true, migratedLocal: localHas };
+    }
+
+    if (sameProgress(local, remote)) {
+      cloudReady = true;
+      return { ready: true };
+    }
+
+    const remoteHas = jsonHasContent(remote.atlas_state) || jsonHasContent(remote.notebook_state) || jsonHasContent(remote.academy_state);
+    const remoteTimestamp = Date.parse(remote.updated_at || '') || 0;
+    const localTimestamp = progressLatestTimestamp(local);
+
+    // Si este dispositivo tiene progreso y es claramente más reciente, lo subimos.
+    if (localHas && localTimestamp > remoteTimestamp) {
+      const { error: updateError } = await supabaseClient
+        .from('child_progress')
+        .update({
+          atlas_state: local.atlas,
+          notebook_state: local.notebook,
+          academy_state: local.academy,
+          last_device: String(navigator.userAgent || '').slice(0, 240)
+        })
+        .eq('child_id', activeChild.id);
+      if (updateError) throw updateError;
+      cloudReady = true;
+      return { ready: true, uploadedLocal: true };
+    }
+
+    // Si Supabase ya tiene progreso (por ejemplo desde otra tablet), lo cargamos.
+    if (remoteHas) {
+      applyRemoteProgress(remote);
+      cloudReady = true;
+      return { ready: true, reloadNeeded: true };
+    }
+
+    // Nube vacía + local disponible: migración inicial del progreso existente.
+    if (localHas) {
+      const { error: updateError } = await supabaseClient
+        .from('child_progress')
+        .update({
+          atlas_state: local.atlas,
+          notebook_state: local.notebook,
+          academy_state: local.academy,
+          last_device: String(navigator.userAgent || '').slice(0, 240)
+        })
+        .eq('child_id', activeChild.id);
+      if (updateError) throw updateError;
+    }
+
+    cloudReady = true;
+    return { ready: true };
+  }
+
+  async function syncProgressToCloud() {
+    if (!cloudReady || !supabaseClient || !currentUser || !activeChild || testerMode) return false;
+    if (cloudSyncInFlight) {
+      cloudSyncQueued = true;
+      return false;
+    }
+
+    cloudSyncInFlight = true;
+    try {
+      const local = captureLocalProgress();
+      const { error } = await supabaseClient
+        .from('child_progress')
+        .upsert({
+          child_id: activeChild.id,
+          atlas_state: local.atlas,
+          notebook_state: local.notebook,
+          academy_state: local.academy,
+          last_device: String(navigator.userAgent || '').slice(0, 240)
+        }, { onConflict: 'child_id' });
+      if (error) throw error;
+      return true;
+    } catch (error) {
+      console.error('cloud sync error', error);
+      return false;
+    } finally {
+      cloudSyncInFlight = false;
+      if (cloudSyncQueued) {
+        cloudSyncQueued = false;
+        scheduleCloudSync(200);
+      }
+    }
+  }
+
+  function scheduleCloudSync(delay = 900) {
+    if (!cloudReady || testerMode) return;
+    clearTimeout(cloudSyncTimer);
+    cloudSyncTimer = setTimeout(() => { syncProgressToCloud(); }, delay);
+  }
+
+  async function createChildProfile(name) {
+    if (!supabaseClient || !currentUser) throw new Error('Debes iniciar sesión primero.');
+    const cleaned = String(name || '').trim().replace(/\s+/g, ' ');
+    if (cleaned.length < 2) throw new Error('Escribe un nombre de al menos 2 caracteres.');
+
+    const { data, error } = await supabaseClient
+      .from('children')
+      .insert({ parent_id: currentUser.id, name: cleaned })
+      .select('id, name, parent_id, is_active, created_at')
+      .single();
+    if (error) throw error;
+
+    activeChild = data;
+    writeLocalJson(FAMILY_PROFILE_KEY, {
+      email: currentUser.email,
+      childName: activeChild.name,
+      childId: activeChild.id,
+      updatedAt: Date.now()
+    });
+    updatePersonalization();
+    return data;
+  }
+
+  async function loadOrCreateChild() {
+    if (!supabaseClient || !currentUser) return null;
+
+    const { data, error } = await supabaseClient
+      .from('children')
+      .select('id, name, parent_id, is_active, created_at')
+      .eq('parent_id', currentUser.id)
+      .eq('is_active', true)
+      .order('created_at', { ascending: true })
+      .limit(1)
+      .maybeSingle();
+
+    if (error) throw error;
+    if (data) {
+      activeChild = data;
+      writeLocalJson(FAMILY_PROFILE_KEY, {
+        email: currentUser.email,
+        childName: data.name,
+        childId: data.id,
+        updatedAt: Date.now()
+      });
+      updatePersonalization();
+      return data;
+    }
+
+    const pending = familyProfile();
+    if (pending.email === currentUser.email && String(pending.childName || '').trim().length >= 2) {
+      return createChildProfile(pending.childName);
+    }
+
+    activeChild = null;
+    updatePersonalization();
+    return null;
+  }
+
   async function verifySubscription({ silent = false } = {}) {
-    const stored = storedSubscription();
-    if (!stored.id) {
-      if (!silent) setAccessStatus('Todavía no hay una suscripción guardada en este dispositivo.', 'warning');
+    if (!currentSession?.access_token) {
+      if (!silent) setAccessStatus('Inicia sesión para verificar tu suscripción.', 'warning');
       return false;
     }
 
@@ -294,28 +614,38 @@
     if (verifySubscriptionBtn) verifySubscriptionBtn.disabled = true;
 
     try {
-      const res = await fetch(`/api/subscription-status?id=${encodeURIComponent(stored.id)}`, {
-        headers: { Accept: 'application/json' },
+      const stored = storedSubscription();
+      const query = stored.id ? `?id=${encodeURIComponent(stored.id)}` : '';
+      const res = await fetch(`/api/subscription-status${query}`, {
+        headers: currentAuthHeaders({ Accept: 'application/json' }),
         cache: 'no-store'
       });
       const data = await res.json().catch(() => ({}));
+
+      if (res.status === 404) {
+        if (verifySubscriptionBtn) verifySubscriptionBtn.hidden = true;
+        setSubscriptionSettings('Todavía no hay una suscripción activa.');
+        if (!silent) setAccessStatus('Tu cuenta está lista. Puedes activar el plan mensual cuando quieras.', 'info');
+        return false;
+      }
       if (!res.ok) throw new Error(data.error || 'No pudimos verificar el pago.');
 
       writeLocalJson(SUBSCRIPTION_KEY, {
-        ...stored,
-        status: data.status || stored.status || 'pending',
+        id: data.id,
+        status: data.status || 'pending',
+        email: currentUser.email,
         checkedAt: Date.now()
       });
 
       if (data.active) {
-        setAccessStatus('Suscripción activa. Entrando a la Expedición…', 'success');
+        setAccessStatus('Suscripción activa. Entrando a La Expedición…', 'success');
         grantCommercialAccess('subscription');
         return true;
       }
 
       if (verifySubscriptionBtn) verifySubscriptionBtn.hidden = false;
       const labels = {
-        pending: 'El pago todavía está pendiente. Complétalo en Mercado Pago y vuelve a verificar.',
+        pending: 'La suscripción todavía está pendiente. Completa el proceso en Mercado Pago.',
         paused: 'La suscripción está pausada.',
         cancelled: 'La suscripción está cancelada.',
         canceled: 'La suscripción está cancelada.'
@@ -324,8 +654,8 @@
       if (!silent) setAccessStatus(text, 'warning');
       setSubscriptionSettings(text);
       return false;
-    } catch (err) {
-      if (!silent) setAccessStatus(err.message || 'No pudimos verificar la suscripción.', 'error');
+    } catch (error) {
+      if (!silent) setAccessStatus(error.message || 'No pudimos verificar la suscripción.', 'error');
       setSubscriptionSettings('No fue posible verificar la suscripción.');
       return false;
     } finally {
@@ -333,34 +663,143 @@
     }
   }
 
+  async function handleAuthenticatedFamily() {
+    if (!currentUser) return;
+    showCommercialGate();
+    showAccountStage('subscriber');
+    setAccessStatus('Cargando el perfil y el progreso…', 'loading');
+
+    try {
+      const child = await loadOrCreateChild();
+      if (!child) {
+        showAccountStage('child');
+        setAccessStatus('Tu cuenta está lista. Ahora crea el perfil del niño.', 'info');
+        return;
+      }
+
+      showAccountStage('subscriber');
+      const hydration = await hydrateCloudProgress();
+      if (hydration.reloadNeeded) {
+        setAccessStatus('Encontré progreso guardado en la nube. Cargándolo…', 'success');
+        setTimeout(() => window.location.reload(), 250);
+        return;
+      }
+
+      if (hydration.migratedLocal || hydration.uploadedLocal) {
+        setAccessStatus('Progreso anterior guardado en Supabase ✅', 'success');
+      } else {
+        setAccessStatus('Cuenta y progreso sincronizados con Supabase.', 'success');
+      }
+
+      if (subscriptionConfig.enabled === false) {
+        grantCommercialAccess('owner');
+        setSubscriptionSettings('Suscripciones desactivadas por configuración.');
+        return;
+      }
+
+      const active = await verifySubscription({ silent: true });
+      if (!active) {
+        showCommercialGate();
+        showAccountStage('subscriber');
+        const returned = new URLSearchParams(window.location.search).get('subscription') === 'return';
+        setAccessStatus(
+          returned ? 'Volviste de Mercado Pago. Pulsa “Ya pagué · verificar acceso”.' : 'Tu cuenta está lista. Activa la suscripción para entrar.',
+          returned ? 'info' : 'info'
+        );
+        if (returned && verifySubscriptionBtn) verifySubscriptionBtn.hidden = false;
+      }
+    } catch (error) {
+      console.error('family initialization error', error);
+      showCommercialGate();
+      showAccountStage('subscriber');
+      setAccessStatus(error.message || 'No fue posible cargar la cuenta familiar.', 'error');
+    }
+  }
+
+  async function handleAuthSession(session) {
+    currentSession = session || null;
+    currentUser = session?.user || null;
+    cloudReady = false;
+
+    if (!currentUser) {
+      familyLoadPromise = null;
+      activeChild = null;
+      showCommercialGate();
+      showAccountStage('auth');
+      updatePersonalization();
+      setAuthStatus('');
+      return;
+    }
+
+    updatePersonalization();
+    if (familyLoadPromise) return familyLoadPromise;
+    familyLoadPromise = handleAuthenticatedFamily().finally(() => { familyLoadPromise = null; });
+    return familyLoadPromise;
+  }
+
+  async function signOutFamily() {
+    try {
+      await syncProgressToCloud();
+    } catch {}
+
+    cloudReady = false;
+    activeChild = null;
+    currentUser = null;
+    currentSession = null;
+
+    // Evita que el progreso de una familia se mezcle con otra en un dispositivo compartido.
+    [
+      CLOUD_PROGRESS_KEYS.atlas,
+      CLOUD_PROGRESS_KEYS.notebook,
+      CLOUD_PROGRESS_KEYS.academy,
+      'emilianoMission',
+      'emilianoUnlocked',
+      'emilianoIntroSeen'
+    ].forEach(key => localStorage.removeItem(key));
+    localStorage.removeItem(FAMILY_PROFILE_KEY);
+    localStorage.removeItem(SUBSCRIPTION_KEY);
+
+    if (supabaseClient) await supabaseClient.auth.signOut();
+    window.location.reload();
+  }
+
   async function initializeCommercialAccess() {
     updatePersonalization();
-    await loadSubscriptionConfig();
+    await loadPublicConfig();
 
     if (sessionStorage.getItem(OWNER_DEMO_KEY) === 'yes') {
       grantCommercialAccess('owner');
       return;
     }
 
-    if (subscriptionConfig.enabled === false) {
-      grantCommercialAccess('owner');
-      setSubscriptionSettings('Suscripciones desactivadas por configuración.');
+    showCommercialGate();
+
+    if (!supabaseClient) {
+      showAccountStage('auth');
+      setAuthStatus('Supabase no está configurado o no pudo cargarse. Revisa SUPABASE_URL y SUPABASE_PUBLISHABLE_KEY en Vercel.', 'error');
       return;
     }
 
-    showCommercialGate();
+    supabaseClient.auth.onAuthStateChange((event, session) => {
+      if (event === 'TOKEN_REFRESHED') {
+        currentSession = session;
+        currentUser = session?.user || currentUser;
+        return;
+      }
+      if (event === 'SIGNED_IN' || event === 'SIGNED_OUT' || event === 'USER_UPDATED') {
+        setTimeout(() => { handleAuthSession(session); }, 0);
+      }
+    });
 
-    const stored = storedSubscription();
-    if (stored.id) {
-      if (verifySubscriptionBtn) verifySubscriptionBtn.hidden = false;
-      const ok = await verifySubscription({ silent: true });
-      if (ok) return;
-      setAccessStatus('Encontré una suscripción en este dispositivo. Puedes verificarla de nuevo.', 'info');
-    } else if (!subscriptionConfig.paymentConfigured) {
-      setAccessStatus('Mercado Pago aún no está configurado en Vercel. Usa el acceso de adulto para probar.', 'warning');
+    const { data, error } = await supabaseClient.auth.getSession();
+    if (error) {
+      setAuthStatus('No pudimos recuperar la sesión. Intenta iniciar sesión.', 'error');
+      showAccountStage('auth');
+      return;
     }
-  }
 
+    await handleAuthSession(data.session);
+  }
 
   const NOTEBOOK_SAVE_KEY = 'emilianoNotebookV1';
   const TESTER_PIN = '123456';
@@ -510,6 +949,7 @@
         savedAt:Date.now()
       }));
     } catch {}
+    scheduleCloudSync();
   }
 
   function recordAcademySkill(skill, correct) {
@@ -967,6 +1407,7 @@
         savedAt: Date.now()
       }));
     } catch {}
+    scheduleCloudSync();
   }
 
   function resetNotebookState() {
@@ -977,6 +1418,7 @@
     notebookJournalLines = [];
     notebookChatHistory = [];
     localStorage.removeItem(NOTEBOOK_SAVE_KEY);
+    scheduleCloudSync(250);
   }
 
   function buildDivisionDiscovery(current, divisor) {
@@ -1938,6 +2380,7 @@
       localStorage.setItem('emilianoUnlocked', String(state.unlocked));
       localStorage.setItem('emilianoSound', soundOn ? 'on' : 'off');
     } catch {}
+    scheduleCloudSync();
   }
 
   function clearCurrentMissionState() {
@@ -3132,6 +3575,7 @@
     localStorage.setItem('emilianoUnlocked', '0');
     localStorage.removeItem(SAVE_KEY);
     resetNotebookState();
+    scheduleCloudSync(250);
 
     settingsModal.hidden = true;
     document.body.classList.remove('modal-open');
@@ -3148,6 +3592,7 @@
     localStorage.setItem('emilianoMission', '0');
     localStorage.setItem('emilianoUnlocked', '0');
     localStorage.removeItem(SAVE_KEY);
+    scheduleCloudSync(250);
     gameArea.hidden = false;
     renderMission({ restore: false });
     window.scrollTo({top:0, behavior:'smooth'});
@@ -3342,25 +3787,141 @@
     document.body.classList.add('modal-open');
   });
 
-  subscriptionForm?.addEventListener('submit', async (e) => {
+  signupTabBtn?.addEventListener('click', () => setAuthMode('signup'));
+  loginTabBtn?.addEventListener('click', () => setAuthMode('login'));
+
+  authForm?.addEventListener('submit', async (e) => {
     e.preventDefault();
+    if (!supabaseClient) {
+      setAuthStatus('Supabase no está disponible. Revisa la configuración en Vercel.', 'error');
+      return;
+    }
 
     const email = String(parentEmailInput?.value || '').trim().toLowerCase();
+    const password = String(parentPasswordInput?.value || '');
     const childName = String(childNameInput?.value || '').trim().replace(/\s+/g, ' ');
 
-    if (!email || !email.includes('@')) {
-      setAccessStatus('Escribe el correo del adulto que realizará la suscripción.', 'warning');
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      setAuthStatus('Escribe un correo válido.', 'warning');
       parentEmailInput?.focus();
       return;
     }
-    if (childName.length < 2) {
-      setAccessStatus('Escribe el nombre del niño para personalizar la Expedición.', 'warning');
+    if (password.length < 6) {
+      setAuthStatus('La contraseña debe tener al menos 6 caracteres.', 'warning');
+      parentPasswordInput?.focus();
+      return;
+    }
+    if (authMode === 'signup' && childName.length < 2) {
+      setAuthStatus('Escribe el nombre del niño.', 'warning');
       childNameInput?.focus();
       return;
     }
 
-    writeLocalJson(FAMILY_PROFILE_KEY, { email, childName, updatedAt: Date.now() });
-    updatePersonalization();
+    if (authSubmitBtn) {
+      authSubmitBtn.disabled = true;
+      authSubmitBtn.textContent = authMode === 'signup' ? 'Creando cuenta…' : 'Ingresando…';
+    }
+    setAuthStatus(authMode === 'signup' ? 'Creando tu cuenta familiar…' : 'Iniciando sesión…', 'loading');
+
+    try {
+      if (authMode === 'signup') {
+        writeLocalJson(FAMILY_PROFILE_KEY, {
+          email,
+          childName,
+          updatedAt: Date.now()
+        });
+
+        const { data, error } = await supabaseClient.auth.signUp({
+          email,
+          password,
+          options: {
+            data: { account_type: 'parent' },
+            emailRedirectTo: `${window.location.origin}/`
+          }
+        });
+        if (error) throw error;
+
+        if (!data.session) {
+          setAuthStatus('Cuenta creada. Revisa tu correo y confirma el enlace para activar la cuenta. Después vuelve e inicia sesión.', 'success');
+          setAuthMode('login');
+          if (parentEmailInput) parentEmailInput.value = email;
+          return;
+        }
+
+        setAuthStatus('Cuenta creada ✅ Preparando el perfil del niño…', 'success');
+        await handleAuthSession(data.session);
+      } else {
+        const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
+        if (error) throw error;
+        setAuthStatus('Sesión iniciada ✅', 'success');
+        await handleAuthSession(data.session);
+      }
+    } catch (error) {
+      console.error('auth error', error);
+      const raw = String(error?.message || 'No fue posible acceder a la cuenta.');
+      const friendly = raw.toLowerCase().includes('invalid login')
+        ? 'Correo o contraseña incorrectos.'
+        : raw.toLowerCase().includes('already registered')
+          ? 'Este correo ya tiene una cuenta. Usa “Ya tengo cuenta”.'
+          : raw;
+      setAuthStatus(friendly, 'error');
+    } finally {
+      if (authSubmitBtn) {
+        authSubmitBtn.disabled = false;
+        authSubmitBtn.textContent = authMode === 'signup' ? 'Crear cuenta familiar' : 'Iniciar sesión';
+      }
+    }
+  });
+
+  childProfileForm?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const name = String(childProfileNameInput?.value || '').trim().replace(/\s+/g, ' ');
+    if (name.length < 2) {
+      setAccessStatus('Escribe el nombre del niño.', 'warning');
+      childProfileNameInput?.focus();
+      return;
+    }
+
+    if (createChildBtn) {
+      createChildBtn.disabled = true;
+      createChildBtn.textContent = 'Creando perfil…';
+    }
+    setAccessStatus('Creando el perfil y preparando el progreso…', 'loading');
+
+    try {
+      await createChildProfile(name);
+      const hydration = await hydrateCloudProgress();
+      if (hydration.reloadNeeded) {
+        setAccessStatus('Cargando el progreso guardado…', 'success');
+        setTimeout(() => window.location.reload(), 250);
+        return;
+      }
+      showAccountStage('subscriber');
+      setAccessStatus('Perfil creado y sincronizado ✅ Ahora puedes activar la suscripción.', 'success');
+      await verifySubscription({ silent: true });
+    } catch (error) {
+      console.error('create child error', error);
+      setAccessStatus(error.message || 'No pudimos crear el perfil.', 'error');
+    } finally {
+      if (createChildBtn) {
+        createChildBtn.disabled = false;
+        createChildBtn.textContent = 'Crear perfil y continuar';
+      }
+    }
+  });
+
+  subscriptionForm?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    if (!currentSession?.access_token || !currentUser || !activeChild) {
+      setAccessStatus('Primero inicia sesión y crea el perfil del niño.', 'warning');
+      return;
+    }
+
+    if (!subscriptionConfig.paymentConfigured) {
+      setAccessStatus('Mercado Pago todavía no está configurado en Vercel.', 'warning');
+      return;
+    }
 
     if (subscribeBtn) {
       subscribeBtn.disabled = true;
@@ -3371,8 +3932,8 @@
     try {
       const res = await fetch('/api/subscription-create', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-        body: JSON.stringify({ email })
+        headers: currentAuthHeaders({ 'Content-Type': 'application/json', Accept: 'application/json' }),
+        body: JSON.stringify({ childId: activeChild.id })
       });
       const data = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error(data.error || 'No fue posible iniciar la suscripción.');
@@ -3380,7 +3941,7 @@
       writeLocalJson(SUBSCRIPTION_KEY, {
         id: data.id,
         status: data.status || 'pending',
-        email,
+        email: currentUser.email,
         createdAt: Date.now()
       });
 
@@ -3389,8 +3950,8 @@
 
       setAccessStatus('Te llevaremos a Mercado Pago para completar la suscripción.', 'success');
       window.location.assign(data.initPoint);
-    } catch (err) {
-      setAccessStatus(err.message || 'No fue posible conectar con Mercado Pago.', 'error');
+    } catch (error) {
+      setAccessStatus(error.message || 'No fue posible conectar con Mercado Pago.', 'error');
       if (subscribeBtn) {
         subscribeBtn.disabled = false;
         subscribeBtn.textContent = 'Suscribirme con Mercado Pago';
@@ -3408,6 +3969,9 @@
     const active = await verifySubscription({ silent: false });
     showToast(active ? 'Suscripción activa ✅' : 'Revisa el estado de la suscripción.');
   });
+
+  accessSignOutBtn?.addEventListener('click', () => signOutFamily());
+  accountSignOutBtn?.addEventListener('click', () => signOutFamily());
 
   ownerAccessBtn?.addEventListener('click', () => {
     if (!ownerPinForm) return;
@@ -3432,9 +3996,19 @@
   skipIntroBtn.addEventListener('click', () => openApp(false));
 
   // Guarda incluso si se cierra el navegador, se bloquea la tablet o cambia de app.
-  window.addEventListener('pagehide', () => { saveGameState(); saveNotebookState(); saveAcademyState(); });
+  window.addEventListener('pagehide', () => {
+    saveGameState();
+    saveNotebookState();
+    saveAcademyState();
+    syncProgressToCloud();
+  });
   document.addEventListener('visibilitychange', () => {
-    if (document.visibilityState === 'hidden') { saveGameState(); saveNotebookState(); saveAcademyState(); }
+    if (document.visibilityState === 'hidden') {
+      saveGameState();
+      saveNotebookState();
+      saveAcademyState();
+      syncProgressToCloud();
+    }
   });
 
   const initialSaved = readSavedGame();

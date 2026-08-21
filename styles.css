@@ -1943,3 +1943,115 @@ button.subject-card { cursor: pointer; font: inherit; }
   .subject-copy strong { font-size: 1.08rem; }
 }
 
+
+/* ==========================================================================
+   CUENTA FAMILIAR + SUPABASE
+   ========================================================================== */
+.auth-view,
+.child-setup,
+.subscriber-view {
+  margin-top: 16px;
+}
+
+.auth-tabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  padding: 5px;
+  border-radius: 18px;
+  background: rgba(0,0,0,.16);
+  border: 1px solid rgba(255,255,255,.08);
+}
+
+.auth-tab {
+  min-height: 44px;
+  border: 0;
+  border-radius: 14px;
+  background: transparent;
+  color: #aeb8df;
+  font-weight: 950;
+  cursor: pointer;
+}
+
+.auth-tab.active {
+  color: #111831;
+  background: linear-gradient(135deg,var(--cyan),#b9f8ff);
+  box-shadow: 0 6px 18px rgba(88,230,255,.15);
+}
+
+.auth-form { margin-top: 12px; }
+.compact-form { margin-top: 12px; }
+
+.account-chip {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 13px 14px;
+  border-radius: 18px;
+  background: rgba(255,255,255,.07);
+  border: 1px solid rgba(255,255,255,.10);
+}
+
+.account-chip > span {
+  width: 42px;
+  height: 42px;
+  border-radius: 14px;
+  display: grid;
+  place-items: center;
+  background: rgba(88,230,255,.10);
+  font-size: 1.3rem;
+}
+
+.account-chip > div {
+  min-width: 0;
+  display: grid;
+  gap: 2px;
+}
+
+.account-chip small {
+  color: var(--cyan);
+  font-size: .62rem;
+  font-weight: 1000;
+  letter-spacing: .1em;
+}
+
+.account-chip strong {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.account-chip em {
+  color: var(--muted);
+  font-size: .73rem;
+  font-style: normal;
+}
+
+.child-setup h2 {
+  margin: 17px 0 5px;
+  font-size: 1.45rem;
+}
+
+.child-setup > p {
+  margin: 0;
+  color: var(--muted);
+  font-size: .86rem;
+  line-height: 1.5;
+}
+
+.subscriber-view .access-plan { margin-top: 12px; }
+
+.access-text-btn {
+  width: 100%;
+  margin-top: 10px;
+  min-height: 42px;
+  border: 0;
+  background: transparent;
+  color: #9eabd8;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.sync-indicator {
+  color: var(--green);
+}
