@@ -14,6 +14,14 @@ function getAppUrl(req) {
   return host ? `${proto}://${host}` : '';
 }
 
+function normalizeEmail(value = '') {
+  return String(value).trim().toLowerCase();
+}
+
+function isEmail(value = '') {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+}
+
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     res.setHeader('Allow', 'POST');
@@ -28,8 +36,27 @@ export default async function handler(req, res) {
       return res.status(503).json({ error: 'Mercado Pago aún no está configurado en Vercel.' });
     }
 
-    const email = String(user.email || '').trim().toLowerCase();
-    if (!email) return res.status(400).json({ error: 'La cuenta no tiene un correo válido.' });
+    const accountEmail = normalizeEmail(user.email || '');
+    if (!isEmail(accountEmail)) {
+      return res.status(400).json({ error: 'La cuenta no tiene un correo válido.' });
+    }
+
+    const mercadoPagoMode = String(process.env.MERCADOPAGO_MODE || 'production')
+      .trim()
+      .toLowerCase();
+
+    const testPayerEmail = normalizeEmail(process.env.MERCADOPAGO_TEST_PAYER_EMAIL || '');
+    const isTestMode = mercadoPagoMode === 'test';
+
+    if (isTestMode && !isEmail(testPayerEmail)) {
+      return res.status(500).json({
+        error: 'MERCADOPAGO_TEST_PAYER_EMAIL no está configurado con un correo válido.'
+      });
+    }
+
+    // En pruebas Mercado Pago exige un payer_email de prueba. En producción
+    // usamos el correo real del adulto autenticado en La Expedición.
+    const payerEmail = isTestMode ? testPayerEmail : accountEmail;
 
     const childId = String(req.body?.childId || '').trim();
     if (childId) {
@@ -70,7 +97,7 @@ export default async function handler(req, res) {
     const payload = {
       reason: process.env.SUBSCRIPTION_REASON || 'La Expedición - Plan familiar mensual',
       external_reference: externalReference,
-      payer_email: email,
+      payer_email: payerEmail,
       auto_recurring: {
         frequency: 1,
         frequency_type: 'months',
@@ -93,12 +120,24 @@ export default async function handler(req, res) {
     const data = await mpRes.json().catch(() => ({}));
     if (!mpRes.ok) {
       console.error('Mercado Pago subscription-create error', mpRes.status, data);
-      return res.status(502).json({ error: data?.message || 'Mercado Pago rechazó la creación de la suscripción.' });
+      return res.status(502).json({
+        error: data?.message || 'Mercado Pago rechazó la creación de la suscripción.',
+        mercadoPagoStatus: mpRes.status
+      });
     }
 
     if (!data?.id || !data?.init_point) {
       return res.status(502).json({ error: 'Mercado Pago no devolvió el enlace de suscripción.' });
     }
+
+    const providerData = {
+      ...data,
+      _expedicion: {
+        mode: isTestMode ? 'test' : 'production',
+        account_email: accountEmail,
+        payer_email_sent: payerEmail
+      }
+    };
 
     const { error: saveError } = await admin
       .from('subscriptions')
@@ -107,23 +146,26 @@ export default async function handler(req, res) {
         provider: 'mercadopago',
         provider_subscription_id: data.id,
         external_reference: externalReference,
-        payer_email: email,
+        payer_email: payerEmail,
         status: String(data.status || 'pending').toLowerCase(),
         next_payment_date: data.next_payment_date || null,
         amount,
         currency,
-        raw_provider_data: data
+        raw_provider_data: providerData
       });
 
     if (saveError) {
       console.error('Supabase subscription insert error', saveError);
-      return res.status(500).json({ error: 'La suscripción se creó en Mercado Pago, pero no pudimos asociarla a tu cuenta. Contacta soporte.' });
+      return res.status(500).json({
+        error: 'La suscripción se creó en Mercado Pago, pero no pudimos asociarla a tu cuenta. Contacta soporte.'
+      });
     }
 
     return res.status(200).json({
       id: data.id,
       status: data.status || 'pending',
-      initPoint: data.init_point
+      initPoint: data.init_point,
+      mode: isTestMode ? 'test' : 'production'
     });
   } catch (error) {
     return sendServerError(res, error, 'No fue posible crear la suscripción.');
