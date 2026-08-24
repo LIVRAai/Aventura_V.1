@@ -1,28 +1,31 @@
-# La Expedición · V17
+# La Expedición · V18
 
-Versión productiva basada en V16 Premium, ahora con **gestión autoservicio del plan familiar**.
+Versión productiva enfocada en **acceso familiar y experiencia de inicio de sesión**.
 
-## Qué agrega
+## Cambios de esta versión
 
-- `Perfil → Plan familiar → Administrar` abre un panel de suscripción claro para el adulto.
-- El adulto puede cancelar la **renovación mensual** sin salir de La Expedición.
-- La cancelación se ejecuta en el backend autenticado mediante la API de Suscripciones de Mercado Pago.
-- Si existe un periodo ya pagado, el acceso continúa hasta la fecha de la siguiente renovación que tenía registrada la suscripción antes de cancelarla.
-- Una suscripción cancelada no genera nuevos cobros recurrentes.
-- El estado se mantiene sincronizado por `/api/subscription-status` y por el webhook.
-- Se evita crear otra suscripción mientras todavía exista una activa o una cancelada con acceso pagado vigente.
+- El formulario de acceso queda centrado dentro de la tarjeta en PC, tablet y celular.
+- Después de iniciar sesión aparece una transición neutra: **“Preparando tu aventura…”**.
+- La pantalla de pago **no se muestra** hasta que `/api/subscription-status` confirme que la cuenta no tiene acceso vigente.
+- Una cuenta con plan activo —incluido acceso vigente con renovación desactivada— entra directamente a La Expedición.
+- Si el estado del plan no se puede verificar por un problema temporal, la app **no ofrece pagar**. Muestra “Intentar de nuevo” para evitar posibles dobles cobros.
+- Después de crear un perfil infantil también se verifica primero el acceso antes de presentar el checkout.
+- El checkout de dos columnas se reserva para escritorios amplios; laptops y tablets horizontales usan una columna centrada para evitar recortes.
+- Se eliminaron mensajes intermedios como “cuenta y progreso listos” del recorrido normal.
+- Se agregó favicon propio y se retiró el archivo público de previsualización de desarrollo.
 
 ## No cambia
 
-- CardForm / tokenización de tarjeta.
-- Supabase y las tablas existentes.
+- Mercado Pago / CardForm.
+- Cancelación de renovación implementada en V17.1.
+- Supabase y tablas actuales.
+- Webhooks.
 - NOVA y `/api/tutor`.
 - Progreso local + nube.
 - Contenido pedagógico.
-- Arquitectura responsive y capa visual premium de V16.
 
 ## Despliegue
 
-Reemplaza la versión anterior por esta carpeta y haz redeploy en Vercel.
+Reemplaza la versión anterior por esta carpeta y haz un redeploy en Vercel.
 
 **No requiere nuevas variables de entorno ni nuevas tablas.**

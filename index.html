@@ -3,6 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
   <meta name="theme-color" content="#5b4bff" />
   <title>La Expedición | Refuerzo de Matemáticas</title>
   <link rel="stylesheet" href="styles.css" />
@@ -40,6 +41,24 @@
       <p class="access-lead">
         Refuerzo de matemáticas organizado por habilidades. El niño aprende jugando y el adulto puede ver con claridad qué está practicando y qué necesita reforzar.
       </p>
+
+      <div id="accountLoadingView" class="account-loading-view" hidden aria-live="polite" aria-busy="true">
+        <div class="account-loading-orbit" aria-hidden="true">
+          <span class="account-loading-core">÷</span>
+          <span class="account-loading-dot dot-one"></span>
+          <span class="account-loading-dot dot-two"></span>
+          <span class="account-loading-dot dot-three"></span>
+        </div>
+        <div class="account-loading-copy">
+          <span class="premium-step-label">LA EXPEDICIÓN</span>
+          <h2 id="accountLoadingTitle">Preparando tu aventura…</h2>
+          <p id="accountLoadingText">Estamos dejando todo listo para continuar donde quedaste.</p>
+        </div>
+        <div id="accountLoadingActions" class="account-loading-actions" hidden>
+          <button id="accountRetryBtn" class="access-primary" type="button">Intentar de nuevo</button>
+          <button id="accountLoadingSignOutBtn" class="access-text-btn" type="button">Usar otra cuenta</button>
+        </div>
+      </div>
 
       <div id="authView" class="auth-view">
         <div class="auth-tabs" role="tablist" aria-label="Acceso a la cuenta">

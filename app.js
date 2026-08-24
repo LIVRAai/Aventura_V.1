@@ -140,6 +140,12 @@
   const introBackBtn = $('#introBackBtn');
   const hubMathStatus = $('#hubMathStatus');
   const hubMathProgressBar = $('#hubMathProgressBar');
+  const accountLoadingView = $('#accountLoadingView');
+  const accountLoadingTitle = $('#accountLoadingTitle');
+  const accountLoadingText = $('#accountLoadingText');
+  const accountLoadingActions = $('#accountLoadingActions');
+  const accountRetryBtn = $('#accountRetryBtn');
+  const accountLoadingSignOutBtn = $('#accountLoadingSignOutBtn');
   const authView = $('#authView');
   const signupTabBtn = $('#signupTabBtn');
   const loginTabBtn = $('#loginTabBtn');
@@ -788,10 +794,25 @@
 
   function showAccountStage(stage = 'auth') {
     if (accessGate) accessGate.dataset.stage = stage;
+    if (accountLoadingView) accountLoadingView.hidden = stage !== 'loading';
     if (authView) authView.hidden = stage !== 'auth';
     if (childSetupView) childSetupView.hidden = stage !== 'child';
     if (subscriberView) subscriberView.hidden = stage !== 'subscriber';
     updatePersonalization();
+  }
+
+  function setAccountLoadingState({
+    title = 'Preparando tu aventura…',
+    text = 'Estamos dejando todo listo para continuar donde quedaste.',
+    error = false
+  } = {}) {
+    if (accountLoadingTitle) accountLoadingTitle.textContent = title;
+    if (accountLoadingText) accountLoadingText.textContent = text;
+    if (accountLoadingView) {
+      accountLoadingView.classList.toggle('is-error', Boolean(error));
+      accountLoadingView.setAttribute('aria-busy', String(!error));
+    }
+    if (accountLoadingActions) accountLoadingActions.hidden = !error;
   }
 
   function grantCommercialAccess(reason = 'subscription') {
@@ -1357,7 +1378,8 @@
     } catch (error) {
       if (!silent) setAccessStatus('No pudimos revisar el acceso en este momento. Intenta nuevamente.', 'error');
       setSubscriptionSettings('No pudimos revisar el plan.');
-      return false;
+      // null significa “no pudimos verificar”. Nunca debe convertirse en una invitación a pagar.
+      return null;
     } finally {
       if (verifySubscriptionBtn) verifySubscriptionBtn.disabled = false;
     }
@@ -1456,30 +1478,29 @@
 
   async function handleAuthenticatedFamily() {
     if (!currentUser) return;
+
+    // Nunca enseñamos el checkout hasta saber con certeza si esta cuenta necesita pagar.
     showCommercialGate();
-    showAccountStage('subscriber');
-    setAccessStatus('Cargando el perfil y el progreso…', 'loading');
+    showAccountStage('loading');
+    setAccessStatus('');
+    setAccountLoadingState();
 
     try {
       const child = await loadOrCreateChild();
       if (!child) {
         showAccountStage('child');
-        setAccessStatus('Tu cuenta está lista. Ahora crea el perfil del niño.', 'info');
+        setAccessStatus('');
         return;
       }
 
-      showAccountStage('subscriber');
       const hydration = await hydrateCloudProgress();
       if (hydration.reloadNeeded) {
-        setAccessStatus('Encontré tu progreso. Cargando la aventura…', 'success');
+        setAccountLoadingState({
+          title: 'Recuperando tu progreso…',
+          text: 'Encontramos tu avance guardado. Ya casi está lista la aventura.'
+        });
         setTimeout(() => window.location.reload(), 250);
         return;
-      }
-
-      if (hydration.migratedLocal || hydration.uploadedLocal) {
-        setAccessStatus('Tu progreso está guardado ✅', 'success');
-      } else {
-        setAccessStatus('Cuenta y progreso listos ✅', 'success');
       }
 
       if (subscriptionConfig.enabled === false) {
@@ -1488,22 +1509,45 @@
         return;
       }
 
-      const active = await verifySubscription({ silent: true });
-      if (!active) {
-        showCommercialGate();
-        showAccountStage('subscriber');
-        const returned = new URLSearchParams(window.location.search).get('subscription') === 'return';
-        setAccessStatus(
-          returned ? 'Estamos confirmando tu pago. Pulsa “Actualizar acceso”.' : 'Tu cuenta está lista. Activa el plan familiar para comenzar.',
-          returned ? 'info' : 'info'
-        );
-        if (returned && verifySubscriptionBtn) verifySubscriptionBtn.hidden = false;
+      const accessState = await verifySubscription({ silent: true });
+
+      if (accessState === true) {
+        // verifySubscription ya concedió el acceso. No se muestra ninguna pantalla intermedia de cobro.
+        return;
       }
+
+      if (accessState === null) {
+        // Si no pudimos verificar el plan, protegemos al cliente de un posible doble cobro.
+        showAccountStage('loading');
+        setAccountLoadingState({
+          title: 'No pudimos abrir tu cuenta',
+          text: 'Tu plan no cambió. Revisa tu conexión e inténtalo nuevamente.',
+          error: true
+        });
+        return;
+      }
+
+      // Solo llegamos aquí cuando el servidor confirmó que no existe acceso vigente.
+      showCommercialGate();
+      showAccountStage('subscriber');
+      const returned = new URLSearchParams(window.location.search).get('subscription') === 'return';
+      setAccessStatus(
+        returned
+          ? 'Estamos terminando de confirmar tu pago. Puedes actualizar el acceso en unos segundos.'
+          : '',
+        returned ? 'info' : ''
+      );
+      if (verifySubscriptionBtn) verifySubscriptionBtn.hidden = !returned;
     } catch (error) {
       console.error('family initialization error', error);
       showCommercialGate();
-      showAccountStage('subscriber');
-      setAccessStatus('No pudimos preparar tu cuenta en este momento. Intenta nuevamente.', 'error');
+      showAccountStage('loading');
+      setAccessStatus('');
+      setAccountLoadingState({
+        title: 'No pudimos abrir tu cuenta',
+        text: 'No hicimos ningún cambio. Intenta nuevamente en unos segundos.',
+        error: true
+      });
     }
   }
 
@@ -4920,12 +4964,12 @@
           return;
         }
 
-        setAuthStatus('Cuenta creada ✅ Preparando el perfil del niño…', 'success');
+        setAuthStatus('');
         await handleAuthSession(data.session);
       } else {
         const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
         if (error) throw error;
-        setAuthStatus('Sesión iniciada ✅', 'success');
+        setAuthStatus('');
         await handleAuthSession(data.session);
       }
     } catch (error) {
@@ -4973,9 +5017,24 @@
         setTimeout(() => window.location.reload(), 250);
         return;
       }
+      showAccountStage('loading');
+      setAccessStatus('');
+      setAccountLoadingState({
+        title: 'Preparando tu aventura…',
+        text: 'El perfil está listo. Estamos comprobando el acceso de tu cuenta.'
+      });
+      const accessState = await verifySubscription({ silent: true });
+      if (accessState === true) return;
+      if (accessState === null) {
+        setAccountLoadingState({
+          title: 'No pudimos revisar tu acceso',
+          text: 'El perfil quedó guardado. Intenta nuevamente para continuar.',
+          error: true
+        });
+        return;
+      }
       showAccountStage('subscriber');
-      setAccessStatus('¡Perfil listo! ✨ Ahora puedes activar el plan familiar.', 'success');
-      await verifySubscription({ silent: true });
+      setAccessStatus('');
     } catch (error) {
       console.error('create child error', error);
       setAccessStatus('No pudimos crear el perfil en este momento. Intenta nuevamente.', 'error');
@@ -5025,6 +5084,18 @@
 
   accessSignOutBtn?.addEventListener('click', () => signOutFamily());
   childSetupSignOutBtn?.addEventListener('click', () => signOutFamily());
+  accountLoadingSignOutBtn?.addEventListener('click', () => signOutFamily());
+  accountRetryBtn?.addEventListener('click', async () => {
+    if (!currentSession?.user) {
+      showAccountStage('auth');
+      return;
+    }
+    showAccountStage('loading');
+    setAccountLoadingState();
+    setAccessStatus('');
+    if (familyLoadPromise) return;
+    await handleAuthSession(currentSession);
+  });
   accountSignOutBtn?.addEventListener('click', () => signOutFamily());
 
   reviewHomeBtn?.addEventListener('click', () => {
