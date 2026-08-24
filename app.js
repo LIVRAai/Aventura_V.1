@@ -681,7 +681,7 @@
 
   function showLearningHubView() {
     if (!commercialAccessGranted) {
-      showCommercialGate('Activa el plan familiar para comenzar la aventura.');
+      showCommercialGate('Activa el plan familiar para empezar a aprender con NOVA.');
       return;
     }
     closeNavigationOverlays();
@@ -802,7 +802,7 @@
   }
 
   function setAccountLoadingState({
-    title = 'Preparando tu aventura…',
+    title = 'Preparando tu espacio de aprendizaje…',
     text = 'Estamos dejando todo listo para continuar donde quedaste.',
     error = false
   } = {}) {
@@ -978,7 +978,7 @@
       });
 
       if (currentSubscriptionInfo.active || currentSubscriptionInfo.status === 'authorized') {
-        setAccessStatus('¡Plan activo! 🚀 Preparando la aventura…', 'success');
+        setAccessStatus('¡Plan activo! ✨ Preparando Aprende con NOVA…', 'success');
         grantCommercialAccess('subscription');
         updateSubscriptionSummary(currentSubscriptionInfo);
         return;
@@ -1358,7 +1358,7 @@
             );
           }
         } else if (!silent) {
-          setAccessStatus('¡Plan activo! 🚀 Entrando a La Expedición…', 'success');
+          setAccessStatus('¡Plan activo! ✨ Todo listo para aprender con NOVA.', 'success');
         }
         grantCommercialAccess('subscription');
         updateSubscriptionSummary(currentSubscriptionInfo);
@@ -1497,7 +1497,7 @@
       if (hydration.reloadNeeded) {
         setAccountLoadingState({
           title: 'Recuperando tu progreso…',
-          text: 'Encontramos tu avance guardado. Ya casi está lista la aventura.'
+          text: 'Encontramos tu avance guardado. Ya casi está listo tu espacio de aprendizaje.'
         });
         setTimeout(() => window.location.reload(), 250);
         return;
@@ -3494,7 +3494,7 @@
 
   function openApp(withSound = true) {
     if (!commercialAccessGranted) {
-      showCommercialGate('Activa el plan familiar para entrar a La Expedición.');
+      showCommercialGate('Activa el plan familiar para entrar a Aprende con NOVA.');
       return;
     }
     if (withSound) playStart();
@@ -3556,7 +3556,7 @@
         <article><span>⚡ HABILIDAD ESPECIAL</span><strong>${p.power}</strong></article>
         ${p.size ? `<article><span>📏 TAMAÑO</span><strong>${p.size}</strong></article>` : ''}
       </div>
-      <div class="math-link"><span>÷</span><div><small>LA REGLA DE LA EXPEDICIÓN</small><strong>Para seguir avanzando, debes resolver el código de división de esta criatura.</strong></div></div>`;
+      <div class="math-link"><span>÷</span><div><small>LA REGLA DE NOVA</small><strong>Para seguir avanzando, debes resolver el código de división de esta criatura.</strong></div></div>`;
     animalModal.hidden = false;
     document.body.classList.add('modal-open');
     playTap();
@@ -5020,7 +5020,7 @@
       showAccountStage('loading');
       setAccessStatus('');
       setAccountLoadingState({
-        title: 'Preparando tu aventura…',
+        title: 'Preparando tu espacio de aprendizaje…',
         text: 'El perfil está listo. Estamos comprobando el acceso de tu cuenta.'
       });
       const accessState = await verifySubscription({ silent: true });
