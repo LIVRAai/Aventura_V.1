@@ -116,9 +116,13 @@ async function refreshSubscription(admin, subscriptionId, token) {
     _expedicion: previousMeta
   };
 
-  const status = String(data.status || 'unknown').toLowerCase();
+  const providerStatus = String(data.status || 'unknown').toLowerCase();
+  const cancellationRequested = Boolean(previousMeta.cancel_requested);
+  const appStatus = cancellationRequested && ['paused', 'canceled', 'cancelled'].includes(providerStatus)
+    ? 'canceled'
+    : (providerStatus === 'cancelled' ? 'canceled' : providerStatus);
   const update = {
-    status: status === 'cancelled' ? 'canceled' : status,
+    status: appStatus,
     provider_subscription_id: String(data.id),
     next_payment_date: data.next_payment_date || existing?.next_payment_date || null,
     raw_provider_data: rawProviderData

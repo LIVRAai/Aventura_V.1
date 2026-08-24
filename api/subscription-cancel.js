@@ -39,8 +39,8 @@ async function findManageableSubscription(admin, userId) {
   if (!Array.isArray(data) || !data.length) return null;
 
   return data.find(row => String(row.status).toLowerCase() === 'authorized')
-    || data.find(row => String(row.status).toLowerCase() === 'paused')
     || data.find(row => ['canceled', 'cancelled'].includes(String(row.status).toLowerCase()))
+    || data.find(row => String(row.status).toLowerCase() === 'paused')
     || data[0];
 }
 
@@ -83,7 +83,8 @@ export default async function handler(req, res) {
 
     const id = String(subscription.provider_subscription_id);
     const previousMeta = subscription.raw_provider_data?._expedicion || {};
-    const alreadyCanceled = ['canceled', 'cancelled'].includes(String(subscription.status).toLowerCase());
+    const alreadyCanceled = ['canceled', 'cancelled'].includes(String(subscription.status).toLowerCase())
+      || Boolean(previousMeta.cancel_requested);
 
     if (alreadyCanceled) {
       const accessUntil = futureIso(previousMeta.access_until);
@@ -98,8 +99,8 @@ export default async function handler(req, res) {
       });
     }
 
-    // Consultamos el estado real antes de cancelar para conservar el fin del
-    // periodo ya pagado. Normalmente coincide con next_payment_date.
+    // Leemos primero el estado real para conservar exactamente el final del
+    // periodo ya cubierto por el cliente.
     const before = await mpRequest(`/preapproval/${encodeURIComponent(id)}`, accessToken);
     if (!before.response.ok) {
       console.error('Mercado Pago subscription-cancel precheck error', {
@@ -117,79 +118,65 @@ export default async function handler(req, res) {
     }
 
     const providerBeforeStatus = String(before.data?.status || subscription.status || '').toLowerCase();
-    if (['canceled', 'cancelled'].includes(providerBeforeStatus)) {
-      const accessUntil = futureIso(previousMeta.access_until || subscription.next_payment_date || before.data?.next_payment_date);
-      const canceledAt = asIso(previousMeta.canceled_at) || new Date().toISOString();
-      const rawProviderData = mergeProviderData(before.data, subscription.raw_provider_data, {
-        canceled_at: canceledAt,
-        access_until: accessUntil,
-        cancellation_source: previousMeta.cancellation_source || 'self_service'
-      });
-
-      const { error: syncError } = await admin
-        .from('subscriptions')
-        .update({
-          status: 'canceled',
-          next_payment_date: before.data?.next_payment_date || subscription.next_payment_date || null,
-          raw_provider_data: rawProviderData
-        })
-        .eq('parent_id', user.id)
-        .eq('provider_subscription_id', id);
-      if (syncError) throw syncError;
-
-      return res.status(200).json({
-        id,
-        status: 'canceled',
-        active: Boolean(accessUntil),
-        renews: false,
-        accessUntil,
-        canceledAt,
-        alreadyCanceled: true
-      });
-    }
-
     const accessUntil = futureIso(before.data?.next_payment_date || subscription.next_payment_date);
     const canceledAt = new Date().toISOString();
 
-    const canceled = await mpRequest(`/preapproval/${encodeURIComponent(id)}`, accessToken, {
-      method: 'PUT',
-      body: JSON.stringify({ status: 'canceled' })
-    });
+    // En la API productiva de Mercado Pago Colombia esta integración recibe
+    // HTTP 400 al intentar status="canceled" sobre /preapproval/{id}, aunque
+    // la documentación pública lo liste. Para detener futuros débitos usamos
+    // el estado soportado "paused" y La Expedición lo trata como una
+    // cancelación de renovación definitiva para el cliente.
+    let providerAfter = before.data;
+    let providerRequestId = before.requestId || null;
 
-    if (!canceled.response.ok) {
-      console.error('Mercado Pago subscription-cancel error', {
-        status: canceled.response.status,
-        requestId: canceled.requestId,
-        message: canceled.data?.message,
-        error: canceled.data?.error,
-        cause: canceled.data?.cause
+    if (providerBeforeStatus !== 'paused') {
+      const stopped = await mpRequest(`/preapproval/${encodeURIComponent(id)}`, accessToken, {
+        method: 'PUT',
+        body: JSON.stringify({ status: 'paused' })
       });
-      return res.status(502).json({
-        error: 'No pudimos cancelar la renovación. No se hizo ningún cambio.',
-        mercadoPagoRequestId: canceled.requestId || null
-      });
+
+      if (!stopped.response.ok) {
+        console.error('Mercado Pago subscription-stop-renewal error', {
+          status: stopped.response.status,
+          requestId: stopped.requestId,
+          message: stopped.data?.message,
+          error: stopped.data?.error,
+          cause: stopped.data?.cause
+        });
+        return res.status(502).json({
+          error: 'No pudimos cancelar la renovación. No se hizo ningún cambio.',
+          mercadoPagoRequestId: stopped.requestId || null
+        });
+      }
+
+      const providerStatus = String(stopped.data?.status || '').toLowerCase();
+      if (providerStatus !== 'paused') {
+        return res.status(502).json({
+          error: 'Mercado Pago no confirmó que los próximos cobros quedaron detenidos.',
+          mercadoPagoRequestId: stopped.requestId || null
+        });
+      }
+
+      providerAfter = stopped.data;
+      providerRequestId = stopped.requestId || null;
     }
 
-    const status = String(canceled.data?.status || 'canceled').toLowerCase();
-    if (!['canceled', 'cancelled'].includes(status)) {
-      return res.status(502).json({
-        error: 'Mercado Pago no confirmó la cancelación. No se hizo ningún cambio visible.',
-        mercadoPagoRequestId: canceled.requestId || null
-      });
-    }
-
-    const rawProviderData = mergeProviderData(canceled.data, subscription.raw_provider_data, {
+    const rawProviderData = mergeProviderData(providerAfter, subscription.raw_provider_data, {
       canceled_at: canceledAt,
       access_until: accessUntil,
+      cancel_requested: true,
       cancellation_source: 'self_service',
-      cancellation_request_id: canceled.requestId || null
+      cancellation_provider_action: 'paused',
+      cancellation_request_id: providerRequestId
     });
 
     const { error: updateError } = await admin
       .from('subscriptions')
       .update({
+        // Estado de negocio de La Expedición. El estado real del proveedor
+        // queda almacenado en raw_provider_data.status = "paused".
         status: 'canceled',
-        next_payment_date: canceled.data?.next_payment_date || subscription.next_payment_date || null,
+        next_payment_date: providerAfter?.next_payment_date || subscription.next_payment_date || null,
         raw_provider_data: rawProviderData
       })
       .eq('parent_id', user.id)

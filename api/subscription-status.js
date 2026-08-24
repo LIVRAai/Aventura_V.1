@@ -98,16 +98,20 @@ export default async function handler(req, res) {
       });
     }
 
-    const status = String(data?.status || 'unknown').toLowerCase();
+    const providerStatus = String(data?.status || 'unknown').toLowerCase();
     const meta = subscription.raw_provider_data?._expedicion || {};
-    const accessUntil = ['canceled', 'cancelled'].includes(status)
+    const cancellationRequested = Boolean(meta.cancel_requested);
+    const accessUntil = cancellationRequested || ['canceled', 'cancelled'].includes(providerStatus)
       ? futureIso(meta.access_until)
       : null;
-    const entitlementActive = status === 'authorized' || Boolean(accessUntil);
+    const entitlementActive = providerStatus === 'authorized' || Boolean(accessUntil);
+    const appStatus = cancellationRequested && ['paused', 'canceled', 'cancelled'].includes(providerStatus)
+      ? 'canceled'
+      : (providerStatus === 'cancelled' ? 'canceled' : providerStatus);
 
     const rawProviderData = providerDataWithMeta(data, subscription.raw_provider_data);
     const update = {
-      status,
+      status: appStatus,
       next_payment_date: data?.next_payment_date || subscription.next_payment_date || null,
       raw_provider_data: rawProviderData
     };
@@ -125,12 +129,12 @@ export default async function handler(req, res) {
 
     return res.status(200).json({
       id,
-      status: status === 'cancelled' ? 'canceled' : status,
+      status: appStatus,
       active: entitlementActive,
-      renews: status === 'authorized',
+      renews: appStatus === 'authorized',
       accessUntil,
       canceledAt: asIso(meta.canceled_at),
-      nextPaymentDate: status === 'authorized'
+      nextPaymentDate: appStatus === 'authorized'
         ? (data?.next_payment_date || subscription.next_payment_date || null)
         : null,
       amount: data?.auto_recurring?.transaction_amount ?? subscription.amount ?? null,
