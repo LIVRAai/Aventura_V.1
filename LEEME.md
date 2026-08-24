@@ -1,27 +1,36 @@
-# La Expedición · V14
+# La Expedición · V15
 
-Versión de producto con navegación jerárquica, experiencia infantil colorida, pago productivo y revisión para adultos sin afectar el progreso real.
+Versión enfocada en claridad pedagógica para niños y familias.
 
-## Flujo del niño
+## Arquitectura visible
 
-`Inicio → Matemáticas → Etapa → Actividad`
+`Inicio → Matemáticas → División → Etapa → Actividad`
 
-## Flujo familiar
+Los nombres narrativos como **Atlas Animal** siguen dentro de la aventura, pero dejan de ser la forma principal de explicar el aprendizaje al adulto.
 
-`Crear cuenta / Iniciar sesión → Perfil del niño → Plan familiar → Inicio`
+## Qué ve el adulto
 
-## Revisión para adultos
+Desde **Perfil → Progreso de aprendizaje** puede consultar:
 
-Desde la pantalla de acceso existe `Revisar la app`. Al ingresar con la clave privada se activa una sesión temporal que no guarda el progreso. Una barra visible únicamente para adultos permite abrir el panel de revisión o volver completamente al inicio de sesión desde cualquier pantalla.
+- qué tema está reforzando el niño;
+- qué está trabajando en este momento;
+- comprensión de la división;
+- procedimiento escrito;
+- propiedades de los números;
+- aplicación en problemas;
+- habilidades dominadas, en progreso o que necesitan refuerzo.
 
-## Responsive
+El avance de una misión no se interpreta automáticamente como dominio. Los estados de dominio se basan en respuestas observadas durante la práctica.
 
-La interfaz tiene reglas específicas para PC, tablet, celular, teléfonos pequeños y orientación horizontal.
+## Qué ve el niño
+
+La experiencia conserva misiones, animales, mundos y NOVA, pero la navegación principal usa objetivos fáciles de entender:
+
+- **Comprender la división**;
+- **Resolver divisiones paso a paso**.
+
+Dentro del entrenamiento, las actividades están agrupadas por procedimiento, propiedades y aplicación.
 
 ## Integraciones
 
-Se conservan Supabase, NOVA/OpenAI y Mercado Pago productivo. Consulta `CONFIGURA_VERCEL.md` para las variables privadas del despliegue.
-
-## Cambios detallados
-
-Consulta `REVISION_UX_V14.md`.
+Se conservan la cuenta familiar, sincronización de progreso, NOVA y el flujo productivo de pago existentes. No requiere nuevas tablas ni nuevas variables de entorno frente a V14.

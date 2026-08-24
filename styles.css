@@ -2912,3 +2912,248 @@ body.review-active .app-shell {
   .modal-card { max-height:96dvh; }
   .home-adventure-banner { min-height:126px; }
 }
+
+/* ========================================================================== */
+/* V15 · CLARIDAD PEDAGÓGICA PARA FAMILIAS                                   */
+/* La aventura conserva sus nombres narrativos, pero el producto se organiza  */
+/* por materia → tema → habilidad.                                            */
+/* ========================================================================== */
+
+.path-experience {
+  display:inline-flex;
+  width:max-content;
+  max-width:100%;
+  margin-top:3px;
+  padding:5px 9px;
+  border-radius:999px;
+  background:rgba(9,16,53,.22);
+  color:#fff !important;
+  font-size:.62rem !important;
+  font-weight:900 !important;
+  letter-spacing:.01em;
+}
+
+.settings-row-action {
+  width:100%;
+  margin:0;
+  color:inherit;
+  font:inherit;
+  text-align:left;
+  cursor:pointer;
+  appearance:none;
+}
+.settings-row-action:hover { background:rgba(88,230,255,.09); border-color:rgba(88,230,255,.18); }
+.settings-row-action:active { transform:scale(.995); }
+.settings-row-arrow {
+  width:38px;
+  height:38px;
+  display:grid;
+  place-items:center;
+  border-radius:13px;
+  background:rgba(88,230,255,.11);
+  color:#bff7ff;
+  font-weight:1000;
+  font-size:1rem;
+}
+
+.parent-progress-modal-card {
+  width:min(100%, 900px);
+  max-height:calc(100dvh - 32px);
+  padding:22px;
+  background:
+    radial-gradient(circle at 92% 3%, rgba(88,230,255,.12), transparent 24%),
+    radial-gradient(circle at 6% 92%, rgba(157,124,255,.13), transparent 28%),
+    linear-gradient(160deg,#101641,#172253);
+}
+.parent-progress-head { align-items:flex-start; }
+.parent-progress-head h2 { margin-bottom:3px; }
+.parent-progress-child { margin:0;color:#bac4ec;font-size:.78rem;font-weight:800; }
+
+.parent-topic-summary {
+  margin-top:12px;
+  padding:18px;
+  display:grid;
+  grid-template-columns:auto minmax(0,1fr) auto;
+  gap:15px;
+  align-items:center;
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:24px;
+  background:linear-gradient(135deg,rgba(84,118,255,.24),rgba(36,185,220,.13));
+}
+.parent-topic-icon {
+  width:62px;height:62px;border-radius:20px;display:grid;place-items:center;
+  background:linear-gradient(145deg,#fff3a7,#ffd84d);
+  color:#1a2040;font-size:1.8rem;box-shadow:0 10px 24px rgba(0,0,0,.16);
+}
+.parent-topic-summary > div:nth-child(2) { min-width:0; }
+.parent-topic-summary span { display:block;color:#9fefff;font-size:.61rem;font-weight:1000;letter-spacing:.10em; }
+.parent-topic-summary strong { display:block;margin:3px 0 5px;color:#fff;font-size:1.35rem; }
+.parent-topic-summary p { margin:0;color:#dce3ff;font-size:.78rem;line-height:1.48; }
+.parent-overall-progress {
+  min-width:82px;padding:10px 12px;border-radius:18px;text-align:center;
+  background:rgba(6,12,43,.32);border:1px solid rgba(255,255,255,.10);
+}
+.parent-overall-progress strong { margin:0;color:#fff2a8;font-size:1.35rem; }
+.parent-overall-progress small { display:block;margin-top:2px;color:#b7c1eb;font-size:.62rem;font-weight:900; }
+
+.parent-current-focus {
+  margin:14px 0 18px;padding:15px 17px;border-radius:20px;
+  border:1px solid rgba(255,216,77,.17);
+  background:linear-gradient(135deg,rgba(255,216,77,.10),rgba(255,115,183,.055));
+}
+.parent-current-focus span { display:block;color:#ffe882;font-size:.58rem;font-weight:1000;letter-spacing:.10em; }
+.parent-current-focus strong { display:block;margin:4px 0;color:#fff;font-size:1rem; }
+.parent-current-focus p { margin:0;color:#dce2fb;font-size:.76rem;line-height:1.45; }
+
+.parent-learning-sections { display:grid;gap:13px; }
+.parent-learning-block {
+  overflow:hidden;
+  border-radius:23px;
+  border:1px solid rgba(255,255,255,.10);
+  background:rgba(255,255,255,.045);
+}
+.parent-learning-block-head {
+  padding:16px 17px;
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto;
+  gap:14px;
+  align-items:start;
+  border-bottom:1px solid rgba(255,255,255,.075);
+}
+.parent-learning-block-head > div { min-width:0; }
+.parent-learning-block-head span { display:block;color:#9eefff;font-size:.58rem;font-weight:1000;letter-spacing:.09em; }
+.parent-learning-block-head h3 { margin:4px 0 5px;color:#fff;font-size:1rem; }
+.parent-learning-block-head p { margin:0;color:#bfc8ec;font-size:.73rem;line-height:1.45; }
+.parent-learning-block-head > b {
+  align-self:center;
+  max-width:150px;
+  padding:7px 9px;border-radius:11px;
+  color:#dbe2ff;background:rgba(255,255,255,.06);
+  font-size:.63rem;text-align:center;line-height:1.25;
+}
+.parent-learning-block-head > b.mastered { color:#baffd3;background:rgba(112,240,167,.10); }
+.parent-learning-block-head > b.progress { color:#fff0a3;background:rgba(255,216,77,.10); }
+.parent-learning-block-head > b.reinforce { color:#ffd0e7;background:rgba(255,112,183,.11); }
+.parent-learning-block-head > b.not-started { color:#c8d0ed;background:rgba(255,255,255,.05); }
+
+.parent-skill-list { display:grid; }
+.parent-skill-row {
+  min-width:0;
+  display:grid;
+  grid-template-columns:38px minmax(0,1fr) auto;
+  gap:10px;
+  align-items:center;
+  padding:12px 15px;
+}
+.parent-skill-row + .parent-skill-row { border-top:1px solid rgba(255,255,255,.055); }
+.parent-skill-icon {
+  width:36px;height:36px;border-radius:12px;display:grid;place-items:center;
+  background:rgba(255,255,255,.065);font-size:1rem;
+}
+.parent-skill-copy { min-width:0;display:grid;gap:2px; }
+.parent-skill-copy strong { color:#fff;font-size:.79rem; }
+.parent-skill-copy small { color:#aeb9df;font-size:.66rem;line-height:1.36; }
+.parent-skill-row > b {
+  max-width:170px;
+  padding:6px 8px;
+  border-radius:10px;
+  font-size:.60rem;
+  text-align:center;
+  line-height:1.28;
+  white-space:normal;
+}
+.parent-skill-row.mastered > b { color:#baffd3;background:rgba(112,240,167,.10); }
+.parent-skill-row.progress > b { color:#fff0a3;background:rgba(255,216,77,.10); }
+.parent-skill-row.reinforce > b { color:#ffd0e7;background:rgba(255,112,183,.11); }
+.parent-skill-row.not-started > b { color:#c6cfea;background:rgba(255,255,255,.055); }
+
+.parent-recommendation-card {
+  margin-top:16px;
+  padding:15px 16px;
+  display:grid;
+  grid-template-columns:auto 1fr;
+  gap:12px;
+  align-items:center;
+  border-radius:20px;
+  border:1px solid rgba(157,124,255,.20);
+  background:linear-gradient(135deg,rgba(157,124,255,.16),rgba(59,230,255,.07));
+}
+.parent-recommendation-card span { color:#d7caff;font-size:.58rem;font-weight:1000;letter-spacing:.08em; }
+.parent-recommendation-card p { margin:4px 0 0;color:#e1e6ff;font-size:.76rem;line-height:1.45; }
+.parent-progress-note {
+  margin:12px 2px 0;
+  color:#919bc3;
+  font-size:.63rem;
+  line-height:1.45;
+}
+
+@media (min-width: 760px) {
+  .parent-learning-sections { grid-template-columns:1fr 1fr;align-items:start; }
+  .parent-learning-block.concept-block { grid-column:1 / -1; }
+  .parent-learning-block.application-block { grid-column:1 / -1; }
+}
+
+@media (max-width: 720px) {
+  .parent-progress-modal-card { padding:16px 13px calc(18px + env(safe-area-inset-bottom)); }
+  .parent-topic-summary { grid-template-columns:50px minmax(0,1fr);padding:14px;gap:11px; }
+  .parent-topic-icon { width:50px;height:50px;border-radius:16px;font-size:1.45rem; }
+  .parent-overall-progress { grid-column:1 / -1;width:100%;display:flex;justify-content:space-between;align-items:center;padding:9px 12px; }
+  .parent-overall-progress strong { font-size:1.1rem; }
+  .parent-overall-progress small { margin:0; }
+  .parent-learning-block-head { grid-template-columns:1fr;padding:14px;gap:9px; }
+  .parent-learning-block-head > b { justify-self:start;max-width:100%; }
+  .parent-skill-row { grid-template-columns:34px minmax(0,1fr);padding:11px 13px;gap:9px; }
+  .parent-skill-icon { width:34px;height:34px; }
+  .parent-skill-row > b { grid-column:2;justify-self:start;max-width:100%; }
+  .path-experience { width:fit-content; }
+}
+
+@media (max-width: 420px) {
+  .parent-topic-summary p { font-size:.72rem; }
+  .parent-current-focus { padding:13px 14px; }
+  .parent-skill-copy strong { font-size:.76rem; }
+  .parent-skill-copy small { font-size:.64rem; }
+}
+
+/* V15 · Agrupación pedagógica del entrenamiento */
+.academy-route-grid {
+  display:grid;
+  grid-template-columns:1fr;
+  gap:14px;
+}
+.academy-learning-group {
+  padding:14px;
+  border-radius:22px;
+  border:1px solid rgba(255,255,255,.09);
+  background:rgba(255,255,255,.035);
+}
+.academy-learning-group-head {
+  display:grid;
+  grid-template-columns:auto minmax(0,1fr);
+  gap:11px;
+  align-items:start;
+  margin-bottom:11px;
+}
+.academy-learning-group-icon {
+  width:42px;height:42px;border-radius:14px;display:grid;place-items:center;
+  background:rgba(88,230,255,.09);font-size:1.15rem;
+}
+.academy-learning-group-head > div { min-width:0; }
+.academy-learning-group-head small {
+  display:block;color:#9eefff;font-size:.57rem;font-weight:1000;letter-spacing:.09em;
+}
+.academy-learning-group-head strong {
+  display:block;margin:3px 0 4px;color:#fff;font-size:.95rem;
+}
+.academy-learning-group-head p {
+  margin:0;color:#aeb9df;font-size:.71rem;line-height:1.42;
+}
+.academy-route-group-grid {
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:10px;
+}
+@media (max-width:720px) {
+  .academy-learning-group { padding:12px; }
+  .academy-route-group-grid { grid-template-columns:1fr; }
+}

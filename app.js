@@ -76,6 +76,22 @@
   const ownerPinInput = $('#ownerPinInput');
   const subscriptionSettingsText = $('#subscriptionSettingsText');
   const subscriptionSettingsBtn = $('#subscriptionSettingsBtn');
+  const learningProgressSettingsBtn = $('#learningProgressSettingsBtn');
+  const learningProgressModal = $('#learningProgressModal');
+  const closeLearningProgressBtn = $('#closeLearningProgressBtn');
+  const learningProgressChild = $('#learningProgressChild');
+  const parentOverallProgress = $('#parentOverallProgress');
+  const parentCurrentFocus = $('#parentCurrentFocus');
+  const parentCurrentFocusDetail = $('#parentCurrentFocusDetail');
+  const parentConceptProgress = $('#parentConceptProgress');
+  const parentConceptSkills = $('#parentConceptSkills');
+  const parentProcedureStatus = $('#parentProcedureStatus');
+  const parentProcedureSkills = $('#parentProcedureSkills');
+  const parentNumbersStatus = $('#parentNumbersStatus');
+  const parentNumbersSkills = $('#parentNumbersSkills');
+  const parentApplicationStatus = $('#parentApplicationStatus');
+  const parentApplicationSkills = $('#parentApplicationSkills');
+  const parentRecommendation = $('#parentRecommendation');
   const introChildName = $('#introChildName');
   const finalChildName = $('#finalChildName');
   const learningHub = $('#learningHub');
@@ -423,8 +439,8 @@
 
     if (hubMathStatus) {
       hubMathStatus.textContent = snap.atlasCompleted
-        ? (snap.academyStarted ? `Academia de División · ${snap.academyPct}%` : 'Atlas completo · Academia lista')
-        : `Atlas Animal · misión ${snap.currentMission + 1} de ${snap.total}`;
+        ? (snap.academyStarted ? `División · práctica ${snap.academyPct}%` : 'División · comprensión completada')
+        : `División · comprensión · misión ${snap.currentMission + 1} de ${snap.total}`;
     }
     if (hubMathProgressBar) {
       const combined = snap.atlasCompleted ? Math.round(50 + (snap.academyPct / 2)) : Math.round(snap.atlasPct / 2);
@@ -433,13 +449,13 @@
 
     if (continueLearningTitle) {
       continueLearningTitle.textContent = snap.atlasCompleted
-        ? (snap.route ? snap.route.title : 'Academia de División con NOVA')
-        : 'Atlas Animal';
+        ? (snap.route ? snap.route.title : 'Resolver divisiones paso a paso')
+        : 'Comprender la división';
     }
     if (continueLearningMeta) {
       continueLearningMeta.textContent = snap.atlasCompleted
-        ? (snap.route ? `Matemáticas · ${snap.route.goal}` : 'Matemáticas · comienza la etapa 2')
-        : `Matemáticas · misión ${snap.currentMission + 1} de ${snap.total}`;
+        ? (snap.route ? `División · ${snap.route.goal}` : 'División · empieza el procedimiento con NOVA')
+        : `División · comprender · misión ${snap.currentMission + 1} de ${snap.total}`;
     }
     if (continueLearningProgressBar) {
       continueLearningProgressBar.style.width = `${snap.atlasCompleted ? snap.academyPct : snap.atlasPct}%`;
@@ -455,7 +471,7 @@
     if (academyPathProgressBar) academyPathProgressBar.style.width = `${snap.academyPct}%`;
     if (academyPathStatus) academyPathStatus.textContent = snap.atlasCompleted
       ? (snap.academyStarted ? `${snap.academyPct}% del entrenamiento recorrido` : 'Lista para comenzar')
-      : 'Se desbloquea al completar el Atlas';
+      : 'Se desbloquea al completar la comprensión';
     if (academyPathState) academyPathState.textContent = snap.atlasCompleted
       ? (snap.academyStarted ? 'Continuar →' : 'Empezar →')
       : '🔒';
@@ -463,18 +479,18 @@
     academyPathBtn?.setAttribute('aria-disabled', String(!snap.atlasCompleted && !testerMode));
 
     if (mathContinueTitle) mathContinueTitle.textContent = snap.atlasCompleted
-      ? (snap.route ? snap.route.title : 'Academia de División con NOVA')
-      : 'Atlas Animal';
+      ? (snap.route ? snap.route.title : 'Resolver divisiones paso a paso')
+      : 'Comprender la división';
     if (mathContinueMeta) mathContinueMeta.textContent = snap.atlasCompleted
-      ? (snap.route ? `Retoma: ${snap.route.goal}` : 'Empieza la etapa 2 con NOVA')
-      : `Continúa en la misión ${snap.currentMission + 1} de ${snap.total}`;
+      ? (snap.route ? `Retoma esta habilidad: ${snap.route.goal}` : 'Empieza a resolver divisiones con NOVA')
+      : `Sigue construyendo la idea de división · misión ${snap.currentMission + 1} de ${snap.total}`;
 
     if (mathRecommendation) {
       mathRecommendation.textContent = !snap.atlasCompleted
-        ? `Continúa el Atlas Animal. Vas en la misión ${snap.currentMission + 1} de ${snap.total}.`
+        ? `Sigue reforzando qué significa dividir. Vas en la misión ${snap.currentMission + 1} de ${snap.total}.`
         : snap.route
           ? `Continúa con “${snap.route.title}”. NOVA retomará el punto donde quedaste.`
-          : 'El Atlas está completo. Ya puedes comenzar la Academia de División con NOVA.';
+          : 'Ya comprendiste la base. Ahora puedes empezar a resolver divisiones paso a paso con NOVA.';
     }
   }
 
@@ -491,7 +507,7 @@
     }
   }
   function closeNavigationOverlays() {
-    [settingsModal, worldModal, animalModal, guideModal, testerModal].forEach(modal => {
+    [settingsModal, learningProgressModal, worldModal, animalModal, guideModal, testerModal].forEach(modal => {
       if (modal) modal.hidden = true;
     });
     document.body.classList.remove('modal-open');
@@ -574,12 +590,12 @@
 
   function showAcademyView() {
     if (!commercialAccessGranted) {
-      showCommercialGate('Activa el plan familiar para entrar a la Academia.');
+      showCommercialGate('Activa el plan familiar para continuar con las habilidades de división.');
       return;
     }
     if (!gameCompleted && unlockedCount() < missions.length && !testerMode) {
       showMathHubView();
-      showToast('La Academia se desbloquea al completar el Atlas Animal 🎓', 2800);
+      showToast('Primero completa la etapa “Comprender la división” ✨', 2800);
       return;
     }
     closeNavigationOverlays();
@@ -1501,6 +1517,7 @@
     if (correct) s.correct += 1;
     academyState.stats[skill] = s;
     saveAcademyState();
+    if (learningProgressModal && !learningProgressModal.hidden) renderParentLearningProgress();
   }
 
   function skillAccuracy(skill) {
@@ -1554,10 +1571,146 @@
         prime:'Primo o compuesto',
         factors:'Factores primos'
       };
-      return `NOVA recomienda reforzar: ${names[practiced[0].skill]}.`;
+      return `Conviene reforzar: ${names[practiced[0].skill]}.`;
     }
-    if (!practiced.length) return 'Empieza por “¿Cuántas veces cabe?” y después practica la división en el cuaderno.';
+    if (!practiced.length) return 'Empieza por comprender cuántas veces cabe el divisor y después practica el procedimiento escrito.';
     return 'Vas construyendo una base sólida. Alterna la práctica del cuaderno con los retos de comprensión.';
+  }
+
+  const parentSkillMeta = {
+    terms:['🧩','Partes de una división','Reconoce dividendo, divisor, cociente y residuo.'],
+    fits:['🎯','Cuántas veces cabe','Encuentra el múltiplo correcto sin pasarse.'],
+    multiply:['✖️','Multiplicar para comprobar','Calcula cuánto se usó en cada paso.'],
+    subtract:['➖','Restar para hallar lo que queda','Encuentra el residuo parcial correctamente.'],
+    bring:['⬇️','Bajar la siguiente cifra','Forma el nuevo número de trabajo.'],
+    placement:['📐','Ubicar cada número','Escribe cociente y operaciones en el lugar correcto.'],
+    exact:['⚖️','División exacta e inexacta','Interpreta el residuo final.'],
+    divisors:['🔎','Divisores','Identifica qué números dividen exactamente.'],
+    prime:['💎','Primos y compuestos','Distingue números con dos divisores de los que tienen más.'],
+    factors:['🧱','Factores primos','Descompone números usando factores primos.'],
+    problems:['🧠','Problemas con división','Reconoce cuándo una situación requiere dividir.']
+  };
+
+  function parentSkillState(skill) {
+    const acc = skillAccuracy(skill);
+    if (acc === null) return { label:'Aún no trabajado', cls:'not-started', acc:null };
+    if (acc >= 85) return { label:`Dominado · ${acc}%`, cls:'mastered', acc };
+    if (acc >= 65) return { label:`En progreso · ${acc}%`, cls:'progress', acc };
+    return { label:`Necesita refuerzo · ${acc}%`, cls:'reinforce', acc };
+  }
+
+  function parentGroupState(skills) {
+    const values = skills.map(skillAccuracy).filter(v => v !== null);
+    if (!values.length) return { label:'Sin practicar', cls:'not-started', avg:null };
+    const avg = Math.round(values.reduce((a,b)=>a+b,0) / values.length);
+    if (avg >= 85) return { label:`Dominado · ${avg}%`, cls:'mastered', avg };
+    if (avg >= 65) return { label:`En progreso · ${avg}%`, cls:'progress', avg };
+    return { label:`Necesita refuerzo · ${avg}%`, cls:'reinforce', avg };
+  }
+
+  function renderParentSkillList(container, skills) {
+    if (!container) return;
+    container.innerHTML = '';
+    skills.forEach(skill => {
+      const meta = parentSkillMeta[skill] || ['•', skill, ''];
+      const state = parentSkillState(skill);
+      const row = document.createElement('article');
+      row.className = `parent-skill-row ${state.cls}`;
+      row.innerHTML = `
+        <span class="parent-skill-icon">${meta[0]}</span>
+        <div class="parent-skill-copy"><strong>${meta[1]}</strong><small>${meta[2]}</small></div>
+        <b>${state.label}</b>
+      `;
+      container.appendChild(row);
+    });
+  }
+
+  function renderParentConceptSkills(snap) {
+    if (!parentConceptSkills) return;
+    const perWorld = 6;
+    const completed = snap.atlasCompleted ? snap.total : Math.max(0, Math.min(snap.total, Number(snap.unlocked) || 0));
+    parentConceptSkills.innerHTML = '';
+    worlds.forEach((world, index) => {
+      const start = index * perWorld;
+      const done = Math.max(0, Math.min(perWorld, completed - start));
+      const pct = Math.round((done / perWorld) * 100);
+      const state = done >= perWorld
+        ? {label:'Recorrido completado', cls:'mastered'}
+        : done > 0 || (snap.currentMission >= start && snap.currentMission < start + perWorld)
+          ? {label:`En curso · ${Math.max(1, done)}/${perWorld} misiones`, cls:'progress'}
+          : {label:'Pendiente', cls:'not-started'};
+      const row = document.createElement('article');
+      row.className = `parent-skill-row ${state.cls}`;
+      row.innerHTML = `
+        <span class="parent-skill-icon">${world.icon}</span>
+        <div class="parent-skill-copy"><strong>${world.subtitle}</strong><small>${world.name} · ${pct}% del recorrido</small></div>
+        <b>${state.label}</b>
+      `;
+      parentConceptSkills.appendChild(row);
+    });
+  }
+
+  function renderParentLearningProgress() {
+    readAcademyState();
+    const snap = learningSnapshot();
+    const name = explorerName();
+    const combined = snap.atlasCompleted ? Math.round(50 + (snap.academyPct / 2)) : Math.round(snap.atlasPct / 2);
+
+    if (learningProgressChild) learningProgressChild.textContent = `${name} · Matemáticas · División`;
+    if (parentOverallProgress) parentOverallProgress.textContent = `${combined}%`;
+    if (parentConceptProgress) parentConceptProgress.textContent = `${snap.atlasPct}% recorrido`;
+
+    renderParentConceptSkills(snap);
+
+    const procedureSkills = ['terms','fits','multiply','subtract','bring','placement'];
+    const numbersSkills = ['exact','divisors','prime','factors'];
+    const applicationSkills = ['problems'];
+    renderParentSkillList(parentProcedureSkills, procedureSkills);
+    renderParentSkillList(parentNumbersSkills, numbersSkills);
+    renderParentSkillList(parentApplicationSkills, applicationSkills);
+
+    const procedureState = parentGroupState(procedureSkills);
+    const numbersState = parentGroupState(numbersSkills);
+    const applicationState = parentGroupState(applicationSkills);
+    if (parentProcedureStatus) { parentProcedureStatus.textContent = procedureState.label; parentProcedureStatus.className = procedureState.cls; }
+    if (parentNumbersStatus) { parentNumbersStatus.textContent = numbersState.label; parentNumbersStatus.className = numbersState.cls; }
+    if (parentApplicationStatus) { parentApplicationStatus.textContent = applicationState.label; parentApplicationStatus.className = applicationState.cls; }
+
+    if (parentCurrentFocus && parentCurrentFocusDetail) {
+      if (!snap.atlasCompleted) {
+        const currentWorld = worlds[missions[snap.currentMission]?.w || 0] || worlds[0];
+        parentCurrentFocus.textContent = 'Comprender qué significa dividir';
+        parentCurrentFocusDetail.textContent = `${currentWorld.subtitle}. Está recorriendo “${currentWorld.name}”, misión ${snap.currentMission + 1} de ${snap.total}.`;
+      } else if (snap.route) {
+        parentCurrentFocus.textContent = snap.route.title;
+        parentCurrentFocusDetail.textContent = snap.route.goal;
+      } else {
+        parentCurrentFocus.textContent = 'Resolver divisiones paso a paso';
+        parentCurrentFocusDetail.textContent = 'La comprensión inicial está completa. El siguiente objetivo es practicar el procedimiento con NOVA.';
+      }
+    }
+
+    if (parentRecommendation) {
+      const practiced = Object.keys(academyState.stats || {}).some(key => Number(academyState.stats[key]?.attempts) > 0);
+      if (!snap.atlasCompleted) {
+        parentRecommendation.textContent = 'Ahora conviene terminar la etapa de comprensión. El recorrido construye la idea de reparto, grupos iguales y relación con las tablas antes de entrar al algoritmo escrito.';
+      } else if (!practiced) {
+        parentRecommendation.textContent = 'La base conceptual ya está completa. El siguiente paso es observar cómo resuelve “cuántas veces cabe” y después practicar la división escrita.';
+      } else {
+        parentRecommendation.textContent = bestAcademyRecommendation();
+      }
+    }
+  }
+
+  function openLearningProgressView() {
+    if (!commercialAccessGranted || !learningProgressModal) return;
+    playTap();
+    renderParentLearningProgress();
+    settingsModal.hidden = true;
+    learningProgressModal.hidden = false;
+    document.body.classList.add('modal-open');
+    const card = learningProgressModal.querySelector('.modal-card');
+    if (card) card.scrollTop = 0;
   }
 
   function renderAcademyHome() {
@@ -1572,27 +1725,72 @@
     academyRecommendation.textContent = bestAcademyRecommendation();
 
     academyRouteGrid.innerHTML = '';
-    academyRoutes.forEach(route => {
-      const status = routeStatus(route);
-      const progress = academyState.routeProgress[route.id] || 0;
-      const btn = document.createElement('button');
-      btn.className = `academy-route-card ${status.cls}`;
-      btn.type = 'button';
-      btn.innerHTML = `
-        <div class="academy-route-icon">${route.icon}</div>
-        <div class="academy-route-copy">
-          <span>${status.label}</span>
-          <strong>${route.title}</strong>
-          <p>${route.goal}</p>
-          ${route.id === 'long'
-            ? `<small>${Math.min(notebookCompletedLessons, notebookLessons.length)} / ${notebookLessons.length} divisiones</small>`
-            : `<small>Reto ${Math.min(progress + 1, (academyChallengeSets[route.id] || []).length)} de ${(academyChallengeSets[route.id] || []).length}</small>`
-          }
+    const learningGroups = [
+      {
+        icon:'✏️',
+        label:'PASO 1',
+        title:'Aprender el procedimiento',
+        description:'Entiende las partes de la división y practica el ciclo para resolverla en el cuaderno.',
+        routes:['terms','fits','long']
+      },
+      {
+        icon:'🔎',
+        label:'PASO 2',
+        title:'Entender las propiedades',
+        description:'Interpreta el residuo y descubre divisores, números primos y factores.',
+        routes:['exact','divisors','prime','factors']
+      },
+      {
+        icon:'🧠',
+        label:'PASO 3',
+        title:'Aplicar lo aprendido',
+        description:'Decide cuándo una situación se resuelve con división y cuándo requiere otra operación.',
+        routes:['problems']
+      }
+    ];
+
+    learningGroups.forEach(group => {
+      const section = document.createElement('section');
+      section.className = 'academy-learning-group';
+      section.innerHTML = `
+        <div class="academy-learning-group-head">
+          <span class="academy-learning-group-icon">${group.icon}</span>
+          <div>
+            <small>${group.label}</small>
+            <strong>${group.title}</strong>
+            <p>${group.description}</p>
+          </div>
         </div>
-        <b>→</b>
+        <div class="academy-route-group-grid"></div>
       `;
-      btn.addEventListener('click', () => startAcademyRoute(route.id));
-      academyRouteGrid.appendChild(btn);
+      const grid = section.querySelector('.academy-route-group-grid');
+
+      group.routes.forEach(routeId => {
+        const route = academyRoutes.find(item => item.id === routeId);
+        if (!route) return;
+        const status = routeStatus(route);
+        const progress = academyState.routeProgress[route.id] || 0;
+        const btn = document.createElement('button');
+        btn.className = `academy-route-card ${status.cls}`;
+        btn.type = 'button';
+        btn.innerHTML = `
+          <div class="academy-route-icon">${route.icon}</div>
+          <div class="academy-route-copy">
+            <span>${status.label}</span>
+            <strong>${route.title}</strong>
+            <p>${route.goal}</p>
+            ${route.id === 'long'
+              ? `<small>${Math.min(notebookCompletedLessons, notebookLessons.length)} / ${notebookLessons.length} divisiones practicadas</small>`
+              : `<small>Práctica ${Math.min(progress + 1, (academyChallengeSets[route.id] || []).length)} de ${(academyChallengeSets[route.id] || []).length}</small>`
+            }
+          </div>
+          <b>→</b>
+        `;
+        btn.addEventListener('click', () => startAcademyRoute(route.id));
+        grid.appendChild(btn);
+      });
+
+      academyRouteGrid.appendChild(section);
     });
 
     const skillNames = {
@@ -1656,7 +1854,7 @@
     const route = academyRoutes.find(r => r.id === academyCurrentRoute);
 
     academyPracticeIcon.textContent = route.icon;
-    academyPracticeKicker.textContent = `RUTA · ${route.title.toUpperCase()}`;
+    academyPracticeKicker.textContent = `HABILIDAD · ${route.title.toUpperCase()}`;
     academyPracticeTitle.textContent = route.title;
     academyPracticeGoal.textContent = route.goal;
     academyPracticeCounter.textContent = `${academyChallengeIndex + 1} / ${set.length}`;
@@ -2504,7 +2702,7 @@
 
   function openNotebookModule() {
     if (!gameCompleted && unlockedCount() < missions.length && !testerMode) {
-      showToast('Primero completa el Atlas Animal para desbloquear la Academia 🎓', 2800);
+      showToast('Primero completa la etapa “Comprender la división” ✨', 2800);
       return;
     }
 
@@ -4004,7 +4202,7 @@
 
     academyState.routeProgress[routeId] = 0;
     startAcademyRoute(routeId);
-    showToast(`🧪 Probando ruta: ${academyRoutes.find(r => r.id === routeId)?.title || routeId}`, 2200);
+    showToast(`🧪 Probando habilidad: ${academyRoutes.find(r => r.id === routeId)?.title || routeId}`, 2200);
   }
 
   function buildTesterNavigator() {
@@ -4036,7 +4234,7 @@
       btn.innerHTML = `
         <span>${route.icon}</span>
         <div>
-          <small>RUTA ${index + 1}</small>
+          <small>HABILIDAD ${index + 1}</small>
           <strong>${route.title}</strong>
           <em>${route.goal}</em>
         </div>
@@ -4166,6 +4364,15 @@
     if (e.target === settingsModal) closeSettingsBtn.click();
   });
 
+  learningProgressSettingsBtn?.addEventListener('click', openLearningProgressView);
+  closeLearningProgressBtn?.addEventListener('click', () => {
+    learningProgressModal.hidden = true;
+    document.body.classList.remove('modal-open');
+  });
+  learningProgressModal?.addEventListener('click', (e) => {
+    if (e.target === learningProgressModal) closeLearningProgressBtn?.click();
+  });
+
   testerSettingsBtn?.addEventListener('click', openTesterModal);
 
   closeTesterBtn?.addEventListener('click', () => {
@@ -4250,7 +4457,7 @@
       academyState.routeProgress[academyCurrentRoute] = set.length;
       saveAcademyState();
       playSuccess();
-      showToast('Ruta completada. NOVA actualizó tu mapa de habilidades ✨', 2600);
+      showToast('Práctica completada. NOVA actualizó tu progreso ✨', 2600);
       renderAcademyHome();
       window.scrollTo({top:0,behavior:'smooth'});
       return;
@@ -4283,9 +4490,9 @@
     if (notebookLessonIndex >= notebookLessons.length - 1) {
       notebookCompletedLessons = notebookLessons.length;
       saveNotebookState();
-      notebookDoneTitle.textContent = '¡Ruta de cuaderno completada!';
-      notebookDoneFeedback.textContent = 'Ya recorriste el procedimiento completo: DIVIDO, MULTIPLICO, RESTO, BAJO y REPITO. NOVA guardó lo que practicastes en el mapa de habilidades.';
-      notebookNextBtn.textContent = 'Volver a la Academia';
+      notebookDoneTitle.textContent = '¡División escrita completada!';
+      notebookDoneFeedback.textContent = 'Ya recorriste el procedimiento completo: DIVIDO, MULTIPLICO, RESTO, BAJO y REPITO. NOVA guardó lo que practicaste en el reporte de habilidades.';
+      notebookNextBtn.textContent = 'Volver a habilidades';
       notebookNextBtn.onclick = () => renderAcademyHome();
       return;
     }
@@ -4361,7 +4568,7 @@
     playTap();
     const snap = learningSnapshot();
     if (!snap.atlasCompleted && !testerMode) {
-      showToast('Completa primero el Atlas Animal para desbloquear esta etapa 🎓', 2800);
+      showToast('Completa primero “Comprender la división” para continuar ✨', 2800);
       return;
     }
     showAcademyView();
