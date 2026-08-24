@@ -1,4 +1,4 @@
-# La Expedición v10 — revisión productiva
+# La Expedición v11 — revisión productiva
 
 ## Problema encontrado en la versión recibida
 
@@ -6,7 +6,7 @@ El código actual creaba `/preapproval` con `status: pending` y redirigía al `i
 
 ## Cambio principal
 
-La v10 utiliza el otro flujo oficial de Suscripciones de Mercado Pago:
+La v11 utiliza el otro flujo oficial de Suscripciones de Mercado Pago:
 
 **MercadoPago.js CardForm → CardToken → `/preapproval` con `status: authorized`.**
 
@@ -41,3 +41,13 @@ Lee `CONFIGURA_VERCEL.md`. En particular, agrega:
 - `MERCADOPAGO_WEBHOOK_SECRET`
 
 con valores de **producción**.
+
+
+## UX v11
+
+La v11 conserva la integración productiva de Mercado Pago de v10 y mejora la navegación para móvil/tablet:
+- menú inferior: Inicio, Atlas, Academia y Ajustes;
+- progreso de Matemáticas visible desde Inicio;
+- Academia accesible desde navegación, no desde Configuración;
+- Configuración agrupada por propósito;
+- paleta más consistente y jerarquía visual más clara.

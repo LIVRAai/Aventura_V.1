@@ -77,6 +77,13 @@
   const hubChildName = $('#hubChildName');
   const mathSubjectBtn = $('#mathSubjectBtn');
   const hubSettingsBtn = $('#hubSettingsBtn');
+  const hubMathStatus = $('#hubMathStatus');
+  const hubMathProgressBar = $('#hubMathProgressBar');
+  const primaryNav = $('#primaryNav');
+  const navHomeBtn = $('#navHomeBtn');
+  const navAtlasBtn = $('#navAtlasBtn');
+  const navAcademyBtn = $('#navAcademyBtn');
+  const navSettingsBtn = $('#navSettingsBtn');
   const authView = $('#authView');
   const signupTabBtn = $('#signupTabBtn');
   const loginTabBtn = $('#loginTabBtn');
@@ -310,6 +317,116 @@
     if (subscriptionSettingsText) subscriptionSettingsText.textContent = message;
   }
 
+  function setPrimaryNav(active = 'home', visible = true) {
+    if (!primaryNav) return;
+    primaryNav.hidden = !visible || !commercialAccessGranted;
+    document.body.classList.toggle('has-primary-nav', visible && commercialAccessGranted);
+    primaryNav.querySelectorAll('[data-nav]').forEach(btn => {
+      const selected = btn.dataset.nav === active;
+      btn.classList.toggle('active', selected);
+      btn.setAttribute('aria-current', selected ? 'page' : 'false');
+    });
+  }
+
+  function updateHubProgress() {
+    if (!hubMathStatus || !hubMathProgressBar) return;
+    const atlas = readLocalJson(CLOUD_PROGRESS_KEYS.atlas) || {};
+    const academy = readLocalJson(CLOUD_PROGRESS_KEYS.academy) || {};
+    const total = 36;
+    const currentMission = Math.max(0, Math.min(total - 1, Number(atlas.mission) || 0));
+    const unlocked = Math.max(0, Number(atlas.unlocked) || currentMission);
+    const completed = atlas.gameCompleted === true || unlocked >= total;
+    const atlasPct = completed ? 100 : Math.max(0, Math.min(100, Math.round((Math.max(unlocked, currentMission) / total) * 100)));
+    const routeProgress = academy.routeProgress && typeof academy.routeProgress === 'object' ? academy.routeProgress : {};
+    const startedAcademy = Object.values(routeProgress).some(v => Number(v) > 0);
+
+    hubMathStatus.textContent = completed
+      ? (startedAcademy ? 'Atlas completo · continúa tu entrenamiento en la Academia' : 'Atlas completo · Academia de División desbloqueada')
+      : `Atlas Animal · misión ${currentMission + 1} de ${total}`;
+    hubMathProgressBar.style.width = `${atlasPct}%`;
+  }
+
+  function closeNavigationOverlays() {
+    [settingsModal, worldModal, animalModal, guideModal, testerModal].forEach(modal => {
+      if (modal) modal.hidden = true;
+    });
+    document.body.classList.remove('modal-open');
+  }
+
+  function showLearningHubView() {
+    if (!commercialAccessGranted) {
+      showCommercialGate('Necesitas una suscripción activa para entrar.');
+      return;
+    }
+    closeNavigationOverlays();
+    saveGameState();
+    saveNotebookState();
+    saveAcademyState();
+    updateHubProgress();
+    if (intro) intro.hidden = true;
+    if (app) app.hidden = true;
+    if (learningHub) learningHub.hidden = false;
+    setPrimaryNav('home', true);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function showAtlasView({ respectIntro = true } = {}) {
+    if (!commercialAccessGranted) {
+      showCommercialGate('Necesitas una suscripción activa para entrar al Atlas.');
+      return;
+    }
+    closeNavigationOverlays();
+    if (learningHub) learningHub.hidden = true;
+    const introSeen = localStorage.getItem('emilianoIntroSeen') === 'yes';
+    if (respectIntro && !introSeen) {
+      if (app) app.hidden = true;
+      if (intro) {
+        intro.hidden = false;
+        intro.classList.remove('intro-exit');
+      }
+      setPrimaryNav('atlas', false);
+      window.scrollTo(0, 0);
+      return;
+    }
+    if (intro) intro.hidden = true;
+    if (app) app.hidden = false;
+    showNormalMissionShell();
+    if (gameCompleted) {
+      gameArea.hidden = true;
+      finalCard.hidden = false;
+      checkBtn.hidden = true;
+      hintBtn.hidden = true;
+    } else {
+      renderMission({ restore: true });
+    }
+    setPrimaryNav('atlas', true);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function showAcademyView() {
+    if (!commercialAccessGranted) {
+      showCommercialGate('Necesitas una suscripción activa para entrar a la Academia.');
+      return;
+    }
+    if (!gameCompleted && unlockedCount() < missions.length && !testerMode) {
+      showAtlasView({ respectIntro: false });
+      showToast('La Academia se desbloquea al completar el Atlas Animal 🎓', 2800);
+      return;
+    }
+    closeNavigationOverlays();
+    if (learningHub) learningHub.hidden = true;
+    if (intro) intro.hidden = true;
+    if (app) app.hidden = false;
+    openNotebookModule();
+    setPrimaryNav('academy', true);
+  }
+
+  function openSettingsView() {
+    if (!commercialAccessGranted) return;
+    settingsModal.hidden = false;
+    document.body.classList.add('modal-open');
+  }
+
   function setAuthMode(mode = 'signup') {
     authMode = mode === 'login' ? 'login' : 'signup';
     const signingUp = authMode === 'signup';
@@ -338,6 +455,8 @@
     if (accessGate) accessGate.hidden = true;
     document.body.classList.remove('access-locked');
     if (learningHub && app?.hidden) learningHub.hidden = false;
+    updateHubProgress();
+    setPrimaryNav('home', Boolean(learningHub && !learningHub.hidden));
 
     const profile = familyProfile();
     if (reason === 'owner') {
@@ -353,6 +472,7 @@
     commercialAccessGranted = false;
     if (accessGate) accessGate.hidden = false;
     if (learningHub) learningHub.hidden = true;
+    setPrimaryNav('home', false);
     document.body.classList.add('access-locked');
     updatePersonalization();
     if (message) setAccessStatus(message);
@@ -2181,6 +2301,7 @@
       notebookCompletedLessons = Math.max(0, Number(saved.completed) || 0);
     }
     renderAcademyHome();
+    setPrimaryNav('academy', true);
     window.scrollTo({top:0, behavior:'smooth'});
   }
 
@@ -2201,6 +2322,7 @@
     } else {
       gameArea.hidden = false;
     }
+    setPrimaryNav('atlas', true);
     window.scrollTo({top:0, behavior:'smooth'});
   }
 
@@ -2640,6 +2762,7 @@
       intro.hidden = true;
       app.hidden = false;
       renderMission();
+      setPrimaryNav('atlas', true);
       window.scrollTo(0, 0);
     }, 420);
     localStorage.setItem('emilianoIntroSeen', 'yes');
@@ -3798,14 +3921,12 @@
 
   settingsBtn.addEventListener('click', () => {
     playTap();
-    settingsModal.hidden = false;
-    document.body.classList.add('modal-open');
+    openSettingsView();
   });
 
   closeSettingsBtn.addEventListener('click', () => {
     settingsModal.hidden = true;
     document.body.classList.remove('modal-open');
-    if (commercialAccessGranted && app.hidden && !intro.hidden && learningHub) learningHub.hidden = false;
   });
 
   settingsModal.addEventListener('click', (e) => {
@@ -3885,6 +4006,7 @@
   academyHomeBtn?.addEventListener('click', () => {
     playTap();
     renderAcademyHome();
+    setPrimaryNav('academy', true);
     window.scrollTo({top:0,behavior:'smooth'});
   });
 
@@ -3926,7 +4048,7 @@
   notebookSettingsBtn?.addEventListener('click', () => {
     settingsModal.hidden = true;
     document.body.classList.remove('modal-open');
-    openNotebookModule();
+    showAcademyView();
   });
   notebookBackBtn?.addEventListener('click', closeNotebookModule);
 
@@ -3974,15 +4096,33 @@
 
   mathSubjectBtn?.addEventListener('click', () => {
     playTap();
-    if (learningHub) learningHub.hidden = true;
     updatePersonalization();
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    showAtlasView({ respectIntro: true });
   });
 
   hubSettingsBtn?.addEventListener('click', () => {
-    if (learningHub) learningHub.hidden = true;
-    settingsModal.hidden = false;
-    document.body.classList.add('modal-open');
+    playTap();
+    openSettingsView();
+  });
+
+  navHomeBtn?.addEventListener('click', () => {
+    playTap();
+    showLearningHubView();
+  });
+
+  navAtlasBtn?.addEventListener('click', () => {
+    playTap();
+    showAtlasView({ respectIntro: false });
+  });
+
+  navAcademyBtn?.addEventListener('click', () => {
+    playTap();
+    showAcademyView();
+  });
+
+  navSettingsBtn?.addEventListener('click', () => {
+    playTap();
+    openSettingsView();
   });
 
   signupTabBtn?.addEventListener('click', () => setAuthMode('signup'));

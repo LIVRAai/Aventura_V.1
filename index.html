@@ -197,11 +197,12 @@
         <button id="mathSubjectBtn" class="subject-card subject-card-active" type="button">
           <span class="subject-icon">➗</span>
           <span class="subject-copy">
-            <small>DISPONIBLE</small>
+            <small>CONTINUAR</small>
             <strong>Matemáticas</strong>
-            <em>Misiones, división y Academia con NOVA</em>
+            <em id="hubMathStatus">Atlas Animal · preparando tu progreso…</em>
+            <span class="subject-progress" aria-hidden="true"><span id="hubMathProgressBar"></span></span>
           </span>
-          <span class="subject-arrow">→</span>
+          <span class="subject-arrow" aria-hidden="true">→</span>
         </button>
 
         <article class="subject-card subject-card-soon">
@@ -229,6 +230,22 @@
       </section>
     </div>
   </section>
+
+
+  <nav id="primaryNav" class="primary-nav" aria-label="Navegación principal" hidden>
+    <button id="navHomeBtn" class="primary-nav-item" type="button" data-nav="home" aria-label="Ir al inicio">
+      <span class="primary-nav-icon">⌂</span><span>Inicio</span>
+    </button>
+    <button id="navAtlasBtn" class="primary-nav-item" type="button" data-nav="atlas" aria-label="Ir al Atlas">
+      <span class="primary-nav-icon">🗺️</span><span>Atlas</span>
+    </button>
+    <button id="navAcademyBtn" class="primary-nav-item" type="button" data-nav="academy" aria-label="Ir a la Academia">
+      <span class="primary-nav-icon">✏️</span><span>Academia</span>
+    </button>
+    <button id="navSettingsBtn" class="primary-nav-item" type="button" data-nav="settings" aria-label="Abrir configuración">
+      <span class="primary-nav-icon">⚙️</span><span>Ajustes</span>
+    </button>
+  </nav>
 
 
   <div class="stars" aria-hidden="true"></div>
@@ -261,7 +278,7 @@
   <main id="app" class="app-shell" hidden>
     <header class="topbar">
       <div>
-        <p class="eyebrow">LA EXPEDICIÓN</p>
+        <p class="eyebrow">MATEMÁTICAS · ATLAS</p>
         <h1>Atlas Animal</h1>
       </div>
       <div class="top-actions">
@@ -389,7 +406,7 @@
 
     <section id="notebookModule" class="notebook-module academy-module" hidden>
       <div class="notebook-top academy-top">
-        <button id="notebookBackBtn" class="notebook-back-btn" type="button">← Atlas</button>
+        <button id="notebookBackBtn" class="notebook-back-btn" type="button">← Volver al Atlas</button>
         <div>
           <p class="eyebrow">AVENTURA 2</p>
           <h2>Academia de División con NOVA</h2>
@@ -651,6 +668,7 @@
       </div>
 
       <div class="settings-list">
+        <p class="settings-section-label">EXPERIENCIA</p>
         <div class="settings-row">
           <div class="settings-copy">
             <strong>Sonido</strong>
@@ -659,8 +677,7 @@
           <button id="soundBtn" class="settings-toggle" type="button" aria-label="Activar o desactivar sonido" aria-pressed="true">🔊 Activado</button>
         </div>
 
-        <div class="settings-divider"></div>
-
+        <p class="settings-section-label">CUENTA Y ACCESO</p>
         <div class="settings-row">
           <div class="settings-copy">
             <strong>Cuenta familiar</strong>
@@ -668,8 +685,6 @@
           </div>
           <button id="accountSignOutBtn" class="settings-toggle" type="button">↪ Salir</button>
         </div>
-
-        <div class="settings-divider"></div>
 
         <div class="settings-row">
           <div class="settings-copy">
@@ -679,37 +694,24 @@
           <button id="subscriptionSettingsBtn" class="settings-toggle" type="button">💳 Verificar</button>
         </div>
 
-        <div class="settings-divider"></div>
-
+        <p class="settings-section-label">SOLO ADULTOS</p>
         <div class="settings-row">
           <div class="settings-copy">
             <strong>Modo de pruebas</strong>
-            <span>Permite a un adulto abrir cualquier misión sin modificar el progreso real del niño.</span>
+            <span>Abre cualquier misión o ruta sin alterar el progreso real del niño.</span>
           </div>
           <button id="testerSettingsBtn" class="settings-toggle" type="button">🧪 Abrir</button>
         </div>
 
-        <div class="settings-divider"></div>
-
-        <div class="settings-row">
-          <div class="settings-copy">
-            <strong>Módulo de cuaderno</strong>
-            <span>Vuelve a la última división escrita o reinicia solo este módulo.</span>
-          </div>
-          <button id="notebookSettingsBtn" class="settings-toggle" type="button">✏️ Abrir</button>
-        </div>
-
-        <div class="settings-divider"></div>
-
         <div class="settings-row settings-row-danger">
           <div class="settings-copy">
             <strong>Reiniciar aventura</strong>
-            <span>Borra el progreso guardado y vuelve a la misión 1.</span>
+            <span>Borra el progreso local y vuelve a la misión 1. El progreso en la nube se actualizará después.</span>
           </div>
           <button id="resetBtn" class="settings-danger-btn" type="button">Reiniciar</button>
         </div>
 
-        <p class="settings-warning">Esta opción borra el progreso del niño en este dispositivo.</p>
+        <p class="settings-warning">La Academia ahora se abre desde el menú principal inferior, no desde Configuración.</p>
       </div>
     </div>
   </div>

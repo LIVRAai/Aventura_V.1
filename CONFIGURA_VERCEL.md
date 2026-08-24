@@ -1,4 +1,4 @@
-# La Expedición v10 — configuración productiva en Vercel
+# La Expedición v11 — configuración productiva en Vercel
 
 Esta versión elimina el flujo anterior `pending → checkout externo` y usa el flujo productivo de Mercado Pago con **CardForm + CardToken + `/preapproval` autorizado**.
 
@@ -38,7 +38,7 @@ Puedes eliminar o dejar sin efecto:
 - `MERCADOPAGO_MODE`
 - `MERCADOPAGO_TEST_PAYER_EMAIL`
 
-La v10 siempre usa el correo real de la cuenta autenticada y las credenciales productivas que tengas configuradas.
+La v11 siempre usa el correo real de la cuenta autenticada y las credenciales productivas que tengas configuradas.
 
 ## Webhook productivo
 
@@ -87,7 +87,7 @@ No hace falta crear tablas nuevas. Se conservan:
 
 Las filas antiguas `pending` pueden permanecer como historial. La aplicación da prioridad a cualquier suscripción `authorized`.
 
-## Flujo v10
+## Flujo v11
 
 1. El adulto inicia sesión.
 2. Pulsa **Suscribirme con Mercado Pago**.
