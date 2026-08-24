@@ -3420,3 +3420,205 @@ body {
   .premium-plan-card strong { font-size:1.2rem; }
   .access-shell { padding:16px 12px; }
 }
+
+/* ===== V17 · Gestión premium del plan ===== */
+.plan-management-card {
+  width:min(100%,760px);
+  padding:22px;
+  background:
+    radial-gradient(circle at 92% 0%,rgba(88,230,255,.12),transparent 32%),
+    linear-gradient(160deg,#0d1438,#111b47 58%,#0b1438);
+}
+.plan-management-head { margin-bottom:16px; }
+.plan-management-view { display:grid;gap:16px; }
+.plan-status-premium-card {
+  padding:20px;
+  border-radius:24px;
+  border:1px solid rgba(255,255,255,.11);
+  background:linear-gradient(145deg,rgba(255,255,255,.09),rgba(255,255,255,.04));
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.07),0 18px 42px rgba(0,0,0,.16);
+}
+.plan-status-premium-top {
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto;
+  gap:20px;
+  align-items:start;
+}
+.plan-status-premium-top h3 {
+  margin:10px 0 5px;
+  color:#fff;
+  font-size:1.2rem;
+  letter-spacing:-.025em;
+}
+.plan-status-premium-top p {
+  margin:0;
+  color:#bfc9ed;
+  font-size:.8rem;
+  line-height:1.5;
+}
+.plan-status-badge {
+  display:inline-flex;
+  min-height:26px;
+  align-items:center;
+  padding:0 10px;
+  border-radius:999px;
+  font-size:.61rem;
+  letter-spacing:.1em;
+  font-weight:1000;
+  border:1px solid rgba(255,255,255,.12);
+  color:#dde4ff;
+  background:rgba(255,255,255,.07);
+}
+.plan-status-badge.active {
+  color:#9dffd4;
+  border-color:rgba(68,235,163,.26);
+  background:rgba(68,235,163,.10);
+}
+.plan-status-badge.canceled {
+  color:#d8ddf4;
+  border-color:rgba(255,255,255,.14);
+  background:rgba(255,255,255,.06);
+}
+.plan-status-price { text-align:right;display:grid;gap:2px; }
+.plan-status-price strong { color:#fff;font-size:1.55rem;letter-spacing:-.04em; }
+.plan-status-price small { color:#8feefa;font-size:.63rem;font-weight:900; }
+.plan-status-facts {
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  margin-top:18px;
+  padding-top:16px;
+  border-top:1px solid rgba(255,255,255,.08);
+}
+.plan-status-facts>div { min-width:0;display:grid;gap:4px; }
+.plan-status-facts span,
+.plan-includes-card>span,
+.plan-cancel-summary span {
+  color:#8390bd;
+  font-size:.58rem;
+  font-weight:1000;
+  letter-spacing:.09em;
+}
+.plan-status-facts strong { color:#eef2ff;font-size:.78rem;line-height:1.35;overflow-wrap:anywhere; }
+.plan-includes-card {
+  padding:18px 20px;
+  border-radius:22px;
+  border:1px solid rgba(255,255,255,.08);
+  background:rgba(255,255,255,.035);
+}
+.plan-includes-grid { display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:12px; }
+.plan-includes-grid>div {
+  min-width:0;
+  display:grid;
+  grid-template-columns:28px 1fr;
+  gap:9px;
+  align-items:start;
+  padding:12px;
+  border-radius:16px;
+  background:rgba(255,255,255,.045);
+}
+.plan-includes-grid b {
+  width:28px;height:28px;border-radius:9px;display:grid;place-items:center;
+  background:rgba(88,230,255,.10);color:#8feefa;font-size:.78rem;
+}
+.plan-includes-grid p { margin:0;display:grid;gap:3px; }
+.plan-includes-grid strong { color:#fff;font-size:.75rem;line-height:1.25; }
+.plan-includes-grid small { color:#9da8cc;font-size:.64rem;line-height:1.35; }
+.plan-canceled-notice {
+  display:grid;
+  grid-template-columns:38px 1fr;
+  gap:12px;
+  align-items:center;
+  padding:14px 16px;
+  border-radius:18px;
+  border:1px solid rgba(68,235,163,.17);
+  background:rgba(68,235,163,.065);
+}
+.plan-canceled-notice>span {
+  width:38px;height:38px;border-radius:12px;display:grid;place-items:center;
+  background:rgba(68,235,163,.12);color:#9dffd4;font-weight:1000;
+}
+.plan-canceled-notice strong { color:#fff;font-size:.84rem; }
+.plan-canceled-notice p { margin:3px 0 0;color:#b8c4df;font-size:.72rem;line-height:1.45; }
+.plan-management-actions {
+  display:grid;
+  justify-items:center;
+  gap:7px;
+  padding:5px 12px 0;
+}
+.plan-cancel-link {
+  min-height:42px;
+  padding:0 15px;
+  border:0;
+  background:transparent;
+  color:#d4daef;
+  font-weight:900;
+  text-decoration:underline;
+  text-underline-offset:4px;
+  cursor:pointer;
+}
+.plan-cancel-link:hover { color:#fff; }
+.plan-management-actions p { margin:0;max-width:560px;text-align:center;color:#727fa9;font-size:.63rem;line-height:1.45; }
+.plan-cancel-view { text-align:center;justify-items:center;padding:12px 4px 4px; }
+.plan-cancel-icon {
+  width:62px;height:62px;border-radius:20px;display:grid;place-items:center;
+  background:rgba(255,214,89,.10);border:1px solid rgba(255,214,89,.18);
+  color:#ffe78a;font-size:1.6rem;font-weight:1000;
+}
+.plan-cancel-view h3 { margin:2px 0 0;color:#fff;font-size:1.55rem;letter-spacing:-.035em; }
+.plan-cancel-view>p:not(.eyebrow):not(.plan-cancel-status) {
+  margin:0;max-width:580px;color:#b8c4df;font-size:.82rem;line-height:1.6;
+}
+.plan-cancel-summary {
+  width:min(100%,520px);
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  margin-top:4px;
+}
+.plan-cancel-summary>div {
+  display:grid;gap:5px;padding:15px;border-radius:17px;
+  text-align:left;background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.08);
+}
+.plan-cancel-summary strong { color:#fff;font-size:.84rem; }
+.plan-cancel-actions {
+  width:min(100%,520px);
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  margin-top:5px;
+}
+.plan-keep-btn,.plan-confirm-cancel-btn {
+  min-height:50px;
+  border-radius:16px;
+  font-weight:1000;
+  cursor:pointer;
+}
+.plan-keep-btn {
+  border:0;
+  background:linear-gradient(135deg,#ffe05f,#fff09d);
+  color:#141a37;
+  box-shadow:0 7px 20px rgba(255,224,95,.15);
+}
+.plan-confirm-cancel-btn {
+  border:1px solid rgba(255,126,164,.22);
+  background:rgba(255,126,164,.08);
+  color:#ffd6e2;
+}
+.plan-keep-btn:disabled,.plan-confirm-cancel-btn:disabled { opacity:.55;cursor:wait; }
+.plan-cancel-status { min-height:20px;margin:0;color:#ffdca1;font-size:.7rem;line-height:1.45; }
+
+@media (max-width:720px) {
+  .plan-management-card { padding:18px 14px calc(18px + env(safe-area-inset-bottom));border-radius:26px 26px 0 0;max-height:94dvh; }
+  .plan-status-premium-card { padding:17px;border-radius:21px; }
+  .plan-status-premium-top { grid-template-columns:1fr;gap:12px; }
+  .plan-status-price { text-align:left;grid-template-columns:auto auto;align-items:baseline;justify-content:start;gap:7px; }
+  .plan-status-price strong { font-size:1.32rem; }
+  .plan-status-facts { grid-template-columns:1fr; }
+  .plan-includes-grid { grid-template-columns:1fr; }
+  .plan-includes-grid>div { grid-template-columns:32px 1fr; }
+  .plan-cancel-summary,.plan-cancel-actions { grid-template-columns:1fr; }
+  .plan-cancel-actions { display:flex;flex-direction:column; }
+  .plan-keep-btn { order:0; }
+  .plan-confirm-cancel-btn { order:1; }
+}

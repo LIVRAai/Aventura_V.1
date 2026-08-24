@@ -1,13 +1,28 @@
-# La Expedición · V16 Premium
+# La Expedición · V17
 
-Versión enfocada en experiencia de producto terminada para familias y niños.
+Versión productiva basada en V16 Premium, ahora con **gestión autoservicio del plan familiar**.
 
-## Qué cambia
-- Checkout familiar rediseñado con jerarquía premium y dos columnas en escritorio.
-- Pago compacto, limpio y responsive; en móvil pasa a una sola columna.
-- Acceso, cuenta, modales, inicio infantil, Matemáticas y superficies de contenido comparten un sistema visual consistente.
-- Se mantiene la experiencia infantil colorida, mientras las superficies para adultos son más sobrias y confiables.
-- No cambia la lógica pedagógica, Mercado Pago, Supabase, NOVA ni el progreso existente.
+## Qué agrega
+
+- `Perfil → Plan familiar → Administrar` abre un panel de suscripción claro para el adulto.
+- El adulto puede cancelar la **renovación mensual** sin salir de La Expedición.
+- La cancelación se ejecuta en el backend autenticado mediante la API de Suscripciones de Mercado Pago.
+- Si existe un periodo ya pagado, el acceso continúa hasta la fecha de la siguiente renovación que tenía registrada la suscripción antes de cancelarla.
+- Una suscripción cancelada no genera nuevos cobros recurrentes.
+- El estado se mantiene sincronizado por `/api/subscription-status` y por el webhook.
+- Se evita crear otra suscripción mientras todavía exista una activa o una cancelada con acceso pagado vigente.
+
+## No cambia
+
+- CardForm / tokenización de tarjeta.
+- Supabase y las tablas existentes.
+- NOVA y `/api/tutor`.
+- Progreso local + nube.
+- Contenido pedagógico.
+- Arquitectura responsive y capa visual premium de V16.
 
 ## Despliegue
-Usar esta carpeta como reemplazo completo de la versión anterior y hacer redeploy en Vercel. No requiere variables nuevas.
+
+Reemplaza la versión anterior por esta carpeta y haz redeploy en Vercel.
+
+**No requiere nuevas variables de entorno ni nuevas tablas.**

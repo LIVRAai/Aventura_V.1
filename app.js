@@ -76,6 +76,25 @@
   const ownerPinInput = $('#ownerPinInput');
   const subscriptionSettingsText = $('#subscriptionSettingsText');
   const subscriptionSettingsBtn = $('#subscriptionSettingsBtn');
+  const planManagementModal = $('#planManagementModal');
+  const closePlanManagementBtn = $('#closePlanManagementBtn');
+  const planOverviewView = $('#planOverviewView');
+  const planCancelView = $('#planCancelView');
+  const planStatusBadge = $('#planStatusBadge');
+  const planStatusDetail = $('#planStatusDetail');
+  const planManagementPrice = $('#planManagementPrice');
+  const planDateLabel = $('#planDateLabel');
+  const planDateValue = $('#planDateValue');
+  const planAccountEmail = $('#planAccountEmail');
+  const planCanceledNotice = $('#planCanceledNotice');
+  const planCanceledNoticeText = $('#planCanceledNoticeText');
+  const planManagementActions = $('#planManagementActions');
+  const cancelPlanBtn = $('#cancelPlanBtn');
+  const planCancelCopy = $('#planCancelCopy');
+  const planCancelAccessUntil = $('#planCancelAccessUntil');
+  const keepPlanBtn = $('#keepPlanBtn');
+  const confirmCancelPlanBtn = $('#confirmCancelPlanBtn');
+  const planCancelStatus = $('#planCancelStatus');
   const learningProgressSettingsBtn = $('#learningProgressSettingsBtn');
   const learningProgressModal = $('#learningProgressModal');
   const closeLearningProgressBtn = $('#closeLearningProgressBtn');
@@ -270,6 +289,8 @@
   let mercadoPagoFormInitializing = false;
   let mercadoPagoInitPromise = null;
   let mercadoPagoSubmitting = false;
+  let currentSubscriptionInfo = null;
+  let subscriptionCancelBusy = false;
 
   let subscriptionConfig = {
     enabled: true,
@@ -356,6 +377,140 @@
 
   function setSubscriptionSettings(message) {
     if (subscriptionSettingsText) subscriptionSettingsText.textContent = message;
+  }
+
+  function formatPlanDate(value) {
+    if (!value) return '—';
+    const date = new Date(value);
+    if (Number.isNaN(date.getTime())) return '—';
+    try {
+      return new Intl.DateTimeFormat('es-CO', {
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric'
+      }).format(date);
+    } catch {
+      return date.toLocaleDateString('es-CO');
+    }
+  }
+
+  function normalizeSubscriptionInfo(data = {}) {
+    const status = String(data.status || 'unknown').toLowerCase() === 'cancelled'
+      ? 'canceled'
+      : String(data.status || 'unknown').toLowerCase();
+    return {
+      id: data.id || null,
+      status,
+      active: Boolean(data.active),
+      renews: data.renews !== undefined ? Boolean(data.renews) : status === 'authorized',
+      accessUntil: data.accessUntil || null,
+      canceledAt: data.canceledAt || null,
+      nextPaymentDate: data.nextPaymentDate || null,
+      amount: data.amount ?? subscriptionConfig.amount ?? 24900,
+      currency: data.currency || subscriptionConfig.currency || 'COP'
+    };
+  }
+
+  function updateSubscriptionSummary(info = currentSubscriptionInfo) {
+    if (!subscriptionSettingsBtn) return;
+    if (!info) {
+      setSubscriptionSettings('Aún no hay un plan activo.');
+      subscriptionSettingsBtn.textContent = 'Ver plan';
+      return;
+    }
+
+    if (info.status === 'authorized' && info.renews) {
+      const date = formatPlanDate(info.nextPaymentDate);
+      setSubscriptionSettings(date !== '—' ? `Activo · próxima renovación ${date}` : 'Plan activo · renovación mensual');
+      subscriptionSettingsBtn.textContent = 'Administrar';
+      return;
+    }
+
+    if (info.status === 'canceled' && info.active && info.accessUntil) {
+      setSubscriptionSettings(`Renovación cancelada · acceso hasta ${formatPlanDate(info.accessUntil)}`);
+      subscriptionSettingsBtn.textContent = 'Ver plan';
+      return;
+    }
+
+    if (info.status === 'canceled') {
+      setSubscriptionSettings('Plan finalizado · sin nuevos cobros');
+      subscriptionSettingsBtn.textContent = 'Ver plan';
+      return;
+    }
+
+    if (info.status === 'paused') {
+      setSubscriptionSettings('Plan pausado.');
+      subscriptionSettingsBtn.textContent = 'Ver plan';
+      return;
+    }
+
+    setSubscriptionSettings('Estamos confirmando el estado del plan.');
+    subscriptionSettingsBtn.textContent = 'Ver plan';
+  }
+
+  function updatePlanManagementUi(info = currentSubscriptionInfo) {
+    if (!planManagementModal) return;
+    const plan = info || normalizeSubscriptionInfo({});
+    const isCanceled = plan.status === 'canceled';
+    const isRenewing = plan.status === 'authorized' && plan.renews;
+
+    if (planManagementPrice) planManagementPrice.textContent = formatCop(plan.amount || subscriptionConfig.amount);
+    if (planAccountEmail) planAccountEmail.textContent = currentUser?.email || familyProfile().email || '—';
+
+    if (planStatusBadge) {
+      planStatusBadge.classList.toggle('active', isRenewing);
+      planStatusBadge.classList.toggle('canceled', isCanceled);
+      planStatusBadge.textContent = isRenewing ? 'ACTIVO' : isCanceled ? 'CANCELADO' : 'ESTADO DEL PLAN';
+    }
+
+    if (isRenewing) {
+      if (planStatusDetail) planStatusDetail.textContent = 'Tu plan se renueva automáticamente cada mes.';
+      if (planDateLabel) planDateLabel.textContent = 'PRÓXIMA RENOVACIÓN';
+      if (planDateValue) planDateValue.textContent = formatPlanDate(plan.nextPaymentDate);
+      if (planCanceledNotice) planCanceledNotice.hidden = true;
+      if (planManagementActions) planManagementActions.hidden = false;
+      if (cancelPlanBtn) cancelPlanBtn.hidden = false;
+    } else if (isCanceled) {
+      if (planStatusDetail) planStatusDetail.textContent = plan.active
+        ? 'La renovación está cancelada. Puedes seguir usando la app durante el periodo ya pagado.'
+        : 'La renovación está cancelada y el periodo de acceso ya terminó.';
+      if (planDateLabel) planDateLabel.textContent = plan.active ? 'ACCESO HASTA' : 'ESTADO';
+      if (planDateValue) planDateValue.textContent = plan.active ? formatPlanDate(plan.accessUntil) : 'Finalizado';
+      if (planCanceledNotice) planCanceledNotice.hidden = false;
+      if (planCanceledNoticeText) planCanceledNoticeText.textContent = plan.active && plan.accessUntil
+        ? `No se realizarán nuevos cobros. El acceso continúa hasta ${formatPlanDate(plan.accessUntil)}.`
+        : 'No se realizarán nuevos cobros.';
+      if (planManagementActions) planManagementActions.hidden = true;
+    } else {
+      if (planStatusDetail) planStatusDetail.textContent = 'Estamos verificando el estado actual de tu plan.';
+      if (planDateLabel) planDateLabel.textContent = 'ESTADO';
+      if (planDateValue) planDateValue.textContent = plan.status === 'paused' ? 'Pausado' : 'Por confirmar';
+      if (planCanceledNotice) planCanceledNotice.hidden = true;
+      if (planManagementActions) planManagementActions.hidden = true;
+    }
+
+    if (planCancelCopy) {
+      planCancelCopy.textContent = plan.nextPaymentDate
+        ? `Conservarás el acceso hasta ${formatPlanDate(plan.nextPaymentDate)}, que corresponde al periodo ya pagado. Después no se harán nuevos cobros.`
+        : 'La renovación se detendrá y no se harán nuevos cobros. Si existe un periodo ya pagado, conservaremos ese acceso.';
+    }
+    if (planCancelAccessUntil) planCancelAccessUntil.textContent = formatPlanDate(plan.nextPaymentDate || plan.accessUntil);
+  }
+
+  function showPlanOverview() {
+    if (planOverviewView) planOverviewView.hidden = false;
+    if (planCancelView) planCancelView.hidden = true;
+    if (planCancelStatus) planCancelStatus.textContent = '';
+  }
+
+  function showPlanCancelConfirmation() {
+    if (!currentSubscriptionInfo?.renews || currentSubscriptionInfo?.status !== 'authorized') return;
+    updatePlanManagementUi(currentSubscriptionInfo);
+    if (planOverviewView) planOverviewView.hidden = true;
+    if (planCancelView) planCancelView.hidden = false;
+    if (planCancelStatus) planCancelStatus.textContent = '';
+    const card = planManagementModal?.querySelector('.modal-card');
+    if (card) card.scrollTop = 0;
   }
 
   function isOwnerReviewSession() {
@@ -507,7 +662,7 @@
     }
   }
   function closeNavigationOverlays() {
-    [settingsModal, learningProgressModal, worldModal, animalModal, guideModal, testerModal].forEach(modal => {
+    [settingsModal, planManagementModal, learningProgressModal, worldModal, animalModal, guideModal, testerModal].forEach(modal => {
       if (modal) modal.hidden = true;
     });
     document.body.classList.remove('modal-open');
@@ -772,28 +927,39 @@
       const data = await res.json().catch(() => ({}));
 
       if (res.status === 409 && data.active) {
+        currentSubscriptionInfo = normalizeSubscriptionInfo(data);
         writeLocalJson(SUBSCRIPTION_KEY, {
-          id: data.id,
-          status: 'authorized',
+          id: currentSubscriptionInfo.id,
+          status: currentSubscriptionInfo.status,
+          active: true,
+          renews: currentSubscriptionInfo.renews,
+          accessUntil: currentSubscriptionInfo.accessUntil,
           email: currentUser.email,
           checkedAt: Date.now()
         });
         grantCommercialAccess('subscription');
+        updateSubscriptionSummary(currentSubscriptionInfo);
         return;
       }
 
       if (!res.ok) throw new Error(paymentErrorMessage(data));
 
+      currentSubscriptionInfo = normalizeSubscriptionInfo(data);
       writeLocalJson(SUBSCRIPTION_KEY, {
-        id: data.id,
-        status: data.status || 'unknown',
+        id: currentSubscriptionInfo.id,
+        status: currentSubscriptionInfo.status,
+        active: currentSubscriptionInfo.active,
+        renews: currentSubscriptionInfo.renews,
+        accessUntil: currentSubscriptionInfo.accessUntil,
+        nextPaymentDate: currentSubscriptionInfo.nextPaymentDate,
         email: currentUser.email,
         createdAt: Date.now()
       });
 
-      if (data.active || String(data.status).toLowerCase() === 'authorized') {
+      if (currentSubscriptionInfo.active || currentSubscriptionInfo.status === 'authorized') {
         setAccessStatus('¡Plan activo! 🚀 Preparando la aventura…', 'success');
         grantCommercialAccess('subscription');
+        updateSubscriptionSummary(currentSubscriptionInfo);
         return;
       }
 
@@ -1131,8 +1297,6 @@
     if (verifySubscriptionBtn) verifySubscriptionBtn.disabled = true;
 
     try {
-      // El servidor da prioridad a cualquier suscripción authorized. No enviamos
-      // un ID local antiguo para evitar que un intento pending oculte una activa.
       const res = await fetch('/api/subscription-status', {
         headers: currentAuthHeaders({ Accept: 'application/json' }),
         cache: 'no-store'
@@ -1140,23 +1304,43 @@
       const data = await res.json().catch(() => ({}));
 
       if (res.status === 404) {
+        currentSubscriptionInfo = null;
         if (verifySubscriptionBtn) verifySubscriptionBtn.hidden = true;
-        setSubscriptionSettings('Aún no hay un plan activo.');
+        updateSubscriptionSummary(null);
         if (!silent) setAccessStatus('Tu cuenta está lista. Activa el plan familiar para comenzar.', 'info');
         return false;
       }
       if (!res.ok) throw new Error(data.error || 'No pudimos verificar el pago.');
 
+      currentSubscriptionInfo = normalizeSubscriptionInfo(data);
       writeLocalJson(SUBSCRIPTION_KEY, {
-        id: data.id,
-        status: data.status || 'pending',
+        id: currentSubscriptionInfo.id,
+        status: currentSubscriptionInfo.status,
+        active: currentSubscriptionInfo.active,
+        renews: currentSubscriptionInfo.renews,
+        accessUntil: currentSubscriptionInfo.accessUntil,
+        nextPaymentDate: currentSubscriptionInfo.nextPaymentDate,
         email: currentUser.email,
         checkedAt: Date.now()
       });
+      updateSubscriptionSummary(currentSubscriptionInfo);
 
-      if (data.active) {
-        setAccessStatus('¡Plan activo! 🚀 Entrando a La Expedición…', 'success');
+      if (currentSubscriptionInfo.active) {
+        if (currentSubscriptionInfo.status === 'canceled') {
+          if (!silent) {
+            const until = formatPlanDate(currentSubscriptionInfo.accessUntil);
+            setAccessStatus(
+              until !== '—'
+                ? `Tu renovación está cancelada. Conservas acceso hasta ${until}.`
+                : 'Tu renovación está cancelada. Conservas el acceso del periodo ya pagado.',
+              'success'
+            );
+          }
+        } else if (!silent) {
+          setAccessStatus('¡Plan activo! 🚀 Entrando a La Expedición…', 'success');
+        }
         grantCommercialAccess('subscription');
+        updateSubscriptionSummary(currentSubscriptionInfo);
         return true;
       }
 
@@ -1164,12 +1348,11 @@
       const labels = {
         pending: 'El pago todavía está pendiente. Puedes actualizar el acceso en unos segundos.',
         paused: 'El plan está pausado.',
-        cancelled: 'El plan está cancelado.',
-        canceled: 'El plan está cancelado.'
+        canceled: 'El plan está cancelado y el periodo de acceso ya terminó.'
       };
-      const text = labels[data.status] || 'El plan todavía no está activo.';
+      const text = labels[currentSubscriptionInfo.status] || 'El plan todavía no está activo.';
       if (!silent) setAccessStatus(text, 'warning');
-      setSubscriptionSettings(text);
+      updateSubscriptionSummary(currentSubscriptionInfo);
       return false;
     } catch (error) {
       if (!silent) setAccessStatus('No pudimos revisar el acceso en este momento. Intenta nuevamente.', 'error');
@@ -1178,6 +1361,97 @@
     } finally {
       if (verifySubscriptionBtn) verifySubscriptionBtn.disabled = false;
     }
+  }
+
+  async function openPlanManagement() {
+    if (!currentUser || isOwnerReviewSession()) return;
+
+    const previous = currentSubscriptionInfo;
+    await verifySubscription({ silent: true });
+    if (!currentSubscriptionInfo && previous) currentSubscriptionInfo = previous;
+
+    if (!currentSubscriptionInfo) {
+      showToast('Aún no hay un plan para administrar.');
+      return;
+    }
+
+    updatePlanManagementUi(currentSubscriptionInfo);
+    showPlanOverview();
+    if (settingsModal) settingsModal.hidden = true;
+    if (planManagementModal) planManagementModal.hidden = false;
+    document.body.classList.add('modal-open');
+    const card = planManagementModal?.querySelector('.modal-card');
+    if (card) card.scrollTop = 0;
+  }
+
+  function closePlanManagement() {
+    if (subscriptionCancelBusy) return;
+    if (planManagementModal) planManagementModal.hidden = true;
+    document.body.classList.remove('modal-open');
+    showPlanOverview();
+  }
+
+  function setCancelPlanBusy(busy, message = '') {
+    subscriptionCancelBusy = Boolean(busy);
+    if (confirmCancelPlanBtn) {
+      confirmCancelPlanBtn.disabled = Boolean(busy);
+      confirmCancelPlanBtn.textContent = busy ? 'Cancelando…' : 'Sí, cancelar renovación';
+    }
+    if (keepPlanBtn) keepPlanBtn.disabled = Boolean(busy);
+    if (closePlanManagementBtn) closePlanManagementBtn.disabled = Boolean(busy);
+    if (planCancelStatus) planCancelStatus.textContent = message;
+  }
+
+  async function cancelCurrentSubscription() {
+    if (subscriptionCancelBusy) return;
+    if (!currentSession?.access_token || !currentUser) {
+      if (planCancelStatus) planCancelStatus.textContent = 'Tu sesión terminó. Inicia sesión nuevamente.';
+      return;
+    }
+
+    setCancelPlanBusy(true, 'Cancelando la renovación de forma segura…');
+
+    try {
+      const res = await fetch('/api/subscription-cancel', {
+        method: 'POST',
+        headers: currentAuthHeaders({ 'Content-Type': 'application/json', Accept: 'application/json' }),
+        body: JSON.stringify({ confirm: true })
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.error || 'No pudimos cancelar la renovación.');
+
+      currentSubscriptionInfo = normalizeSubscriptionInfo({
+        ...currentSubscriptionInfo,
+        ...data,
+        status: 'canceled',
+        renews: false
+      });
+
+      writeLocalJson(SUBSCRIPTION_KEY, {
+        id: currentSubscriptionInfo.id,
+        status: 'canceled',
+        active: currentSubscriptionInfo.active,
+        renews: false,
+        accessUntil: currentSubscriptionInfo.accessUntil,
+        email: currentUser.email,
+        checkedAt: Date.now()
+      });
+
+      updateSubscriptionSummary(currentSubscriptionInfo);
+      updatePlanManagementUi(currentSubscriptionInfo);
+      showPlanOverview();
+      showToast('Renovación cancelada. No habrá nuevos cobros.');
+
+      if (!currentSubscriptionInfo.active) {
+        closePlanManagement();
+        showCommercialGate('Tu plan fue cancelado. Puedes activar uno nuevo cuando quieras.');
+      }
+    } catch (error) {
+      setCancelPlanBusy(false, error.message || 'No pudimos cancelar la renovación. Intenta nuevamente.');
+      return;
+    }
+
+    setCancelPlanBusy(false, '');
   }
 
   async function handleAuthenticatedFamily() {
@@ -4738,9 +5012,16 @@
       showToast('Estás usando el modo de pruebas del adulto.');
       return;
     }
-    const active = await verifySubscription({ silent: false });
-    showToast(active ? 'Plan activo ✅' : 'El plan todavía no está activo.');
+    await openPlanManagement();
   });
+
+  closePlanManagementBtn?.addEventListener('click', closePlanManagement);
+  planManagementModal?.addEventListener('click', (e) => {
+    if (e.target === planManagementModal) closePlanManagement();
+  });
+  cancelPlanBtn?.addEventListener('click', showPlanCancelConfirmation);
+  keepPlanBtn?.addEventListener('click', showPlanOverview);
+  confirmCancelPlanBtn?.addEventListener('click', cancelCurrentSubscription);
 
   accessSignOutBtn?.addEventListener('click', () => signOutFamily());
   childSetupSignOutBtn?.addEventListener('click', () => signOutFamily());

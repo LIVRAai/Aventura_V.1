@@ -1,9 +1,31 @@
 import { requireUser, sendServerError } from './_supabase-server.js';
 
+function asIso(value = '') {
+  if (!value) return null;
+  const date = new Date(value);
+  return Number.isNaN(date.getTime()) ? null : date.toISOString();
+}
+
+function futureIso(value = '') {
+  const iso = asIso(value);
+  if (!iso) return null;
+  return new Date(iso).getTime() > Date.now() ? iso : null;
+}
+
+function providerDataWithMeta(providerData = {}, previousRaw = {}) {
+  const previousMeta = previousRaw && typeof previousRaw === 'object'
+    ? (previousRaw._expedicion || {})
+    : {};
+  return {
+    ...providerData,
+    _expedicion: previousMeta
+  };
+}
+
 async function findSubscription(admin, userId, requestedId = '') {
   const base = () => admin
     .from('subscriptions')
-    .select('id, provider_subscription_id, status, payer_email, next_payment_date, amount, currency, updated_at')
+    .select('id, provider_subscription_id, status, payer_email, next_payment_date, amount, currency, updated_at, raw_provider_data')
     .eq('parent_id', userId)
     .eq('provider', 'mercadopago');
 
@@ -15,7 +37,8 @@ async function findSubscription(admin, userId, requestedId = '') {
     return data;
   }
 
-  // Una suscripción activa tiene prioridad sobre intentos pending más recientes.
+  // Una suscripción que sigue renovando tiene prioridad. Si fue cancelada,
+  // la más reciente conserva la información del periodo ya pagado.
   const { data: active, error: activeError } = await base()
     .eq('status', 'authorized')
     .order('updated_at', { ascending: false })
@@ -42,7 +65,7 @@ export default async function handler(req, res) {
     const { admin, user } = await requireUser(req);
     const accessToken = String(process.env.MERCADOPAGO_ACCESS_TOKEN || '').trim();
     if (!accessToken) {
-      return res.status(503).json({ error: 'Mercado Pago aún no está configurado en Vercel.' });
+      return res.status(503).json({ error: 'El plan no se puede verificar en este momento.' });
     }
 
     const requestedId = String(req.query?.id || '').trim();
@@ -70,16 +93,23 @@ export default async function handler(req, res) {
         error: data?.error
       });
       return res.status(mpRes.status === 404 ? 404 : 502).json({
-        error: mpRes.status === 404 ? 'No encontramos esa suscripción en Mercado Pago.' : 'No pudimos verificar la suscripción.',
+        error: mpRes.status === 404 ? 'No encontramos ese plan.' : 'No pudimos verificar el plan.',
         mercadoPagoRequestId: requestId || null
       });
     }
 
     const status = String(data?.status || 'unknown').toLowerCase();
+    const meta = subscription.raw_provider_data?._expedicion || {};
+    const accessUntil = ['canceled', 'cancelled'].includes(status)
+      ? futureIso(meta.access_until)
+      : null;
+    const entitlementActive = status === 'authorized' || Boolean(accessUntil);
+
+    const rawProviderData = providerDataWithMeta(data, subscription.raw_provider_data);
     const update = {
       status,
-      next_payment_date: data?.next_payment_date || null,
-      raw_provider_data: data
+      next_payment_date: data?.next_payment_date || subscription.next_payment_date || null,
+      raw_provider_data: rawProviderData
     };
     if (data?.payer_email) update.payer_email = String(data.payer_email);
     if (data?.auto_recurring?.transaction_amount != null) update.amount = Number(data.auto_recurring.transaction_amount);
@@ -95,9 +125,16 @@ export default async function handler(req, res) {
 
     return res.status(200).json({
       id,
-      status,
-      active: status === 'authorized',
-      nextPaymentDate: data?.next_payment_date || null,
+      status: status === 'cancelled' ? 'canceled' : status,
+      active: entitlementActive,
+      renews: status === 'authorized',
+      accessUntil,
+      canceledAt: asIso(meta.canceled_at),
+      nextPaymentDate: status === 'authorized'
+        ? (data?.next_payment_date || subscription.next_payment_date || null)
+        : null,
+      amount: data?.auto_recurring?.transaction_amount ?? subscription.amount ?? null,
+      currency: data?.auto_recurring?.currency_id || subscription.currency || null,
       mercadoPagoRequestId: requestId || null
     });
   } catch (error) {

@@ -80,23 +80,39 @@ export default async function handler(req, res) {
     const appUrl = getAppUrl(req);
     if (!appUrl) return res.status(500).json({ error: 'No fue posible determinar APP_URL.' });
 
-    // Evita cobros duplicados si ya existe cualquier suscripción autorizada.
-    const { data: activeExisting, error: activeExistingError } = await admin
+    // Evita cobros duplicados si ya existe una suscripción que renueva o si
+    // el cliente canceló la renovación pero todavía conserva tiempo pagado.
+    const { data: existingRows, error: activeExistingError } = await admin
       .from('subscriptions')
-      .select('provider_subscription_id, status')
+      .select('provider_subscription_id, status, raw_provider_data, updated_at')
       .eq('parent_id', user.id)
       .eq('provider', 'mercadopago')
-      .eq('status', 'authorized')
       .order('updated_at', { ascending: false })
-      .limit(1)
-      .maybeSingle();
+      .limit(12);
     if (activeExistingError) throw activeExistingError;
+
+    const now = Date.now();
+    const activeExisting = (existingRows || []).find(row => {
+      const status = String(row.status || '').toLowerCase();
+      if (status === 'authorized') return true;
+      if (!['canceled', 'cancelled'].includes(status)) return false;
+      const accessUntil = row.raw_provider_data?._expedicion?.access_until;
+      const time = accessUntil ? new Date(accessUntil).getTime() : NaN;
+      return Number.isFinite(time) && time > now;
+    });
+
     if (activeExisting?.provider_subscription_id) {
+      const status = String(activeExisting.status || 'authorized').toLowerCase();
+      const accessUntil = activeExisting.raw_provider_data?._expedicion?.access_until || null;
       return res.status(409).json({
-        error: 'Esta cuenta ya tiene una suscripción activa.',
+        error: status === 'authorized'
+          ? 'Esta cuenta ya tiene un plan activo.'
+          : 'Tu plan cancelado todavía tiene acceso vigente.',
         id: activeExisting.provider_subscription_id,
-        status: 'authorized',
-        active: true
+        status: status === 'cancelled' ? 'canceled' : status,
+        active: true,
+        renews: status === 'authorized',
+        accessUntil
       });
     }
 
@@ -187,7 +203,10 @@ export default async function handler(req, res) {
       id: String(data.id),
       status: providerStatus,
       active: providerStatus === 'authorized',
+      renews: providerStatus === 'authorized',
       nextPaymentDate: data.next_payment_date || null,
+      amount,
+      currency,
       mercadoPagoRequestId: requestId || null
     });
   } catch (error) {

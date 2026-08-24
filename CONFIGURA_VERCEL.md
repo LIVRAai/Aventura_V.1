@@ -1,4 +1,4 @@
-# La Expedición v15 — configuración productiva en Vercel
+# La Expedición v17 — configuración productiva en Vercel
 
 Esta versión elimina el flujo anterior `pending → checkout externo` y usa el flujo productivo de Mercado Pago con **CardForm + CardToken + `/preapproval` autorizado**.
 
@@ -38,7 +38,7 @@ Puedes eliminar o dejar sin efecto:
 - `MERCADOPAGO_MODE`
 - `MERCADOPAGO_TEST_PAYER_EMAIL`
 
-La v15 siempre usa el correo real de la cuenta autenticada y las credenciales productivas que tengas configuradas.
+La v17 siempre usa el correo real de la cuenta autenticada y las credenciales productivas que tengas configuradas.
 
 ## Webhook productivo
 
@@ -99,3 +99,8 @@ Las filas antiguas `pending` pueden permanecer como historial. La aplicación da
 8. Webhooks mantienen el estado sincronizado en cambios futuros.
 
 > La Expedición no recibe ni guarda el número de tarjeta o CVV.
+
+
+## Cancelación autoservicio
+
+La V17 agrega `POST /api/subscription-cancel`. No necesita variables nuevas: usa `MERCADOPAGO_ACCESS_TOKEN` y la sesión autenticada de Supabase ya existentes. Tampoco requiere tablas ni columnas nuevas.

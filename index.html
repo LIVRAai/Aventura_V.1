@@ -840,7 +840,7 @@
             <strong>Plan familiar</strong>
             <span id="subscriptionSettingsText">Revisando el plan...</span>
           </div>
-          <button id="subscriptionSettingsBtn" class="settings-toggle" type="button">Actualizar</button>
+          <button id="subscriptionSettingsBtn" class="settings-toggle" type="button">Administrar</button>
         </div>
 
         <p class="settings-section-label">ZONA PARA ADULTOS</p>
@@ -861,6 +861,92 @@
         </div>
 
         <p class="settings-warning">Las opciones para adultos están separadas de la aventura para que el niño pueda concentrarse en aprender.</p>
+      </div>
+    </div>
+  </div>
+
+
+  <div id="planManagementModal" class="modal" hidden>
+    <div class="modal-card plan-management-card" role="dialog" aria-modal="true" aria-labelledby="planManagementTitle">
+      <div class="modal-head plan-management-head">
+        <div>
+          <p class="eyebrow">PLAN FAMILIAR</p>
+          <h2 id="planManagementTitle">Tu suscripción</h2>
+        </div>
+        <button id="closePlanManagementBtn" class="icon-btn" type="button" aria-label="Cerrar administración del plan">✕</button>
+      </div>
+
+      <div id="planOverviewView" class="plan-management-view">
+        <section class="plan-status-premium-card">
+          <div class="plan-status-premium-top">
+            <div>
+              <span id="planStatusBadge" class="plan-status-badge active">ACTIVO</span>
+              <h3>La Expedición · Plan familiar</h3>
+              <p id="planStatusDetail">Tu plan se renueva mensualmente.</p>
+            </div>
+            <div class="plan-status-price">
+              <strong id="planManagementPrice">$24.900</strong>
+              <small>COP / mes</small>
+            </div>
+          </div>
+
+          <div class="plan-status-facts">
+            <div>
+              <span id="planDateLabel">PRÓXIMA RENOVACIÓN</span>
+              <strong id="planDateValue">—</strong>
+            </div>
+            <div>
+              <span>CUENTA</span>
+              <strong id="planAccountEmail">—</strong>
+            </div>
+          </div>
+        </section>
+
+        <section class="plan-includes-card">
+          <span>INCLUIDO EN TU PLAN</span>
+          <div class="plan-includes-grid">
+            <div><b>✓</b><p><strong>Refuerzo por habilidades</strong><small>Progreso claro y medible.</small></p></div>
+            <div><b>✦</b><p><strong>Tutor NOVA</strong><small>Acompañamiento durante la práctica.</small></p></div>
+            <div><b>↗</b><p><strong>Progreso familiar</strong><small>Qué domina y qué conviene reforzar.</small></p></div>
+          </div>
+        </section>
+
+        <div id="planCanceledNotice" class="plan-canceled-notice" hidden>
+          <span>✓</span>
+          <div>
+            <strong>Renovación cancelada</strong>
+            <p id="planCanceledNoticeText">No se realizarán nuevos cobros.</p>
+          </div>
+        </div>
+
+        <div id="planManagementActions" class="plan-management-actions">
+          <button id="cancelPlanBtn" class="plan-cancel-link" type="button">Cancelar renovación</button>
+          <p>La cancelación detiene futuros cobros. Los pagos ya aprobados no se reembolsan automáticamente.</p>
+        </div>
+      </div>
+
+      <div id="planCancelView" class="plan-management-view plan-cancel-view" hidden>
+        <div class="plan-cancel-icon" aria-hidden="true">↻</div>
+        <p class="eyebrow">ANTES DE CONTINUAR</p>
+        <h3>¿Cancelar la renovación?</h3>
+        <p id="planCancelCopy">Tu plan seguirá disponible hasta terminar el periodo que ya pagaste. Después no se harán nuevos cobros.</p>
+
+        <div class="plan-cancel-summary">
+          <div>
+            <span>ACCESO HASTA</span>
+            <strong id="planCancelAccessUntil">—</strong>
+          </div>
+          <div>
+            <span>NUEVOS COBROS</span>
+            <strong>No</strong>
+          </div>
+        </div>
+
+        <div class="plan-cancel-actions">
+          <button id="keepPlanBtn" class="plan-keep-btn" type="button">Conservar mi plan</button>
+          <button id="confirmCancelPlanBtn" class="plan-confirm-cancel-btn" type="button">Sí, cancelar renovación</button>
+        </div>
+        <p id="planCancelStatus" class="plan-cancel-status" role="status" aria-live="polite"></p>
       </div>
     </div>
   </div>

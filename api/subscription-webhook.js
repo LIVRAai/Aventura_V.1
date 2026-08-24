@@ -23,7 +23,6 @@ function safeEqualHex(left = '', right = '') {
   return a.length === b.length && timingSafeEqual(a, b);
 }
 
-// Replica el esquema HMAC-SHA256 documentado por Mercado Pago para Webhooks.
 function validateMercadoPagoSignature(req, dataId, secret) {
   const xSignature = header(req, 'x-signature');
   const xRequestId = header(req, 'x-request-id').trim();
@@ -76,6 +75,28 @@ async function fetchMercadoPago(path, token) {
   return { response, data };
 }
 
+async function findExistingSubscription(admin, data) {
+  let query = admin
+    .from('subscriptions')
+    .select('id, raw_provider_data, next_payment_date, status')
+    .eq('provider', 'mercadopago');
+
+  if (data?.external_reference) {
+    query = query.eq('external_reference', String(data.external_reference));
+  } else if (data?.id) {
+    query = query.eq('provider_subscription_id', String(data.id));
+  } else {
+    return null;
+  }
+
+  const { data: existing, error } = await query
+    .order('updated_at', { ascending: false })
+    .limit(1)
+    .maybeSingle();
+  if (error) throw supabaseError('No se pudo leer subscriptions', error);
+  return existing;
+}
+
 async function refreshSubscription(admin, subscriptionId, token) {
   if (!subscriptionId) return { processed: false, providerLookup: 'missing_subscription_id' };
 
@@ -88,12 +109,19 @@ async function refreshSubscription(admin, subscriptionId, token) {
     return { processed: false, providerLookup: `preapproval_${response.status}` };
   }
 
+  const existing = await findExistingSubscription(admin, data);
+  const previousMeta = existing?.raw_provider_data?._expedicion || {};
+  const rawProviderData = {
+    ...data,
+    _expedicion: previousMeta
+  };
+
   const status = String(data.status || 'unknown').toLowerCase();
   const update = {
-    status,
+    status: status === 'cancelled' ? 'canceled' : status,
     provider_subscription_id: String(data.id),
-    next_payment_date: data.next_payment_date || null,
-    raw_provider_data: data
+    next_payment_date: data.next_payment_date || existing?.next_payment_date || null,
+    raw_provider_data: rawProviderData
   };
   if (data.payer_email) update.payer_email = String(data.payer_email);
   if (data.auto_recurring?.transaction_amount != null) update.amount = Number(data.auto_recurring.transaction_amount);
@@ -109,7 +137,7 @@ async function refreshSubscription(admin, subscriptionId, token) {
   const { error } = await query;
   if (error) throw supabaseError('No se pudo actualizar subscriptions', error);
 
-  return { processed: true, providerLookup: 'preapproval_ok', subscriptionId: String(data.id), status };
+  return { processed: true, providerLookup: 'preapproval_ok', subscriptionId: String(data.id), status: update.status };
 }
 
 export default async function handler(req, res) {
@@ -130,8 +158,6 @@ export default async function handler(req, res) {
     const type = String(body.type || req.query?.type || 'unknown').trim();
     const action = String(body.action || req.query?.action || '').trim();
 
-    // Para validar firma Mercado Pago usa data.id de la query. Dejamos fallback al body
-    // para compatibilidad con algunos envíos/simulaciones.
     const signatureDataId = String(
       req.query?.['data.id'] ||
       req.query?.data_id ||
