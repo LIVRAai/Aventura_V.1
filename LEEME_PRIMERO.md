@@ -1,32 +1,43 @@
-# La Expedición v9
+# La Expedición v10 — revisión productiva
 
-## Ya incluye
+## Problema encontrado en la versión recibida
 
-- Cuenta familiar con Supabase Auth.
-- Perfil del niño en `children`.
-- Sincronización de Atlas, cuaderno y Academia con `child_progress`.
-- Migración automática del progreso histórico de `localStorage` cuando la nube está vacía.
-- Suscripción de Mercado Pago asociada al usuario autenticado.
-- Registro de webhooks en `subscription_events`.
-- Selector de materias preparado para crecer.
-- Modo interno `123456` conservado.
+El código actual creaba `/preapproval` con `status: pending` y redirigía al `init_point` de Mercado Pago. En producción la suscripción sí se creaba, pero el comprador llegaba a una pantalla donde el botón **Confirmar** podía quedar deshabilitado; la fila de Supabase seguía con `payment_method_id: null` y `status: pending`.
+
+## Cambio principal
+
+La v10 utiliza el otro flujo oficial de Suscripciones de Mercado Pago:
+
+**MercadoPago.js CardForm → CardToken → `/preapproval` con `status: authorized`.**
+
+La tarjeta se captura en campos seguros controlados por Mercado Pago. El servidor de La Expedición recibe solamente el token temporal.
+
+## Qué se conservó
+
+No se reescribió la experiencia educativa:
+
+- Atlas y 36 misiones.
+- Academia de División.
+- 8 rutas.
+- NOVA.
+- Modo de pruebas para adultos.
+- Progreso local + sincronización Supabase.
+- Tablas actuales de Supabase.
+
+## Optimizaciones adicionales
+
+- `subscription-status` ya no deja que un intento `pending` reciente oculte una suscripción `authorized` anterior.
+- Errores de Mercado Pago incluyen `x-request-id` para diagnóstico sin exponer secretos.
+- Webhook productivo valida `x-signature` con `MERCADOPAGO_WEBHOOK_SECRET`.
+- `subscription_authorized_payment` consulta la factura y actualiza la suscripción relacionada.
+- Se eliminó el endpoint temporal `api/create-mp-test-user.js`.
+- `health-supabase` verifica Public Key, Access Token y secreto de Webhook por separado.
 
 ## Antes de desplegar
 
-Asegúrate de tener en Vercel:
+Lee `CONFIGURA_VERCEL.md`. En particular, agrega:
 
-`SUPABASE_URL`
+- `MERCADOPAGO_PUBLIC_KEY`
+- `MERCADOPAGO_WEBHOOK_SECRET`
 
-`SUPABASE_PUBLISHABLE_KEY`
-
-`SUPABASE_SECRET_KEY`
-
-`MERCADOPAGO_ACCESS_TOKEN`
-
-`OPENAI_API_KEY`
-
-Además de las variables de precio y `APP_URL` descritas en `CONFIGURA_VERCEL.md`.
-
-## No reemplaces por accidente
-
-Si tu repositorio ya tiene `api/tutor.js` y `api/health.js`, consérvalos. Este paquete no los incluye porque no fueron suministrados en el código base.
+con valores de **producción**.

@@ -13,8 +13,6 @@ export default function handler(req, res) {
     return res.status(405).json({ error: 'Método no permitido.' });
   }
 
-  const mercadoPagoMode = String(process.env.MERCADOPAGO_MODE || 'production').trim().toLowerCase();
-
   return res.status(200).json({
     supabaseUrlConfigured: validHttpUrl(process.env.SUPABASE_URL),
     publishableKeyConfigured: Boolean(
@@ -23,9 +21,10 @@ export default function handler(req, res) {
       process.env.SUPABASE_ANON_KEY
     ),
     secretKeyConfigured: Boolean(process.env.SUPABASE_SECRET_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY),
-    mercadoPagoConfigured: Boolean(process.env.MERCADOPAGO_ACCESS_TOKEN),
-    mercadoPagoMode: mercadoPagoMode === 'test' ? 'test' : 'production',
-    mercadoPagoTestPayerConfigured: mercadoPagoMode !== 'test' || Boolean(process.env.MERCADOPAGO_TEST_PAYER_EMAIL),
+    mercadoPagoAccessTokenConfigured: Boolean(process.env.MERCADOPAGO_ACCESS_TOKEN),
+    mercadoPagoPublicKeyConfigured: Boolean(process.env.MERCADOPAGO_PUBLIC_KEY),
+    mercadoPagoWebhookSecretConfigured: Boolean(process.env.MERCADOPAGO_WEBHOOK_SECRET),
+    subscriptionFlow: 'authorized-card-token',
     openAIConfigured: Boolean(process.env.OPENAI_API_KEY)
   });
 }

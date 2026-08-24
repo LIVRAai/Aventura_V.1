@@ -97,8 +97,69 @@
           <button id="subscribeBtn" class="access-primary" type="submit">Suscribirme con Mercado Pago</button>
         </form>
 
+        <section id="paymentPanel" class="mp-payment-panel" hidden aria-label="Pago seguro con Mercado Pago">
+          <div class="mp-payment-head">
+            <div>
+              <span>PAGO SEGURO · MERCADO PAGO</span>
+              <strong>Activa tu suscripción mensual</strong>
+              <p>Tu tarjeta se procesa directamente con Mercado Pago. La Expedición no recibe ni guarda el número de tarjeta ni el código de seguridad.</p>
+            </div>
+            <button id="closePaymentPanelBtn" class="mp-payment-close" type="button" aria-label="Cerrar formulario de pago">✕</button>
+          </div>
+
+          <form id="form-checkout" class="mp-card-form" autocomplete="on">
+            <label class="mp-field mp-field-wide">
+              <span>Número de tarjeta</span>
+              <div id="form-checkout__cardNumber" class="mp-secure-field"></div>
+            </label>
+
+            <div class="mp-field-row">
+              <label class="mp-field">
+                <span>Vencimiento</span>
+                <div id="form-checkout__expirationDate" class="mp-secure-field"></div>
+              </label>
+              <label class="mp-field">
+                <span>Código de seguridad</span>
+                <div id="form-checkout__securityCode" class="mp-secure-field"></div>
+              </label>
+            </div>
+
+            <label class="mp-field mp-field-wide">
+              <span>Nombre en la tarjeta</span>
+              <input id="form-checkout__cardholderName" type="text" autocomplete="cc-name" placeholder="Como aparece en la tarjeta" required />
+            </label>
+
+            <div class="mp-field-row">
+              <label class="mp-field">
+                <span>Tipo de documento</span>
+                <select id="form-checkout__identificationType" required></select>
+              </label>
+              <label class="mp-field">
+                <span>Número de documento</span>
+                <input id="form-checkout__identificationNumber" type="text" inputmode="numeric" autocomplete="off" required />
+              </label>
+            </div>
+
+            <label class="mp-field mp-field-wide">
+              <span>Correo del titular</span>
+              <input id="form-checkout__cardholderEmail" type="email" autocomplete="email" readonly />
+            </label>
+
+            <div class="mp-technical-fields" aria-hidden="true">
+              <select id="form-checkout__issuer" tabindex="-1"></select>
+              <select id="form-checkout__installments" tabindex="-1"></select>
+            </div>
+
+            <progress id="paymentProgress" class="mp-payment-progress" value="0" max="1">Procesando...</progress>
+            <button id="form-checkout__submit" class="access-primary mp-submit-btn" type="submit" disabled>
+              Confirmar suscripción · $24.900/mes
+            </button>
+            <p class="mp-validation-note">Mercado Pago puede realizar un cargo pequeño de validación de tarjeta y devolverlo automáticamente.</p>
+          </form>
+        </section>
+
         <button id="verifySubscriptionBtn" class="access-secondary" type="button" hidden>
-          Ya pagué · verificar acceso
+          Verificar suscripción
         </button>
 
         <button id="accessSignOutBtn" class="access-text-btn" type="button">Cerrar sesión</button>
@@ -728,6 +789,7 @@
 
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="https://sdk.mercadopago.com/js/v2"></script>
   <script src="app.js"></script>
 </body>
 </html>

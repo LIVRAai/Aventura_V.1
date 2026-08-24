@@ -58,6 +58,11 @@
   const parentEmailInput = $('#parentEmailInput');
   const childNameInput = $('#childNameInput');
   const subscribeBtn = $('#subscribeBtn');
+  const paymentPanel = $('#paymentPanel');
+  const closePaymentPanelBtn = $('#closePaymentPanelBtn');
+  const paymentProgress = $('#paymentProgress');
+  const mpCardholderEmail = $('#form-checkout__cardholderEmail');
+  const mpSubmitBtn = $('#form-checkout__submit');
   const verifySubscriptionBtn = $('#verifySubscriptionBtn');
   const subscriptionPrice = $('#subscriptionPrice');
   const accessStatus = $('#accessStatus');
@@ -211,10 +216,18 @@
   let cloudSyncQueued = false;
   let authMode = 'signup';
   let familyLoadPromise = null;
+  let mercadoPagoClient = null;
+  let mercadoPagoCardForm = null;
+  let mercadoPagoFormReady = false;
+  let mercadoPagoFormInitializing = false;
+  let mercadoPagoInitPromise = null;
+  let mercadoPagoSubmitting = false;
 
   let subscriptionConfig = {
     enabled: true,
     paymentConfigured: false,
+    publicKey: '',
+    flow: 'authorized-card-token',
     amount: 24900,
     currency: 'COP',
     formattedAmount: '$24.900'
@@ -321,6 +334,7 @@
   function grantCommercialAccess(reason = 'subscription') {
     commercialAccessGranted = true;
     updatePersonalization();
+    if (paymentPanel) paymentPanel.hidden = true;
     if (accessGate) accessGate.hidden = true;
     document.body.classList.remove('access-locked');
     if (learningHub && app?.hidden) learningHub.hidden = false;
@@ -386,6 +400,190 @@
       const price = subscriptionConfig.formattedAmount || formatCop(subscriptionConfig.amount);
       subscriptionPrice.innerHTML = `${price} <small>${subscriptionConfig.currency || 'COP'} / mes</small>`;
     }
+    if (mpSubmitBtn) {
+      const price = subscriptionConfig.formattedAmount || formatCop(subscriptionConfig.amount);
+      mpSubmitBtn.textContent = `Confirmar suscripción · ${price}/mes`;
+    }
+  }
+
+  function setPaymentBusy(busy, message = '') {
+    mercadoPagoSubmitting = Boolean(busy);
+    if (mpSubmitBtn) mpSubmitBtn.disabled = Boolean(busy) || !mercadoPagoFormReady;
+    if (closePaymentPanelBtn) closePaymentPanelBtn.disabled = Boolean(busy);
+    if (paymentProgress) {
+      if (busy) paymentProgress.removeAttribute('value');
+      else paymentProgress.setAttribute('value', '0');
+    }
+    if (message) setAccessStatus(message, busy ? 'loading' : 'info');
+  }
+
+  function fillPaymentAccountEmail() {
+    if (mpCardholderEmail) mpCardholderEmail.value = currentUser?.email || '';
+  }
+
+  function paymentErrorMessage(data = {}) {
+    const reference = data?.mercadoPagoRequestId ? ` Referencia MP: ${data.mercadoPagoRequestId}.` : '';
+    const base = data?.error || 'Mercado Pago no pudo crear la suscripción.';
+    return `${base}${reference}`;
+  }
+
+  async function submitAuthorizedSubscription(cardData = {}) {
+    if (mercadoPagoSubmitting) return;
+    const token = String(cardData?.token || '').trim();
+    if (!token) {
+      setAccessStatus('No fue posible proteger los datos de la tarjeta. Revisa los campos e intenta otra vez.', 'error');
+      return;
+    }
+    if (!currentSession?.access_token || !currentUser || !activeChild) {
+      setAccessStatus('Tu sesión ya no está disponible. Inicia sesión de nuevo.', 'error');
+      return;
+    }
+
+    setPaymentBusy(true, 'Validando la tarjeta y activando la suscripción…');
+
+    try {
+      const res = await fetch('/api/subscription-create', {
+        method: 'POST',
+        headers: currentAuthHeaders({ 'Content-Type': 'application/json', Accept: 'application/json' }),
+        body: JSON.stringify({ childId: activeChild.id, cardTokenId: token })
+      });
+      const data = await res.json().catch(() => ({}));
+
+      if (res.status === 409 && data.active) {
+        writeLocalJson(SUBSCRIPTION_KEY, {
+          id: data.id,
+          status: 'authorized',
+          email: currentUser.email,
+          checkedAt: Date.now()
+        });
+        grantCommercialAccess('subscription');
+        return;
+      }
+
+      if (!res.ok) throw new Error(paymentErrorMessage(data));
+
+      writeLocalJson(SUBSCRIPTION_KEY, {
+        id: data.id,
+        status: data.status || 'unknown',
+        email: currentUser.email,
+        createdAt: Date.now()
+      });
+
+      if (data.active || String(data.status).toLowerCase() === 'authorized') {
+        setAccessStatus('Suscripción activa ✅ Entrando a La Expedición…', 'success');
+        grantCommercialAccess('subscription');
+        return;
+      }
+
+      if (verifySubscriptionBtn) verifySubscriptionBtn.hidden = false;
+      setAccessStatus(`Mercado Pago creó la suscripción con estado ${data.status || 'pendiente'}. Vamos a verificarla.`, 'warning');
+      await verifySubscription({ silent: false });
+    } catch (error) {
+      console.error('authorized subscription error', error);
+      // El CardToken es de un solo uso. Limpiamos el token oculto para que
+      // MercadoPago.js genere uno nuevo en el siguiente intento.
+      const hiddenToken = document.querySelector('input[name="MPHiddenInputToken"]');
+      if (hiddenToken) hiddenToken.value = '';
+      setAccessStatus(error.message || 'No fue posible activar la suscripción.', 'error');
+    } finally {
+      setPaymentBusy(false);
+    }
+  }
+
+  async function initializeMercadoPagoCardForm() {
+    if (mercadoPagoFormReady && mercadoPagoCardForm) return mercadoPagoCardForm;
+    if (mercadoPagoInitPromise) return mercadoPagoInitPromise;
+
+    mercadoPagoInitPromise = (async () => {
+      if (!subscriptionConfig.publicKey) {
+        throw new Error('Falta MERCADOPAGO_PUBLIC_KEY en Vercel.');
+      }
+      if (!window.MercadoPago) {
+        throw new Error('No fue posible cargar MercadoPago.js. Revisa la conexión e intenta nuevamente.');
+      }
+      if (mercadoPagoFormInitializing) return mercadoPagoCardForm;
+      mercadoPagoFormInitializing = true;
+      fillPaymentAccountEmail();
+
+      mercadoPagoClient = new window.MercadoPago(subscriptionConfig.publicKey, { locale: 'es-CO' });
+      mercadoPagoCardForm = mercadoPagoClient.cardForm({
+        amount: String(Number(subscriptionConfig.amount || 24900)),
+        iframe: true,
+        form: {
+          id: 'form-checkout',
+          cardNumber: { id: 'form-checkout__cardNumber', placeholder: 'Número de tarjeta' },
+          expirationDate: { id: 'form-checkout__expirationDate', placeholder: 'MM/AA' },
+          securityCode: { id: 'form-checkout__securityCode', placeholder: 'CVV' },
+          cardholderName: { id: 'form-checkout__cardholderName', placeholder: 'Nombre del titular' },
+          issuer: { id: 'form-checkout__issuer' },
+          installments: { id: 'form-checkout__installments' },
+          identificationType: { id: 'form-checkout__identificationType' },
+          identificationNumber: { id: 'form-checkout__identificationNumber', placeholder: 'Documento' },
+          cardholderEmail: { id: 'form-checkout__cardholderEmail', placeholder: 'correo@ejemplo.com' }
+        },
+        callbacks: {
+          onFormMounted: error => {
+            mercadoPagoFormInitializing = false;
+            if (error) {
+              mercadoPagoFormReady = false;
+              console.error('Mercado Pago CardForm mount error', error);
+              setAccessStatus('Mercado Pago no pudo cargar el formulario de tarjeta.', 'error');
+              return;
+            }
+            mercadoPagoFormReady = true;
+            setPaymentBusy(false);
+            setAccessStatus('Formulario seguro listo. Completa los datos para activar la suscripción.', 'info');
+          },
+          onSubmit: event => {
+            event.preventDefault();
+            if (mercadoPagoSubmitting) return;
+            const cardData = mercadoPagoCardForm.getCardFormData();
+            submitAuthorizedSubscription(cardData);
+          },
+          onFetching: () => {
+            if (paymentProgress) paymentProgress.removeAttribute('value');
+            return () => paymentProgress?.setAttribute('value', '0');
+          }
+        }
+      });
+      return mercadoPagoCardForm;
+    })().finally(() => {
+      mercadoPagoFormInitializing = false;
+      mercadoPagoInitPromise = null;
+    });
+
+    return mercadoPagoInitPromise;
+  }
+
+  async function openPaymentPanel() {
+    if (!subscriptionConfig.paymentConfigured) {
+      const missing = !subscriptionConfig.publicKey
+        ? 'Falta la Public Key productiva de Mercado Pago en Vercel.'
+        : 'Mercado Pago todavía no está configurado completamente en Vercel.';
+      setAccessStatus(missing, 'warning');
+      return;
+    }
+    if (!paymentPanel) return;
+    paymentPanel.hidden = false;
+    fillPaymentAccountEmail();
+    if (subscribeBtn) subscribeBtn.hidden = true;
+    setAccessStatus('Cargando el formulario seguro de Mercado Pago…', 'loading');
+    try {
+      await initializeMercadoPagoCardForm();
+      paymentPanel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    } catch (error) {
+      console.error('Mercado Pago initialization error', error);
+      setAccessStatus(error.message || 'No fue posible cargar Mercado Pago.', 'error');
+      if (subscribeBtn) subscribeBtn.hidden = false;
+      paymentPanel.hidden = true;
+    }
+  }
+
+  function closePaymentPanel() {
+    if (mercadoPagoSubmitting) return;
+    if (paymentPanel) paymentPanel.hidden = true;
+    if (subscribeBtn) subscribeBtn.hidden = false;
+    setAccessStatus('Puedes activar el plan mensual cuando quieras.', 'info');
   }
 
   function captureLocalProgress() {
@@ -614,9 +812,9 @@
     if (verifySubscriptionBtn) verifySubscriptionBtn.disabled = true;
 
     try {
-      const stored = storedSubscription();
-      const query = stored.id ? `?id=${encodeURIComponent(stored.id)}` : '';
-      const res = await fetch(`/api/subscription-status${query}`, {
+      // El servidor da prioridad a cualquier suscripción authorized. No enviamos
+      // un ID local antiguo para evitar que un intento pending oculte una activa.
+      const res = await fetch('/api/subscription-status', {
         headers: currentAuthHeaders({ Accept: 'application/json' }),
         cache: 'no-store'
       });
@@ -645,7 +843,7 @@
 
       if (verifySubscriptionBtn) verifySubscriptionBtn.hidden = false;
       const labels = {
-        pending: 'La suscripción todavía está pendiente. Completa el proceso en Mercado Pago.',
+        pending: 'Mercado Pago todavía no ha autorizado la suscripción. Puedes verificar nuevamente en unos segundos.',
         paused: 'La suscripción está pausada.',
         cancelled: 'La suscripción está cancelada.',
         canceled: 'La suscripción está cancelada.'
@@ -3919,45 +4117,14 @@
     }
 
     if (!subscriptionConfig.paymentConfigured) {
-      setAccessStatus('Mercado Pago todavía no está configurado en Vercel.', 'warning');
+      setAccessStatus('Mercado Pago no está configurado completamente. Revisa Access Token y Public Key en Vercel.', 'warning');
       return;
     }
 
-    if (subscribeBtn) {
-      subscribeBtn.disabled = true;
-      subscribeBtn.textContent = 'Preparando Mercado Pago…';
-    }
-    setAccessStatus('Creando tu suscripción mensual…', 'loading');
-
-    try {
-      const res = await fetch('/api/subscription-create', {
-        method: 'POST',
-        headers: currentAuthHeaders({ 'Content-Type': 'application/json', Accept: 'application/json' }),
-        body: JSON.stringify({ childId: activeChild.id })
-      });
-      const data = await res.json().catch(() => ({}));
-      if (!res.ok) throw new Error(data.error || 'No fue posible iniciar la suscripción.');
-
-      writeLocalJson(SUBSCRIPTION_KEY, {
-        id: data.id,
-        status: data.status || 'pending',
-        email: currentUser.email,
-        createdAt: Date.now()
-      });
-
-      if (verifySubscriptionBtn) verifySubscriptionBtn.hidden = false;
-      if (!data.initPoint) throw new Error('Mercado Pago no devolvió el enlace de pago.');
-
-      setAccessStatus('Te llevaremos a Mercado Pago para completar la suscripción.', 'success');
-      window.location.assign(data.initPoint);
-    } catch (error) {
-      setAccessStatus(error.message || 'No fue posible conectar con Mercado Pago.', 'error');
-      if (subscribeBtn) {
-        subscribeBtn.disabled = false;
-        subscribeBtn.textContent = 'Suscribirme con Mercado Pago';
-      }
-    }
+    await openPaymentPanel();
   });
+
+  closePaymentPanelBtn?.addEventListener('click', closePaymentPanel);
 
   verifySubscriptionBtn?.addEventListener('click', () => verifySubscription({ silent: false }));
 

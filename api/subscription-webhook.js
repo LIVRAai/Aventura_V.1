@@ -1,12 +1,57 @@
-import { createHash } from 'node:crypto';
+import { createHash, createHmac, timingSafeEqual } from 'node:crypto';
 import { createSupabaseAdmin, sendServerError } from './_supabase-server.js';
 
-function eventKey(req, type, action, dataId) {
-  const requestId = String(req.headers?.['x-request-id'] || '').trim();
-  if (requestId) return `mp:${requestId}`;
+function header(req, name) {
+  const value = req.headers?.[name.toLowerCase()];
+  return Array.isArray(value) ? String(value[0] || '') : String(value || '');
+}
+
+function signatureParts(value = '') {
+  const result = {};
+  for (const part of String(value).split(',')) {
+    const index = part.indexOf('=');
+    if (index < 1) continue;
+    result[part.slice(0, index).trim()] = part.slice(index + 1).trim();
+  }
+  return result;
+}
+
+function safeEqualHex(left = '', right = '') {
+  if (!/^[a-f0-9]+$/i.test(left) || !/^[a-f0-9]+$/i.test(right)) return false;
+  const a = Buffer.from(left, 'hex');
+  const b = Buffer.from(right, 'hex');
+  return a.length === b.length && timingSafeEqual(a, b);
+}
+
+// Replica el esquema HMAC-SHA256 documentado por Mercado Pago para Webhooks.
+function validateMercadoPagoSignature(req, dataId, secret) {
+  const xSignature = header(req, 'x-signature');
+  const xRequestId = header(req, 'x-request-id').trim();
+  const { ts, v1 } = signatureParts(xSignature);
+
+  if (!xSignature || !ts || !v1) return false;
+
+  const manifestParts = [];
+  if (dataId) manifestParts.push(`id:${dataId};`);
+  if (xRequestId) manifestParts.push(`request-id:${xRequestId};`);
+  manifestParts.push(`ts:${ts};`);
+
+  const expected = createHmac('sha256', secret)
+    .update(manifestParts.join(''))
+    .digest('hex');
+
+  return safeEqualHex(expected, v1);
+}
+
+function eventKey(req, body, type, action, dataId) {
+  const notificationId = String(body?.id || '').trim();
+  if (notificationId) return `mp:event:${notificationId}`;
+
+  const requestId = header(req, 'x-request-id').trim();
+  if (requestId) return `mp:req:${requestId}`;
 
   return `mp:${createHash('sha256')
-    .update(`${type}|${action}|${dataId}|${JSON.stringify(req.body || {})}`)
+    .update(`${type}|${action}|${dataId}|${JSON.stringify(body || {})}`)
     .digest('hex')
     .slice(0, 48)}`;
 }
@@ -19,6 +64,54 @@ function supabaseError(label, error) {
   return new Error(`${label}: ${details || 'error desconocido de Supabase'}`);
 }
 
+async function fetchMercadoPago(path, token) {
+  const response = await fetch(`https://api.mercadopago.com${path}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      Accept: 'application/json'
+    },
+    cache: 'no-store'
+  });
+  const data = await response.json().catch(() => ({}));
+  return { response, data };
+}
+
+async function refreshSubscription(admin, subscriptionId, token) {
+  if (!subscriptionId) return { processed: false, providerLookup: 'missing_subscription_id' };
+
+  const { response, data } = await fetchMercadoPago(
+    `/preapproval/${encodeURIComponent(subscriptionId)}`,
+    token
+  );
+
+  if (!response.ok || !data?.id) {
+    return { processed: false, providerLookup: `preapproval_${response.status}` };
+  }
+
+  const status = String(data.status || 'unknown').toLowerCase();
+  const update = {
+    status,
+    provider_subscription_id: String(data.id),
+    next_payment_date: data.next_payment_date || null,
+    raw_provider_data: data
+  };
+  if (data.payer_email) update.payer_email = String(data.payer_email);
+  if (data.auto_recurring?.transaction_amount != null) update.amount = Number(data.auto_recurring.transaction_amount);
+  if (data.auto_recurring?.currency_id) update.currency = String(data.auto_recurring.currency_id);
+
+  let query = admin.from('subscriptions').update(update);
+  if (data.external_reference) {
+    query = query.eq('external_reference', String(data.external_reference));
+  } else {
+    query = query.eq('provider_subscription_id', String(data.id));
+  }
+
+  const { error } = await query;
+  if (error) throw supabaseError('No se pudo actualizar subscriptions', error);
+
+  return { processed: true, providerLookup: 'preapproval_ok', subscriptionId: String(data.id), status };
+}
+
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     res.setHeader('Allow', 'POST');
@@ -26,20 +119,36 @@ export default async function handler(req, res) {
   }
 
   try {
-    const admin = createSupabaseAdmin();
+    const webhookSecret = String(process.env.MERCADOPAGO_WEBHOOK_SECRET || '').trim();
+    if (!webhookSecret) {
+      const error = new Error('Falta MERCADOPAGO_WEBHOOK_SECRET en Vercel.');
+      error.statusCode = 503;
+      throw error;
+    }
 
-    const type = String(req.body?.type || req.query?.type || 'unknown');
-    const action = String(req.body?.action || req.query?.action || '');
-    const dataId = String(
-      req.body?.data?.id ||
+    const body = req.body && typeof req.body === 'object' ? req.body : {};
+    const type = String(body.type || req.query?.type || 'unknown').trim();
+    const action = String(body.action || req.query?.action || '').trim();
+
+    // Para validar firma Mercado Pago usa data.id de la query. Dejamos fallback al body
+    // para compatibilidad con algunos envíos/simulaciones.
+    const signatureDataId = String(
       req.query?.['data.id'] ||
-      req.query?.id ||
+      req.query?.data_id ||
+      body?.data?.id ||
       ''
-    );
-    const key = eventKey(req, type, action, dataId);
+    ).trim();
 
-    // 1) SIEMPRE registrar primero el webhook.
-    // Supabase JS devuelve los errores en { error }; no los lanza automáticamente.
+    if (!validateMercadoPagoSignature(req, signatureDataId, webhookSecret)) {
+      const error = new Error('Firma de Webhook de Mercado Pago no válida.');
+      error.statusCode = 401;
+      throw error;
+    }
+
+    const admin = createSupabaseAdmin();
+    const resourceId = String(body?.data?.id || signatureDataId || '').trim();
+    const key = eventKey(req, body, type, action, resourceId);
+
     const { error: eventInsertError } = await admin
       .from('subscription_events')
       .upsert(
@@ -48,123 +157,63 @@ export default async function handler(req, res) {
           event_key: key,
           event_type: type,
           action,
-          provider_resource_id: dataId || null,
+          provider_resource_id: resourceId || null,
           payload: {
-            body: req.body || {},
+            body,
             query: req.query || {},
+            x_request_id: header(req, 'x-request-id') || null,
+            signature_validated: true,
             received_at: new Date().toISOString()
           },
           processed: false
         },
-        {
-          onConflict: 'event_key',
-          ignoreDuplicates: true
-        }
+        { onConflict: 'event_key', ignoreDuplicates: true }
       );
 
     if (eventInsertError) {
       throw supabaseError('No se pudo insertar subscription_events', eventInsertError);
     }
 
-    let processed = false;
-    let providerLookup = 'not_needed';
-
-    // 2) Si el evento apunta a un preapproval REAL, consultar a Mercado Pago
-    // y refrescar subscriptions. En una simulación con ID 123456 la consulta
-    // puede devolver 404: el evento queda registrado igualmente.
-    const isPreapproval =
-      type.toLowerCase().includes('preapproval') ||
-      action.toLowerCase().includes('preapproval') ||
-      String(req.body?.entity || '').toLowerCase().includes('preapproval');
-
-    const mpToken = process.env.MERCADOPAGO_ACCESS_TOKEN;
-
-    if (isPreapproval && dataId && mpToken) {
-      providerLookup = 'attempted';
-
-      const mpRes = await fetch(
-        `https://api.mercadopago.com/preapproval/${encodeURIComponent(dataId)}`,
-        {
-          headers: { Authorization: `Bearer ${mpToken}` },
-          cache: 'no-store'
-        }
-      );
-
-      const mpData = await mpRes.json().catch(() => ({}));
-
-      if (mpRes.ok && mpData?.id) {
-        providerLookup = 'ok';
-
-        const status = String(mpData.status || 'unknown').toLowerCase();
-        const update = {
-          status,
-          provider_subscription_id: String(mpData.id),
-          next_payment_date: mpData.next_payment_date || null,
-          payer_email: mpData.payer_email || null,
-          amount: mpData.auto_recurring?.transaction_amount ?? null,
-          currency: mpData.auto_recurring?.currency_id || 'COP',
-          raw_provider_data: mpData
-        };
-
-        let updateQuery = admin.from('subscriptions').update(update);
-
-        if (mpData.external_reference) {
-          updateQuery = updateQuery.eq(
-            'external_reference',
-            String(mpData.external_reference)
-          );
-        } else {
-          updateQuery = updateQuery.eq(
-            'provider_subscription_id',
-            String(mpData.id)
-          );
-        }
-
-        const { error: subscriptionUpdateError } = await updateQuery;
-
-        if (subscriptionUpdateError) {
-          throw supabaseError(
-            'No se pudo actualizar subscriptions',
-            subscriptionUpdateError
-          );
-        }
-
-        processed = true;
-      } else {
-        // Es normal durante "Simular notificación" si se usa un Data ID ficticio.
-        providerLookup = `not_found_${mpRes.status}`;
-      }
-    } else if (!isPreapproval) {
-      // El webhook se registró correctamente, aunque todavía no tengamos
-      // procesamiento específico para ese tipo de evento.
-      processed = true;
+    const token = String(process.env.MERCADOPAGO_ACCESS_TOKEN || '').trim();
+    if (!token) {
+      const error = new Error('Falta MERCADOPAGO_ACCESS_TOKEN en Vercel.');
+      error.statusCode = 503;
+      throw error;
     }
 
-    // 3) Marcar processed solo cuando realmente pudimos procesar el evento.
-    if (processed) {
-      const { error: processedUpdateError } = await admin
+    let result = { processed: true, providerLookup: 'audit_only' };
+    const normalizedType = type.toLowerCase();
+
+    if (normalizedType === 'subscription_preapproval') {
+      result = await refreshSubscription(admin, resourceId, token);
+    } else if (normalizedType === 'subscription_authorized_payment' && resourceId) {
+      const invoice = await fetchMercadoPago(`/authorized_payments/${encodeURIComponent(resourceId)}`, token);
+      if (invoice.response.ok && invoice.data?.preapproval_id) {
+        result = await refreshSubscription(admin, String(invoice.data.preapproval_id), token);
+        result.providerLookup = result.processed ? 'authorized_payment_and_preapproval_ok' : result.providerLookup;
+      } else {
+        result = { processed: false, providerLookup: `authorized_payment_${invoice.response.status}` };
+      }
+    }
+
+    if (result.processed) {
+      const { error: processedError } = await admin
         .from('subscription_events')
         .update({ processed: true })
         .eq('event_key', key);
-
-      if (processedUpdateError) {
-        throw supabaseError(
-          'No se pudo marcar subscription_events como procesado',
-          processedUpdateError
-        );
-      }
+      if (processedError) throw supabaseError('No se pudo marcar subscription_events como procesado', processedError);
     }
 
     return res.status(200).json({
       received: true,
       eventSaved: true,
+      signatureValidated: true,
       eventType: type,
-      resourceId: dataId || null,
-      processed,
-      providerLookup
+      resourceId: resourceId || null,
+      processed: Boolean(result.processed),
+      providerLookup: result.providerLookup || null
     });
   } catch (error) {
-    // Al devolver 500 Mercado Pago podrá reintentar el webhook.
     return sendServerError(res, error, 'No fue posible registrar el webhook.');
   }
 }
