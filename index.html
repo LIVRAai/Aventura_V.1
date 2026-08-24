@@ -89,98 +89,130 @@
         <button id="childSetupSignOutBtn" class="access-text-btn" type="button">← Usar otra cuenta</button>
       </div>
 
-      <div id="subscriberView" class="subscriber-view" hidden>
-        <div class="account-chip">
-          <span>👨‍👩‍👧</span>
-          <div>
-            <small>CUENTA FAMILIAR</small>
-            <strong id="accountEmailText">—</strong>
-            <em>Perfil: <span id="accountChildText">Explorador</span></em>
-          </div>
-        </div>
-
-        <div class="access-plan">
-          <div>
-            <span>PLAN FAMILIAR</span>
-            <strong id="subscriptionPrice">$24.900 <small>COP / mes</small></strong>
-          </div>
-          <ul>
-            <li>✓ Refuerzo de división por habilidades</li>
-            <li>✓ NOVA acompaña cada práctica</li>
-            <li>✓ Progreso claro para el adulto</li>
-          </ul>
-        </div>
-
-        <form id="subscriptionForm" class="access-form compact-form">
-          <button id="subscribeBtn" class="access-primary" type="submit">Activar plan familiar</button>
-        </form>
-
-        <section id="paymentPanel" class="mp-payment-panel" hidden aria-label="Pago seguro">
-          <div class="mp-payment-head">
-            <div>
-              <span>🔒 PAGO SEGURO</span>
-              <strong>Activa el plan familiar</strong>
-              <p>Completa los datos de pago para comenzar. La información de tu tarjeta se procesa de forma segura y no se guarda en La Expedición.</p>
-            </div>
-            <button id="closePaymentPanelBtn" class="mp-payment-close" type="button" aria-label="Cerrar formulario de pago">✕</button>
-          </div>
-
-          <form id="form-checkout" class="mp-card-form" autocomplete="on">
-            <label class="mp-field mp-field-wide">
-              <span>Número de tarjeta</span>
-              <div id="form-checkout__cardNumber" class="mp-secure-field"></div>
-            </label>
-
-            <div class="mp-field-row">
-              <label class="mp-field">
-                <span>Vencimiento</span>
-                <div id="form-checkout__expirationDate" class="mp-secure-field"></div>
-              </label>
-              <label class="mp-field">
-                <span>Código de seguridad</span>
-                <div id="form-checkout__securityCode" class="mp-secure-field"></div>
-              </label>
+      <div id="subscriberView" class="subscriber-view premium-subscriber" hidden>
+        <div class="premium-checkout-grid">
+          <section class="premium-plan-column" aria-label="Resumen del plan familiar">
+            <div class="account-chip premium-account-chip">
+              <span>👨‍👩‍👧</span>
+              <div>
+                <small>CUENTA FAMILIAR</small>
+                <strong id="accountEmailText">—</strong>
+                <em>Perfil: <span id="accountChildText">Explorador</span></em>
+              </div>
             </div>
 
-            <label class="mp-field mp-field-wide">
-              <span>Nombre en la tarjeta</span>
-              <input id="form-checkout__cardholderName" type="text" autocomplete="cc-name" placeholder="Como aparece en la tarjeta" required />
-            </label>
-
-            <div class="mp-field-row">
-              <label class="mp-field">
-                <span>Tipo de documento</span>
-                <select id="form-checkout__identificationType" required></select>
-              </label>
-              <label class="mp-field">
-                <span>Número de documento</span>
-                <input id="form-checkout__identificationNumber" type="text" inputmode="numeric" autocomplete="off" required />
-              </label>
+            <div class="premium-plan-intro">
+              <span class="premium-step-label">PLAN FAMILIAR</span>
+              <h2>Aprender jugando.<br><span>Avanzar con propósito.</span></h2>
+              <p>Un acompañamiento de matemáticas que convierte cada práctica en una aventura y cada avance en información clara para la familia.</p>
             </div>
 
-            <label class="mp-field mp-field-wide">
-              <span>Correo del titular</span>
-              <input id="form-checkout__cardholderEmail" type="email" autocomplete="email" readonly />
-            </label>
-
-            <div class="mp-technical-fields" aria-hidden="true">
-              <select id="form-checkout__issuer" tabindex="-1"></select>
-              <select id="form-checkout__installments" tabindex="-1"></select>
+            <div class="access-plan premium-plan-card">
+              <div class="premium-plan-price-row">
+                <div>
+                  <span>PLAN FAMILIAR</span>
+                  <small>Acceso mensual</small>
+                </div>
+                <strong id="subscriptionPrice">$24.900 <small>COP / mes</small></strong>
+              </div>
+              <ul class="premium-benefits">
+                <li><span>✓</span><div><strong>Refuerzo por habilidades</strong><small>La práctica se organiza por lo que el niño necesita aprender.</small></div></li>
+                <li><span>✦</span><div><strong>NOVA acompaña cada práctica</strong><small>Explica el qué, el cómo y el porqué sin resolver por el niño.</small></div></li>
+                <li><span>↗</span><div><strong>Progreso claro para la familia</strong><small>Entiende qué está reforzando y qué conviene practicar después.</small></div></li>
+              </ul>
             </div>
 
-            <progress id="paymentProgress" class="mp-payment-progress" value="0" max="1">Procesando...</progress>
-            <button id="form-checkout__submit" class="access-primary mp-submit-btn" type="submit" disabled>
-              Activar plan · $24.900/mes
+            <div class="premium-trust-strip" aria-label="Beneficios del plan">
+              <span>🔒 Pago protegido</span>
+              <span>↻ Mensual</span>
+              <span>✦ Sin anuncios</span>
+            </div>
+          </section>
+
+          <section class="premium-action-column" aria-label="Activación del plan">
+            <div class="premium-payment-heading">
+              <span class="premium-step-label">ACTIVACIÓN</span>
+              <h2>Activa el plan familiar</h2>
+              <p>Una vez aprobado el pago, la aventura queda disponible de inmediato.</p>
+            </div>
+
+            <form id="subscriptionForm" class="access-form compact-form premium-start-form">
+              <button id="subscribeBtn" class="access-primary premium-primary-cta" type="submit">
+                <span>Continuar al pago</span><small>$24.900 / mes</small>
+              </button>
+            </form>
+
+            <section id="paymentPanel" class="mp-payment-panel premium-payment-panel" hidden aria-label="Pago seguro">
+              <div class="mp-payment-head premium-payment-head">
+                <div>
+                  <span>🔒 PAGO SEGURO</span>
+                  <strong>Datos de pago</strong>
+                  <p>Completa la información de la tarjeta. Los datos sensibles se procesan de forma segura.</p>
+                </div>
+                <button id="closePaymentPanelBtn" class="mp-payment-close" type="button" aria-label="Cerrar formulario de pago">✕</button>
+              </div>
+
+              <form id="form-checkout" class="mp-card-form premium-card-form" autocomplete="on">
+                <label class="mp-field mp-field-wide">
+                  <span>Número de tarjeta</span>
+                  <div id="form-checkout__cardNumber" class="mp-secure-field"></div>
+                </label>
+
+                <div class="mp-field-row">
+                  <label class="mp-field">
+                    <span>Vencimiento</span>
+                    <div id="form-checkout__expirationDate" class="mp-secure-field"></div>
+                  </label>
+                  <label class="mp-field">
+                    <span>Código de seguridad</span>
+                    <div id="form-checkout__securityCode" class="mp-secure-field"></div>
+                  </label>
+                </div>
+
+                <label class="mp-field mp-field-wide">
+                  <span>Nombre en la tarjeta</span>
+                  <input id="form-checkout__cardholderName" type="text" autocomplete="cc-name" placeholder="Como aparece en la tarjeta" required />
+                </label>
+
+                <div class="mp-field-row">
+                  <label class="mp-field">
+                    <span>Tipo de documento</span>
+                    <select id="form-checkout__identificationType" required></select>
+                  </label>
+                  <label class="mp-field">
+                    <span>Número de documento</span>
+                    <input id="form-checkout__identificationNumber" type="text" inputmode="numeric" autocomplete="off" placeholder="Documento" required />
+                  </label>
+                </div>
+
+                <label class="mp-field mp-field-wide premium-email-field">
+                  <span>Correo del titular</span>
+                  <input id="form-checkout__cardholderEmail" type="email" autocomplete="email" readonly />
+                </label>
+
+                <div class="mp-technical-fields" aria-hidden="true">
+                  <select id="form-checkout__issuer" tabindex="-1"></select>
+                  <select id="form-checkout__installments" tabindex="-1"></select>
+                </div>
+
+                <progress id="paymentProgress" class="mp-payment-progress" value="0" max="1">Procesando...</progress>
+                <button id="form-checkout__submit" class="access-primary mp-submit-btn premium-primary-cta" type="submit" disabled>
+                  <span>Activar plan familiar</span><small>$24.900 / mes</small>
+                </button>
+                <div class="premium-payment-foot">
+                  <span>🔒</span>
+                  <p>Tu tarjeta se procesa de forma segura. Algunos bancos pueden realizar una validación temporal antes de aprobar el plan.</p>
+                </div>
+              </form>
+            </section>
+
+            <button id="verifySubscriptionBtn" class="access-secondary" type="button" hidden>
+              Actualizar acceso
             </button>
-            <p class="mp-validation-note">Algunos bancos pueden hacer una validación temporal de la tarjeta antes de aprobar el plan.</p>
-          </form>
-        </section>
 
-        <button id="verifySubscriptionBtn" class="access-secondary" type="button" hidden>
-          Actualizar acceso
-        </button>
-
-        <button id="accessSignOutBtn" class="access-text-btn" type="button">Cerrar sesión</button>
+            <button id="accessSignOutBtn" class="access-text-btn premium-signout" type="button">← Usar otra cuenta</button>
+          </section>
+        </div>
       </div>
 
       <div id="accessStatus" class="access-status" role="status" aria-live="polite"></div>

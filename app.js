@@ -632,6 +632,7 @@
   }
 
   function showAccountStage(stage = 'auth') {
+    if (accessGate) accessGate.dataset.stage = stage;
     if (authView) authView.hidden = stage !== 'auth';
     if (childSetupView) childSetupView.hidden = stage !== 'child';
     if (subscriberView) subscriberView.hidden = stage !== 'subscriber';
