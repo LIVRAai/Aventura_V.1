@@ -1,53 +1,38 @@
-# La Expedición v11 — revisión productiva
+# La Expedición v12 — navegación jerárquica
 
-## Problema encontrado en la versión recibida
+Esta versión conserva la integración productiva de Mercado Pago y toda la lógica educativa existente. El cambio se concentra en la arquitectura de información y navegación.
 
-El código actual creaba `/preapproval` con `status: pending` y redirigía al `init_point` de Mercado Pago. En producción la suscripción sí se creaba, pero el comprador llegaba a una pantalla donde el botón **Confirmar** podía quedar deshabilitado; la fila de Supabase seguía con `payment_method_id: null` y `status: pending`.
+## Nueva regla de navegación
 
-## Cambio principal
+**Inicio → Materia → Etapa → Actividad**
 
-La v11 utiliza el otro flujo oficial de Suscripciones de Mercado Pago:
+### Inicio
+
+- muestra un único botón principal: **Continuar donde quedaste**;
+- muestra las materias disponibles;
+- Perfil es secundario.
+
+### Matemáticas
+
+Presenta el camino de División como una secuencia:
+
+1. **Atlas Animal** — comprender la división mediante 36 misiones;
+2. **Academia de División con NOVA** — ejecutar el algoritmo, practicar habilidades y automatizar.
+
+### Dentro de una actividad
+
+No existe menú global. El niño ve únicamente la actividad, las ayudas pertinentes y un regreso claro al nivel anterior.
+
+## Mercado Pago
+
+Se conserva el flujo productivo de v10/v11:
 
 **MercadoPago.js CardForm → CardToken → `/preapproval` con `status: authorized`.**
 
-La tarjeta se captura en campos seguros controlados por Mercado Pago. El servidor de La Expedición recibe solamente el token temporal.
-
-## Qué se conservó
-
-No se reescribió la experiencia educativa:
-
-- Atlas y 36 misiones.
-- Academia de División.
-- 8 rutas.
-- NOVA.
-- Modo de pruebas para adultos.
-- Progreso local + sincronización Supabase.
-- Tablas actuales de Supabase.
-
-## Optimizaciones adicionales
-
-- `subscription-status` ya no deja que un intento `pending` reciente oculte una suscripción `authorized` anterior.
-- Errores de Mercado Pago incluyen `x-request-id` para diagnóstico sin exponer secretos.
-- Webhook productivo valida `x-signature` con `MERCADOPAGO_WEBHOOK_SECRET`.
-- `subscription_authorized_payment` consulta la factura y actualiza la suscripción relacionada.
-- Se eliminó el endpoint temporal `api/create-mp-test-user.js`.
-- `health-supabase` verifica Public Key, Access Token y secreto de Webhook por separado.
+No vuelvas al flujo `pending → checkout externo`.
 
 ## Antes de desplegar
 
-Lee `CONFIGURA_VERCEL.md`. En particular, agrega:
+No hace falta modificar Supabase ni crear tablas nuevas. Conserva las variables de producción descritas en `CONFIGURA_VERCEL.md`.
 
-- `MERCADOPAGO_PUBLIC_KEY`
-- `MERCADOPAGO_WEBHOOK_SECRET`
-
-con valores de **producción**.
-
-
-## UX v11
-
-La v11 conserva la integración productiva de Mercado Pago de v10 y mejora la navegación para móvil/tablet:
-- menú inferior: Inicio, Atlas, Academia y Ajustes;
-- progreso de Matemáticas visible desde Inicio;
-- Academia accesible desde navegación, no desde Configuración;
-- Configuración agrupada por propósito;
-- paleta más consistente y jerarquía visual más clara.
+Consulta `REVISION_V12.md` para el detalle de UX.

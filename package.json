@@ -1,9 +1,9 @@
 {
   "name": "la-expedicion",
-  "version": "11.0.0",
+  "version": "12.0.0",
   "private": true,
   "type": "module",
-  "description": "La Expedición - refuerzo matemático con Supabase, NOVA y suscripción autorizada de Mercado Pago con CardForm",
+  "description": "La Expedición - navegación jerárquica Inicio > Matemáticas > etapa > actividad, con NOVA y suscripción productiva",
   "engines": {
     "node": ">=20"
   },

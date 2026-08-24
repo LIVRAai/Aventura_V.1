@@ -14,7 +14,6 @@
   const aiStatus = $('#aiStatus');
   const soundBtn = $('#soundBtn');
   const resetBtn = $('#resetBtn');
-  const settingsBtn = $('#settingsBtn');
   const settingsModal = $('#settingsModal');
   const closeSettingsBtn = $('#closeSettingsBtn');
   const testerSettingsBtn = $('#testerSettingsBtn');
@@ -74,16 +73,32 @@
   const introChildName = $('#introChildName');
   const finalChildName = $('#finalChildName');
   const learningHub = $('#learningHub');
+  const mathHub = $('#mathHub');
   const hubChildName = $('#hubChildName');
+  const hubProfileBtn = $('#hubProfileBtn');
+  const mathProfileBtn = $('#mathProfileBtn');
   const mathSubjectBtn = $('#mathSubjectBtn');
-  const hubSettingsBtn = $('#hubSettingsBtn');
+  const continueLearningBtn = $('#continueLearningBtn');
+  const continueLearningTitle = $('#continueLearningTitle');
+  const continueLearningMeta = $('#continueLearningMeta');
+  const continueLearningProgressBar = $('#continueLearningProgressBar');
+  const mathBackBtn = $('#mathBackBtn');
+  const mathContinueBtn = $('#mathContinueBtn');
+  const mathContinueTitle = $('#mathContinueTitle');
+  const mathContinueMeta = $('#mathContinueMeta');
+  const atlasPathBtn = $('#atlasPathBtn');
+  const atlasPathProgressBar = $('#atlasPathProgressBar');
+  const atlasPathStatus = $('#atlasPathStatus');
+  const atlasPathState = $('#atlasPathState');
+  const academyPathBtn = $('#academyPathBtn');
+  const academyPathProgressBar = $('#academyPathProgressBar');
+  const academyPathStatus = $('#academyPathStatus');
+  const academyPathState = $('#academyPathState');
+  const mathRecommendation = $('#mathRecommendation');
+  const atlasBackBtn = $('#atlasBackBtn');
+  const introBackBtn = $('#introBackBtn');
   const hubMathStatus = $('#hubMathStatus');
   const hubMathProgressBar = $('#hubMathProgressBar');
-  const primaryNav = $('#primaryNav');
-  const navHomeBtn = $('#navHomeBtn');
-  const navAtlasBtn = $('#navAtlasBtn');
-  const navAcademyBtn = $('#navAcademyBtn');
-  const navSettingsBtn = $('#navSettingsBtn');
   const authView = $('#authView');
   const signupTabBtn = $('#signupTabBtn');
   const loginTabBtn = $('#loginTabBtn');
@@ -132,7 +147,6 @@
   const notebookStartBtn = $('#notebookStartBtn');
   const notebookModule = $('#notebookModule');
   const notebookBackBtn = $('#notebookBackBtn');
-  const notebookSettingsBtn = $('#notebookSettingsBtn');
   const notebookLessonCounter = $('#notebookLessonCounter');
   const notebookMissionLabel = $('#notebookMissionLabel');
   const notebookTitle = $('#notebookTitle');
@@ -317,35 +331,118 @@
     if (subscriptionSettingsText) subscriptionSettingsText.textContent = message;
   }
 
-  function setPrimaryNav(active = 'home', visible = true) {
-    if (!primaryNav) return;
-    primaryNav.hidden = !visible || !commercialAccessGranted;
-    document.body.classList.toggle('has-primary-nav', visible && commercialAccessGranted);
-    primaryNav.querySelectorAll('[data-nav]').forEach(btn => {
-      const selected = btn.dataset.nav === active;
-      btn.classList.toggle('active', selected);
-      btn.setAttribute('aria-current', selected ? 'page' : 'false');
+  function academyCompletionPercent(academy = {}) {
+    const routeProgress = academy.routeProgress && typeof academy.routeProgress === 'object' ? academy.routeProgress : {};
+    const notebook = readLocalJson(CLOUD_PROGRESS_KEYS.notebook) || {};
+    const completedNotebook = Math.max(0, Number(notebook.completed) || Number(notebookCompletedLessons) || 0);
+    let earned = 0;
+    let possible = 0;
+
+    academyRoutes.forEach(route => {
+      if (route.id === 'long') {
+        possible += notebookLessons.length;
+        earned += Math.max(0, Math.min(notebookLessons.length, completedNotebook));
+        return;
+      }
+      const total = (academyChallengeSets[route.id] || []).length;
+      possible += total;
+      earned += Math.max(0, Math.min(total, Number(routeProgress[route.id]) || 0));
     });
+
+    return possible ? Math.round((earned / possible) * 100) : 0;
+  }
+
+  function learningSnapshot() {
+    const atlas = readLocalJson(CLOUD_PROGRESS_KEYS.atlas) || {};
+    const academy = readLocalJson(CLOUD_PROGRESS_KEYS.academy) || {};
+    const total = missions.length || 36;
+    const currentMission = Math.max(0, Math.min(total - 1, Number(atlas.mission) || Number(mission) || 0));
+    const unlocked = Math.max(0, Number(atlas.unlocked) || unlockedCount?.() || currentMission);
+    const atlasCompleted = atlas.gameCompleted === true || gameCompleted === true || unlocked >= total;
+    const atlasPct = atlasCompleted ? 100 : Math.max(0, Math.min(100, Math.round((Math.max(unlocked, currentMission) / total) * 100)));
+    const academyPct = academyCompletionPercent(academy);
+    const academyStarted = academyPct > 0 || Boolean(academy.lastRoute);
+    const lastRoute = academy.lastRoute || null;
+    const route = academyRoutes.find(r => r.id === lastRoute) || null;
+
+    return {
+      atlas, academy, total, currentMission, unlocked, atlasCompleted, atlasPct,
+      academyPct, academyStarted, lastRoute, route
+    };
   }
 
   function updateHubProgress() {
-    if (!hubMathStatus || !hubMathProgressBar) return;
-    const atlas = readLocalJson(CLOUD_PROGRESS_KEYS.atlas) || {};
-    const academy = readLocalJson(CLOUD_PROGRESS_KEYS.academy) || {};
-    const total = 36;
-    const currentMission = Math.max(0, Math.min(total - 1, Number(atlas.mission) || 0));
-    const unlocked = Math.max(0, Number(atlas.unlocked) || currentMission);
-    const completed = atlas.gameCompleted === true || unlocked >= total;
-    const atlasPct = completed ? 100 : Math.max(0, Math.min(100, Math.round((Math.max(unlocked, currentMission) / total) * 100)));
-    const routeProgress = academy.routeProgress && typeof academy.routeProgress === 'object' ? academy.routeProgress : {};
-    const startedAcademy = Object.values(routeProgress).some(v => Number(v) > 0);
+    const snap = learningSnapshot();
 
-    hubMathStatus.textContent = completed
-      ? (startedAcademy ? 'Atlas completo · continúa tu entrenamiento en la Academia' : 'Atlas completo · Academia de División desbloqueada')
-      : `Atlas Animal · misión ${currentMission + 1} de ${total}`;
-    hubMathProgressBar.style.width = `${atlasPct}%`;
+    if (hubMathStatus) {
+      hubMathStatus.textContent = snap.atlasCompleted
+        ? (snap.academyStarted ? `Academia de División · ${snap.academyPct}%` : 'Atlas completo · Academia lista')
+        : `Atlas Animal · misión ${snap.currentMission + 1} de ${snap.total}`;
+    }
+    if (hubMathProgressBar) {
+      const combined = snap.atlasCompleted ? Math.round(50 + (snap.academyPct / 2)) : Math.round(snap.atlasPct / 2);
+      hubMathProgressBar.style.width = `${combined}%`;
+    }
+
+    if (continueLearningTitle) {
+      continueLearningTitle.textContent = snap.atlasCompleted
+        ? (snap.route ? snap.route.title : 'Academia de División con NOVA')
+        : 'Atlas Animal';
+    }
+    if (continueLearningMeta) {
+      continueLearningMeta.textContent = snap.atlasCompleted
+        ? (snap.route ? `Matemáticas · ${snap.route.goal}` : 'Matemáticas · comienza la etapa 2')
+        : `Matemáticas · misión ${snap.currentMission + 1} de ${snap.total}`;
+    }
+    if (continueLearningProgressBar) {
+      continueLearningProgressBar.style.width = `${snap.atlasCompleted ? snap.academyPct : snap.atlasPct}%`;
+    }
+
+    if (atlasPathProgressBar) atlasPathProgressBar.style.width = `${snap.atlasPct}%`;
+    if (atlasPathStatus) atlasPathStatus.textContent = snap.atlasCompleted
+      ? '36 de 36 misiones · completado'
+      : `Misión ${snap.currentMission + 1} de ${snap.total}`;
+    if (atlasPathState) atlasPathState.textContent = snap.atlasCompleted ? '✓ Completado' : 'Continuar →';
+    atlasPathBtn?.classList.toggle('completed', snap.atlasCompleted);
+
+    if (academyPathProgressBar) academyPathProgressBar.style.width = `${snap.academyPct}%`;
+    if (academyPathStatus) academyPathStatus.textContent = snap.atlasCompleted
+      ? (snap.academyStarted ? `${snap.academyPct}% del entrenamiento recorrido` : 'Lista para comenzar')
+      : 'Se desbloquea al completar el Atlas';
+    if (academyPathState) academyPathState.textContent = snap.atlasCompleted
+      ? (snap.academyStarted ? 'Continuar →' : 'Empezar →')
+      : '🔒';
+    academyPathBtn?.classList.toggle('locked', !snap.atlasCompleted && !testerMode);
+    academyPathBtn?.setAttribute('aria-disabled', String(!snap.atlasCompleted && !testerMode));
+
+    if (mathContinueTitle) mathContinueTitle.textContent = snap.atlasCompleted
+      ? (snap.route ? snap.route.title : 'Academia de División con NOVA')
+      : 'Atlas Animal';
+    if (mathContinueMeta) mathContinueMeta.textContent = snap.atlasCompleted
+      ? (snap.route ? `Retoma: ${snap.route.goal}` : 'Empieza la etapa 2 con NOVA')
+      : `Continúa en la misión ${snap.currentMission + 1} de ${snap.total}`;
+
+    if (mathRecommendation) {
+      mathRecommendation.textContent = !snap.atlasCompleted
+        ? `Continúa el Atlas Animal. Vas en la misión ${snap.currentMission + 1} de ${snap.total}.`
+        : snap.route
+          ? `Continúa con “${snap.route.title}”. NOVA retomará el punto donde quedaste.`
+          : 'El Atlas está completo. Ya puedes comenzar la Academia de División con NOVA.';
+    }
   }
 
+  function continueLearning() {
+    const snap = learningSnapshot();
+    if (!snap.atlasCompleted && !testerMode) {
+      showAtlasView({ respectIntro: true });
+      return;
+    }
+
+    showAcademyView();
+    if (snap.lastRoute && academyRoutes.some(r => r.id === snap.lastRoute)) {
+      startAcademyRoute(snap.lastRoute);
+    }
+  }
   function closeNavigationOverlays() {
     [settingsModal, worldModal, animalModal, guideModal, testerModal].forEach(modal => {
       if (modal) modal.hidden = true;
@@ -365,8 +462,27 @@
     updateHubProgress();
     if (intro) intro.hidden = true;
     if (app) app.hidden = true;
+    if (mathHub) mathHub.hidden = true;
     if (learningHub) learningHub.hidden = false;
-    setPrimaryNav('home', true);
+    document.body.classList.remove('content-focus');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function showMathHubView() {
+    if (!commercialAccessGranted) {
+      showCommercialGate('Necesitas una suscripción activa para entrar a Matemáticas.');
+      return;
+    }
+    closeNavigationOverlays();
+    saveGameState();
+    saveNotebookState();
+    saveAcademyState();
+    updateHubProgress();
+    if (intro) intro.hidden = true;
+    if (app) app.hidden = true;
+    if (learningHub) learningHub.hidden = true;
+    if (mathHub) mathHub.hidden = false;
+    document.body.classList.remove('content-focus');
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
@@ -377,6 +493,7 @@
     }
     closeNavigationOverlays();
     if (learningHub) learningHub.hidden = true;
+    if (mathHub) mathHub.hidden = true;
     const introSeen = localStorage.getItem('emilianoIntroSeen') === 'yes';
     if (respectIntro && !introSeen) {
       if (app) app.hidden = true;
@@ -384,7 +501,7 @@
         intro.hidden = false;
         intro.classList.remove('intro-exit');
       }
-      setPrimaryNav('atlas', false);
+      document.body.classList.add('content-focus');
       window.scrollTo(0, 0);
       return;
     }
@@ -399,7 +516,7 @@
     } else {
       renderMission({ restore: true });
     }
-    setPrimaryNav('atlas', true);
+    document.body.classList.add('content-focus');
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
@@ -409,16 +526,17 @@
       return;
     }
     if (!gameCompleted && unlockedCount() < missions.length && !testerMode) {
-      showAtlasView({ respectIntro: false });
+      showMathHubView();
       showToast('La Academia se desbloquea al completar el Atlas Animal 🎓', 2800);
       return;
     }
     closeNavigationOverlays();
     if (learningHub) learningHub.hidden = true;
+    if (mathHub) mathHub.hidden = true;
     if (intro) intro.hidden = true;
     if (app) app.hidden = false;
     openNotebookModule();
-    setPrimaryNav('academy', true);
+    document.body.classList.add('content-focus');
   }
 
   function openSettingsView() {
@@ -426,7 +544,6 @@
     settingsModal.hidden = false;
     document.body.classList.add('modal-open');
   }
-
   function setAuthMode(mode = 'signup') {
     authMode = mode === 'login' ? 'login' : 'signup';
     const signingUp = authMode === 'signup';
@@ -455,8 +572,8 @@
     if (accessGate) accessGate.hidden = true;
     document.body.classList.remove('access-locked');
     if (learningHub && app?.hidden) learningHub.hidden = false;
+    if (mathHub) mathHub.hidden = true;
     updateHubProgress();
-    setPrimaryNav('home', Boolean(learningHub && !learningHub.hidden));
 
     const profile = familyProfile();
     if (reason === 'owner') {
@@ -472,7 +589,7 @@
     commercialAccessGranted = false;
     if (accessGate) accessGate.hidden = false;
     if (learningHub) learningHub.hidden = true;
-    setPrimaryNav('home', false);
+    if (mathHub) mathHub.hidden = true;
     document.body.classList.add('access-locked');
     updatePersonalization();
     if (message) setAccessStatus(message);
@@ -2292,6 +2409,7 @@
     document.querySelector('.progress-wrap').hidden = true;
     document.querySelector('.hero-card').hidden = true;
     document.querySelector('.world-strip').hidden = true;
+    document.querySelector('.topbar').hidden = true;
     aiTutorCard.hidden = true;
     notebookModule.hidden = false;
 
@@ -2301,7 +2419,6 @@
       notebookCompletedLessons = Math.max(0, Number(saved.completed) || 0);
     }
     renderAcademyHome();
-    setPrimaryNav('academy', true);
     window.scrollTo({top:0, behavior:'smooth'});
   }
 
@@ -2310,6 +2427,7 @@
     saveAcademyState();
     academyCurrentRoute = null;
     notebookModule.hidden = true;
+    document.querySelector('.topbar').hidden = false;
     document.querySelector('.actions').hidden = false;
     document.querySelector('.progress-wrap').hidden = false;
     document.querySelector('.hero-card').hidden = false;
@@ -2322,8 +2440,7 @@
     } else {
       gameArea.hidden = false;
     }
-    setPrimaryNav('atlas', true);
-    window.scrollTo({top:0, behavior:'smooth'});
+    showMathHubView();
   }
 
   function appendNotebookChatMessage(role, text, pending = false) {
@@ -2762,8 +2879,7 @@
       intro.hidden = true;
       app.hidden = false;
       renderMission();
-      setPrimaryNav('atlas', true);
-      window.scrollTo(0, 0);
+        window.scrollTo(0, 0);
     }, 420);
     localStorage.setItem('emilianoIntroSeen', 'yes');
     saveGameState();
@@ -3708,6 +3824,7 @@
 
   function showNormalMissionShell() {
     notebookModule.hidden = true;
+    document.querySelector('.topbar').hidden = false;
     document.querySelector('.actions').hidden = false;
     document.querySelector('.progress-wrap').hidden = false;
     document.querySelector('.hero-card').hidden = false;
@@ -3741,6 +3858,7 @@
     document.querySelector('.progress-wrap').hidden = true;
     document.querySelector('.hero-card').hidden = true;
     document.querySelector('.world-strip').hidden = true;
+    document.querySelector('.topbar').hidden = true;
     aiTutorCard.hidden = true;
     notebookModule.hidden = false;
 
@@ -3772,6 +3890,7 @@
     document.querySelector('.progress-wrap').hidden = true;
     document.querySelector('.hero-card').hidden = true;
     document.querySelector('.world-strip').hidden = true;
+    document.querySelector('.topbar').hidden = true;
     aiTutorCard.hidden = true;
     notebookModule.hidden = false;
 
@@ -3919,11 +4038,6 @@
     window.scrollTo({top:0, behavior:'smooth'});
   });
 
-  settingsBtn.addEventListener('click', () => {
-    playTap();
-    openSettingsView();
-  });
-
   closeSettingsBtn.addEventListener('click', () => {
     settingsModal.hidden = true;
     document.body.classList.remove('modal-open');
@@ -4006,7 +4120,6 @@
   academyHomeBtn?.addEventListener('click', () => {
     playTap();
     renderAcademyHome();
-    setPrimaryNav('academy', true);
     window.scrollTo({top:0,behavior:'smooth'});
   });
 
@@ -4045,11 +4158,6 @@
   });
 
   notebookStartBtn?.addEventListener('click', openNotebookModule);
-  notebookSettingsBtn?.addEventListener('click', () => {
-    settingsModal.hidden = true;
-    document.body.classList.remove('modal-open');
-    showAcademyView();
-  });
   notebookBackBtn?.addEventListener('click', closeNotebookModule);
 
   notebookNextBtn?.addEventListener('click', () => {
@@ -4097,32 +4205,57 @@
   mathSubjectBtn?.addEventListener('click', () => {
     playTap();
     updatePersonalization();
-    showAtlasView({ respectIntro: true });
+    showMathHubView();
   });
 
-  hubSettingsBtn?.addEventListener('click', () => {
+  continueLearningBtn?.addEventListener('click', () => {
     playTap();
-    openSettingsView();
+    continueLearning();
   });
 
-  navHomeBtn?.addEventListener('click', () => {
+  mathContinueBtn?.addEventListener('click', () => {
+    playTap();
+    continueLearning();
+  });
+
+  mathBackBtn?.addEventListener('click', () => {
     playTap();
     showLearningHubView();
   });
 
-  navAtlasBtn?.addEventListener('click', () => {
+  hubProfileBtn?.addEventListener('click', () => {
     playTap();
-    showAtlasView({ respectIntro: false });
+    openSettingsView();
   });
 
-  navAcademyBtn?.addEventListener('click', () => {
+  mathProfileBtn?.addEventListener('click', () => {
     playTap();
+    openSettingsView();
+  });
+
+  atlasPathBtn?.addEventListener('click', () => {
+    playTap();
+    showAtlasView({ respectIntro: true });
+  });
+
+  academyPathBtn?.addEventListener('click', () => {
+    playTap();
+    const snap = learningSnapshot();
+    if (!snap.atlasCompleted && !testerMode) {
+      showToast('Completa primero el Atlas Animal para desbloquear esta etapa 🎓', 2800);
+      return;
+    }
     showAcademyView();
   });
 
-  navSettingsBtn?.addEventListener('click', () => {
+  atlasBackBtn?.addEventListener('click', () => {
     playTap();
-    openSettingsView();
+    showMathHubView();
+  });
+
+  introBackBtn?.addEventListener('click', () => {
+    playTap();
+    showMathHubView();
   });
 
   signupTabBtn?.addEventListener('click', () => setAuthMode('signup'));
