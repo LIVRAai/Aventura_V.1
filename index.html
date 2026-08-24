@@ -9,6 +9,21 @@
 </head>
 <body>
 
+  <aside id="reviewModeBar" class="review-mode-bar" hidden aria-label="Controles de revisión para adultos">
+    <div class="review-mode-info">
+      <span class="review-mode-icon" aria-hidden="true">🧪</span>
+      <div>
+        <strong id="reviewModeLabel">Revisión para adultos</strong>
+        <small id="reviewModeNote">El progreso del niño no se modifica.</small>
+      </div>
+    </div>
+    <div class="review-mode-actions">
+      <button id="reviewHomeBtn" type="button">⌂ Inicio</button>
+      <button id="reviewPanelBtn" type="button">☰ Panel</button>
+      <button id="reviewExitBtn" class="review-exit" type="button">Salir</button>
+    </div>
+  </aside>
+
   <section id="accessGate" class="access-gate" aria-label="Acceso familiar">
     <div class="access-shell">
       <div class="access-brand">
@@ -71,6 +86,7 @@
           </label>
           <button id="createChildBtn" class="access-primary" type="submit">Crear perfil y continuar</button>
         </form>
+        <button id="childSetupSignOutBtn" class="access-text-btn" type="button">← Usar otra cuenta</button>
       </div>
 
       <div id="subscriberView" class="subscriber-view" hidden>
@@ -169,9 +185,9 @@
 
       <div id="accessStatus" class="access-status" role="status" aria-live="polite"></div>
 
-      <div class="access-divider access-divider-private"><span>zona privada</span></div>
+      <div class="access-divider access-divider-private"><span>solo adultos</span></div>
 
-      <button id="ownerAccessBtn" class="access-owner-btn" type="button">Acceso de administración</button>
+      <button id="ownerAccessBtn" class="access-owner-btn" type="button">Revisar la app</button>
       <form id="ownerPinForm" class="access-owner-form" hidden>
         <input id="ownerPinInput" type="password" inputmode="numeric" maxlength="6" placeholder="Clave de pruebas" />
         <button type="submit">Entrar</button>
@@ -769,15 +785,15 @@
         </div>
 
         <p class="settings-section-label">FAMILIA</p>
-        <div class="settings-row">
+        <div id="accountSettingsRow" class="settings-row">
           <div class="settings-copy">
-            <strong>Cuenta familiar</strong>
+            <strong id="accountSettingsTitle">Cuenta familiar</strong>
             <span id="accountSettingsText">Sin sesión iniciada.</span>
           </div>
           <button id="accountSignOutBtn" class="settings-toggle" type="button">↪ Salir</button>
         </div>
 
-        <div class="settings-row">
+        <div id="subscriptionSettingsRow" class="settings-row">
           <div class="settings-copy">
             <strong>Plan familiar</strong>
             <span id="subscriptionSettingsText">Revisando el plan...</span>
@@ -786,7 +802,7 @@
         </div>
 
         <p class="settings-section-label">ZONA PARA ADULTOS</p>
-        <div class="settings-row">
+        <div id="testerSettingsRow" class="settings-row">
           <div class="settings-copy">
             <strong>Revisión de contenido</strong>
             <span>Permite revisar misiones y rutas sin cambiar el avance del niño.</span>
@@ -813,7 +829,7 @@
       <div class="modal-head">
         <div>
           <p class="eyebrow">SOLO ADULTOS</p>
-          <h2 id="testerTitle">Modo de pruebas</h2>
+          <h2 id="testerTitle">Revisión de contenido</h2>
         </div>
         <button id="closeTesterBtn" class="icon-btn" aria-label="Cerrar modo de pruebas">✕</button>
       </div>
@@ -821,7 +837,7 @@
       <div id="testerAuthView" class="tester-auth">
         <div class="tester-lock">🔐</div>
         <h3>Ingresa la clave</h3>
-        <p>Este panel permite saltar entre misiones para revisar y probar la app.</p>
+        <p>Este panel permite abrir cualquier misión o ruta sin alterar el avance real del niño.</p>
 
         <form id="testerPinForm" class="tester-pin-form">
           <label for="testerPinInput">Clave de acceso</label>
@@ -846,7 +862,7 @@
         <div class="tester-active-banner">
           <span>🧪</span>
           <div>
-            <strong>Modo de pruebas activo</strong>
+            <strong>Revisión activa</strong>
             <small>Lo que hagas aquí no cambia el progreso guardado del niño.</small>
           </div>
         </div>
@@ -874,7 +890,7 @@
         </section>
 
         <button id="exitTesterModeBtn" class="tester-exit-btn" type="button">
-          Salir del modo de pruebas y volver al progreso real
+          Salir de la revisión
         </button>
       </div>
     </div>

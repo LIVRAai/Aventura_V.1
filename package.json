@@ -1,9 +1,9 @@
 {
   "name": "la-expedicion",
-  "version": "13.0.0",
+  "version": "14.0.0",
   "private": true,
   "type": "module",
-  "description": "La Expedición - producto final infantil con navegación simple, NOVA, progreso en la nube y plan familiar productivo",
+  "description": "La Expedición - navegación jerárquica final, revisión segura para adultos, NOVA, progreso en la nube y plan familiar productivo",
   "engines": {
     "node": ">=20"
   },

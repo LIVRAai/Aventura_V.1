@@ -50,6 +50,12 @@
   const app = $('#app');
   const startBtn = $('#startBtn');
   const skipIntroBtn = $('#skipIntroBtn');
+  const reviewModeBar = $('#reviewModeBar');
+  const reviewModeLabel = $('#reviewModeLabel');
+  const reviewModeNote = $('#reviewModeNote');
+  const reviewHomeBtn = $('#reviewHomeBtn');
+  const reviewPanelBtn = $('#reviewPanelBtn');
+  const reviewExitBtn = $('#reviewExitBtn');
 
   // Capa comercial. No modifica las mecánicas del Atlas ni de la Academia.
   const accessGate = $('#accessGate');
@@ -112,11 +118,16 @@
   const childProfileForm = $('#childProfileForm');
   const childProfileNameInput = $('#childProfileNameInput');
   const createChildBtn = $('#createChildBtn');
+  const childSetupSignOutBtn = $('#childSetupSignOutBtn');
   const subscriberView = $('#subscriberView');
   const accountEmailText = $('#accountEmailText');
   const accountChildText = $('#accountChildText');
   const accessSignOutBtn = $('#accessSignOutBtn');
   const accountSettingsText = $('#accountSettingsText');
+  const accountSettingsRow = $('#accountSettingsRow');
+  const accountSettingsTitle = $('#accountSettingsTitle');
+  const subscriptionSettingsRow = $('#subscriptionSettingsRow');
+  const testerSettingsRow = $('#testerSettingsRow');
   const accountSignOutBtn = $('#accountSignOutBtn');
   const finalCard = $('#finalCard');
   const replayBtn = $('#replayBtn');
@@ -331,6 +342,42 @@
     if (subscriptionSettingsText) subscriptionSettingsText.textContent = message;
   }
 
+  function isOwnerReviewSession() {
+    return sessionStorage.getItem(OWNER_DEMO_KEY) === 'yes';
+  }
+
+  function updateReviewUi() {
+    const ownerReview = isOwnerReviewSession();
+    const active = ownerReview || testerMode;
+
+    if (reviewModeBar) reviewModeBar.hidden = !active;
+    document.body.classList.toggle('review-active', active);
+
+    if (reviewModeLabel) {
+      reviewModeLabel.textContent = ownerReview ? 'Revisión para adultos' : 'Modo de pruebas';
+    }
+    if (reviewModeNote) {
+      reviewModeNote.textContent = ownerReview
+        ? 'Puedes recorrer toda la app. El progreso no se guarda.'
+        : 'Lo que hagas aquí no modifica el progreso del niño.';
+    }
+    if (reviewExitBtn) {
+      reviewExitBtn.textContent = ownerReview ? 'Volver al acceso' : 'Salir de pruebas';
+    }
+    if (exitTesterModeBtn) {
+      exitTesterModeBtn.textContent = ownerReview
+        ? 'Salir de la revisión y volver al inicio de sesión'
+        : 'Salir de pruebas y volver al progreso real';
+    }
+
+    // En revisión sin una cuenta familiar real, evitamos mostrar controles que no aplican.
+    if (accountSettingsTitle) accountSettingsTitle.textContent = ownerReview ? 'Revisión para adultos' : 'Cuenta familiar';
+    if (accountSettingsText && ownerReview) accountSettingsText.textContent = 'Sesión temporal de revisión. No guarda cambios.';
+    if (accountSignOutBtn && ownerReview) accountSignOutBtn.textContent = '↪ Volver al acceso';
+    if (subscriptionSettingsRow) subscriptionSettingsRow.hidden = ownerReview;
+    if (testerSettingsRow) testerSettingsRow.hidden = false;
+  }
+
   function academyCompletionPercent(academy = {}) {
     const routeProgress = academy.routeProgress && typeof academy.routeProgress === 'object' ? academy.routeProgress : {};
     const notebook = readLocalJson(CLOUD_PROGRESS_KEYS.notebook) || {};
@@ -450,6 +497,11 @@
     document.body.classList.remove('modal-open');
   }
 
+  function resetViewScroll(view = null) {
+    if (view && 'scrollTop' in view) view.scrollTop = 0;
+    window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+  }
+
   function showLearningHubView() {
     if (!commercialAccessGranted) {
       showCommercialGate('Activa el plan familiar para comenzar la aventura.');
@@ -465,7 +517,7 @@
     if (mathHub) mathHub.hidden = true;
     if (learningHub) learningHub.hidden = false;
     document.body.classList.remove('content-focus');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    resetViewScroll(learningHub);
   }
 
   function showMathHubView() {
@@ -483,7 +535,7 @@
     if (learningHub) learningHub.hidden = true;
     if (mathHub) mathHub.hidden = false;
     document.body.classList.remove('content-focus');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    resetViewScroll(mathHub);
   }
 
   function showAtlasView({ respectIntro = true } = {}) {
@@ -502,7 +554,7 @@
         intro.classList.remove('intro-exit');
       }
       document.body.classList.add('content-focus');
-      window.scrollTo(0, 0);
+      resetViewScroll(intro);
       return;
     }
     if (intro) intro.hidden = true;
@@ -517,7 +569,7 @@
       renderMission({ restore: true });
     }
     document.body.classList.add('content-focus');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    resetViewScroll(app);
   }
 
   function showAcademyView() {
@@ -537,12 +589,17 @@
     if (app) app.hidden = false;
     openNotebookModule();
     document.body.classList.add('content-focus');
+    resetViewScroll(app);
   }
 
   function openSettingsView() {
     if (!commercialAccessGranted) return;
+    updatePersonalization();
+    updateReviewUi();
     settingsModal.hidden = false;
     document.body.classList.add('modal-open');
+    const card = settingsModal.querySelector('.modal-card');
+    if (card) card.scrollTop = 0;
   }
   function setAuthMode(mode = 'signup') {
     authMode = mode === 'login' ? 'login' : 'signup';
@@ -567,7 +624,15 @@
 
   function grantCommercialAccess(reason = 'subscription') {
     commercialAccessGranted = true;
+
+    // El acceso de revisión es siempre temporal y nunca debe alterar el progreso real.
+    if (reason === 'owner') {
+      sessionStorage.setItem(OWNER_DEMO_KEY, 'yes');
+      activateTesterMode();
+    }
+
     updatePersonalization();
+    updateReviewUi();
     if (paymentPanel) paymentPanel.hidden = true;
     if (accessGate) accessGate.hidden = true;
     document.body.classList.remove('access-locked');
@@ -575,11 +640,8 @@
     if (mathHub) mathHub.hidden = true;
     updateHubProgress();
 
-    const profile = familyProfile();
     if (reason === 'owner') {
-      setSubscriptionSettings('Acceso de administración activo.');
-    } else if (profile.email || currentUser?.email) {
-      setSubscriptionSettings('Plan activo ✅');
+      setSubscriptionSettings('Revisión para adultos activa.');
     } else {
       setSubscriptionSettings('Plan activo ✅');
     }
@@ -590,8 +652,11 @@
     if (accessGate) accessGate.hidden = false;
     if (learningHub) learningHub.hidden = true;
     if (mathHub) mathHub.hidden = true;
+    if (intro) intro.hidden = true;
+    if (app) app.hidden = true;
     document.body.classList.add('access-locked');
     updatePersonalization();
+    updateReviewUi();
     if (message) setAccessStatus(message);
   }
 
@@ -1147,7 +1212,7 @@
       console.error('family initialization error', error);
       showCommercialGate();
       showAccountStage('subscriber');
-      setAccessStatus(error.message || 'No fue posible cargar la cuenta familiar.', 'error');
+      setAccessStatus('No pudimos preparar tu cuenta en este momento. Intenta nuevamente.', 'error');
     }
   }
 
@@ -1172,17 +1237,7 @@
     return familyLoadPromise;
   }
 
-  async function signOutFamily() {
-    try {
-      await syncProgressToCloud();
-    } catch {}
-
-    cloudReady = false;
-    activeChild = null;
-    currentUser = null;
-    currentSession = null;
-
-    // Evita que el progreso de una familia se mezcle con otra en un dispositivo compartido.
+  function clearLocalFamilyState() {
     [
       CLOUD_PROGRESS_KEYS.atlas,
       CLOUD_PROGRESS_KEYS.notebook,
@@ -1193,9 +1248,61 @@
     ].forEach(key => localStorage.removeItem(key));
     localStorage.removeItem(FAMILY_PROFILE_KEY);
     localStorage.removeItem(SUBSCRIPTION_KEY);
+  }
+
+  async function exitReviewToAccess() {
+    // Si la revisión había saltado entre ejercicios, primero devolvemos el snapshot
+    // y después limpiamos la sesión local para que el siguiente usuario inicie desde cero.
+    try { restoreTesterSnapshot(); } catch {}
+    testerMode = false;
+    testerUnlocked = false;
+    testerSnapshot = null;
+    sessionStorage.removeItem(OWNER_DEMO_KEY);
+    commercialAccessGranted = false;
+    cloudReady = false;
+    activeChild = null;
+    currentUser = null;
+    currentSession = null;
+    clearLocalFamilyState();
+    updateReviewUi();
+
+    try {
+      if (supabaseClient) await supabaseClient.auth.signOut();
+    } catch {}
+
+    const cleanUrl = `${window.location.origin}${window.location.pathname}`;
+    window.location.replace(cleanUrl);
+  }
+
+  async function signOutFamily() {
+    // Si alguien pulsa salir durante una revisión, debe volver de verdad al acceso.
+    if (isOwnerReviewSession()) {
+      await exitReviewToAccess();
+      return;
+    }
+
+    try {
+      await syncProgressToCloud();
+    } catch {}
+
+    if (testerMode) {
+      try { restoreTesterSnapshot(); } catch {}
+      testerMode = false;
+      testerUnlocked = false;
+      testerSnapshot = null;
+    }
+
+    sessionStorage.removeItem(OWNER_DEMO_KEY);
+    cloudReady = false;
+    activeChild = null;
+    currentUser = null;
+    currentSession = null;
+    clearLocalFamilyState();
+    updateReviewUi();
 
     if (supabaseClient) await supabaseClient.auth.signOut();
-    window.location.reload();
+    const cleanUrl = `${window.location.origin}${window.location.pathname}`;
+    window.location.replace(cleanUrl);
   }
 
   async function initializeCommercialAccess() {
@@ -3811,6 +3918,7 @@
     }
     testerUnlocked = true;
     buildTesterNavigator();
+    updateReviewUi();
   }
 
   function closeAllTesterOverlays() {
@@ -3959,6 +4067,9 @@
     settingsModal.hidden = true;
     testerModal.hidden = false;
     document.body.classList.add('modal-open');
+    updateReviewUi();
+    const testerCard = testerModal.querySelector('.modal-card');
+    if (testerCard) testerCard.scrollTop = 0;
 
     testerPinError.hidden = true;
 
@@ -3975,9 +4086,16 @@
   }
 
   function exitTesterMode() {
+    if (isOwnerReviewSession()) {
+      exitReviewToAccess();
+      return;
+    }
+
     if (!testerMode) {
+      testerUnlocked = false;
       testerModal.hidden = true;
       document.body.classList.remove('modal-open');
+      updateReviewUi();
       return;
     }
 
@@ -3985,10 +4103,11 @@
     testerMode = false;
     testerUnlocked = false;
     testerSnapshot = null;
+    updateReviewUi();
 
-    // Recargar es la forma más segura de reconstruir exactamente
-    // el progreso real que existía antes de comenzar las pruebas.
-    window.location.reload();
+    // Recargar reconstruye exactamente el progreso real y conserva la sesión familiar.
+    const cleanUrl = `${window.location.origin}${window.location.pathname}`;
+    window.location.replace(cleanUrl);
   }
 
   soundBtn.addEventListener('click', () => {
@@ -4329,12 +4448,17 @@
       }
     } catch (error) {
       console.error('auth error', error);
-      const raw = String(error?.message || 'No fue posible acceder a la cuenta.');
-      const friendly = raw.toLowerCase().includes('invalid login')
-        ? 'Correo o contraseña incorrectos.'
-        : raw.toLowerCase().includes('already registered')
-          ? 'Este correo ya tiene una cuenta. Usa “Ya tengo cuenta”.'
-          : raw;
+      const raw = String(error?.message || '').toLowerCase();
+      let friendly = 'No pudimos entrar a la cuenta. Intenta nuevamente.';
+      if (raw.includes('invalid login') || raw.includes('invalid credentials')) {
+        friendly = 'Correo o contraseña incorrectos.';
+      } else if (raw.includes('already registered') || raw.includes('already exists')) {
+        friendly = 'Este correo ya tiene una cuenta. Usa “Ya tengo cuenta”.';
+      } else if (raw.includes('email not confirmed') || raw.includes('not confirmed')) {
+        friendly = 'Confirma primero el correo que te enviamos y luego inicia sesión.';
+      } else if (raw.includes('rate limit') || raw.includes('too many')) {
+        friendly = 'Hicimos varios intentos seguidos. Espera un momento y vuelve a probar.';
+      }
       setAuthStatus(friendly, 'error');
     } finally {
       if (authSubmitBtn) {
@@ -4372,7 +4496,7 @@
       await verifySubscription({ silent: true });
     } catch (error) {
       console.error('create child error', error);
-      setAccessStatus(error.message || 'No pudimos crear el perfil.', 'error');
+      setAccessStatus('No pudimos crear el perfil en este momento. Intenta nuevamente.', 'error');
     } finally {
       if (createChildBtn) {
         createChildBtn.disabled = false;
@@ -4411,7 +4535,21 @@
   });
 
   accessSignOutBtn?.addEventListener('click', () => signOutFamily());
+  childSetupSignOutBtn?.addEventListener('click', () => signOutFamily());
   accountSignOutBtn?.addEventListener('click', () => signOutFamily());
+
+  reviewHomeBtn?.addEventListener('click', () => {
+    playTap();
+    closeNavigationOverlays();
+    showLearningHubView();
+  });
+
+  reviewPanelBtn?.addEventListener('click', () => openTesterModal());
+
+  reviewExitBtn?.addEventListener('click', () => {
+    if (isOwnerReviewSession()) exitReviewToAccess();
+    else exitTesterMode();
+  });
 
   ownerAccessBtn?.addEventListener('click', () => {
     if (!ownerPinForm) return;
@@ -4423,13 +4561,14 @@
     e.preventDefault();
     const pin = String(ownerPinInput?.value || '').trim();
     if (pin !== TESTER_PIN) {
-      setAccessStatus('La clave de pruebas no es correcta.', 'error');
+      setAccessStatus('La clave de revisión no es correcta.', 'error');
       ownerPinInput?.select();
       return;
     }
     sessionStorage.setItem(OWNER_DEMO_KEY, 'yes');
     grantCommercialAccess('owner');
     setAccessStatus('');
+    showLearningHubView();
   });
 
   startBtn.addEventListener('click', () => openApp(true));

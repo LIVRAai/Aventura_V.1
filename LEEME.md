@@ -1,25 +1,27 @@
-# La Expedición · v13 Final
+# La Expedición · V14
 
-Versión lista para desplegar sobre el repositorio actual.
+Versión de producto con navegación jerárquica, experiencia infantil colorida, pago productivo y revisión para adultos sin afectar el progreso real.
 
-## Experiencia de usuario
+## Flujo del niño
 
-- Inicio infantil colorido con una acción principal: continuar la aventura.
-- Navegación: Inicio → Matemáticas → Etapa → Actividad.
-- Perfil separado del aprendizaje.
-- Zona para adultos discreta.
-- Mensajes de cuenta, progreso y pago escritos para familias, sin exponer términos técnicos del backend.
-- Pago seguro integrado y plan familiar mensual.
+`Inicio → Matemáticas → Etapa → Actividad`
 
-## Se conserva
+## Flujo familiar
 
-- 36 misiones del Atlas Animal.
-- Academia de División con NOVA y 8 rutas.
-- DIVIDO → MULTIPLICO → RESTO → BAJO → REPITO.
-- Progreso local y sincronizado.
-- Modo de revisión para adultos.
-- Supabase, OpenAI y Mercado Pago permanecen en la arquitectura, pero no se muestran como detalles técnicos al usuario.
+`Crear cuenta / Iniciar sesión → Perfil del niño → Plan familiar → Inicio`
 
-## Despliegue
+## Revisión para adultos
 
-Reemplaza los archivos del repositorio por esta carpeta y realiza un Redeploy en Vercel. No requiere cambios de SQL ni variables nuevas respecto de la v10/v12 productiva.
+Desde la pantalla de acceso existe `Revisar la app`. Al ingresar con la clave privada se activa una sesión temporal que no guarda el progreso. Una barra visible únicamente para adultos permite abrir el panel de revisión o volver completamente al inicio de sesión desde cualquier pantalla.
+
+## Responsive
+
+La interfaz tiene reglas específicas para PC, tablet, celular, teléfonos pequeños y orientación horizontal.
+
+## Integraciones
+
+Se conservan Supabase, NOVA/OpenAI y Mercado Pago productivo. Consulta `CONFIGURA_VERCEL.md` para las variables privadas del despliegue.
+
+## Cambios detallados
+
+Consulta `REVISION_UX_V14.md`.
