@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <meta name="theme-color" content="#07112f" />
+  <meta name="theme-color" content="#5b4bff" />
   <title>La Expedición | Refuerzo de Matemáticas</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
@@ -12,16 +12,18 @@
   <section id="accessGate" class="access-gate" aria-label="Acceso familiar">
     <div class="access-shell">
       <div class="access-brand">
-        <div class="access-logo">÷</div>
+        <div class="access-logo-wrap">
+          <div class="access-logo">÷</div>
+          <div class="access-friends" aria-hidden="true"><span>🦎</span><span>🐼</span><span>🐙</span></div>
+        </div>
         <div>
           <p class="eyebrow">LA EXPEDICIÓN</p>
-          <h1>Aprender jugando,<br><span>con progreso visible.</span></h1>
+          <h1>Una aventura para<br><span>aprender jugando.</span></h1>
         </div>
       </div>
 
       <p class="access-lead">
-        Una experiencia de refuerzo de matemáticas para que cada niño practique a su ritmo,
-        reciba ayuda de NOVA y continúe su progreso desde cualquier dispositivo.
+        Misiones, animales curiosos y NOVA acompañan cada paso para que aprender matemáticas se sienta como descubrir un nuevo mundo.
       </p>
 
       <div id="authView" class="auth-view">
@@ -56,12 +58,12 @@
         <div class="account-chip">
           <span>👤</span>
           <div>
-            <small>CUENTA DEL ADULTO</small>
+            <small>CUENTA FAMILIAR</small>
             <strong id="childSetupEmail">—</strong>
           </div>
         </div>
         <h2>¿Quién va a explorar?</h2>
-        <p>Crea el perfil del niño. Este nombre personaliza la experiencia y conecta su progreso.</p>
+        <p>Escribe su nombre para personalizar la aventura y guardar su avance.</p>
         <form id="childProfileForm" class="access-form">
           <label>
             <span>Nombre del niño</span>
@@ -87,22 +89,22 @@
             <strong id="subscriptionPrice">$24.900 <small>COP / mes</small></strong>
           </div>
           <ul>
-            <li>✓ Acceso a la Expedición y la Academia</li>
-            <li>✓ NOVA como tutor durante la práctica</li>
-            <li>✓ Progreso sincronizado con Supabase</li>
+            <li>✓ Misiones y rutas de aprendizaje</li>
+            <li>✓ NOVA acompaña cada práctica</li>
+            <li>✓ El progreso queda guardado</li>
           </ul>
         </div>
 
         <form id="subscriptionForm" class="access-form compact-form">
-          <button id="subscribeBtn" class="access-primary" type="submit">Suscribirme con Mercado Pago</button>
+          <button id="subscribeBtn" class="access-primary" type="submit">Activar plan familiar</button>
         </form>
 
-        <section id="paymentPanel" class="mp-payment-panel" hidden aria-label="Pago seguro con Mercado Pago">
+        <section id="paymentPanel" class="mp-payment-panel" hidden aria-label="Pago seguro">
           <div class="mp-payment-head">
             <div>
-              <span>PAGO SEGURO · MERCADO PAGO</span>
-              <strong>Activa tu suscripción mensual</strong>
-              <p>Tu tarjeta se procesa directamente con Mercado Pago. La Expedición no recibe ni guarda el número de tarjeta ni el código de seguridad.</p>
+              <span>🔒 PAGO SEGURO</span>
+              <strong>Activa el plan familiar</strong>
+              <p>Completa los datos de pago para comenzar. La información de tu tarjeta se procesa de forma segura y no se guarda en La Expedición.</p>
             </div>
             <button id="closePaymentPanelBtn" class="mp-payment-close" type="button" aria-label="Cerrar formulario de pago">✕</button>
           </div>
@@ -152,14 +154,14 @@
 
             <progress id="paymentProgress" class="mp-payment-progress" value="0" max="1">Procesando...</progress>
             <button id="form-checkout__submit" class="access-primary mp-submit-btn" type="submit" disabled>
-              Confirmar suscripción · $24.900/mes
+              Activar plan · $24.900/mes
             </button>
-            <p class="mp-validation-note">Mercado Pago puede realizar un cargo pequeño de validación de tarjeta y devolverlo automáticamente.</p>
+            <p class="mp-validation-note">Algunos bancos pueden hacer una validación temporal de la tarjeta antes de aprobar el plan.</p>
           </form>
         </section>
 
         <button id="verifySubscriptionBtn" class="access-secondary" type="button" hidden>
-          Verificar suscripción
+          Actualizar acceso
         </button>
 
         <button id="accessSignOutBtn" class="access-text-btn" type="button">Cerrar sesión</button>
@@ -167,16 +169,16 @@
 
       <div id="accessStatus" class="access-status" role="status" aria-live="polite"></div>
 
-      <div class="access-divider"><span>pruebas internas</span></div>
+      <div class="access-divider access-divider-private"><span>zona privada</span></div>
 
-      <button id="ownerAccessBtn" class="access-owner-btn" type="button">🧪 Entrar como adulto</button>
+      <button id="ownerAccessBtn" class="access-owner-btn" type="button">Acceso de administración</button>
       <form id="ownerPinForm" class="access-owner-form" hidden>
         <input id="ownerPinInput" type="password" inputmode="numeric" maxlength="6" placeholder="Clave de pruebas" />
         <button type="submit">Entrar</button>
       </form>
 
       <p class="access-note">
-        La cuenta y el progreso se gestionan con Supabase. El pago se procesa en Mercado Pago; La Expedición no almacena datos de tarjeta.
+        Tu cuenta, el progreso y los pagos se protegen de forma segura.
       </p>
     </div>
   </section>
@@ -188,17 +190,29 @@
         <div>
           <p class="eyebrow">LA EXPEDICIÓN</p>
           <h1>Hola, <span id="hubChildName">Explorador</span> 👋</h1>
-          <p>Tu próxima actividad está lista.</p>
+          <p>Hoy hay una nueva misión esperándote.</p>
         </div>
         <button id="hubProfileBtn" class="profile-btn" type="button" aria-label="Abrir perfil y ajustes">
           <span>👤</span><small>Perfil</small>
         </button>
       </header>
 
+      <section class="home-adventure-banner" aria-hidden="true">
+        <div class="home-planet">🌍</div>
+        <div class="home-friend friend-one">🦎</div>
+        <div class="home-friend friend-two">🐬</div>
+        <div class="home-friend friend-three">🦥</div>
+        <div class="home-stars">✦ ✧ ✦</div>
+        <div class="home-banner-copy">
+          <small>LA EXPEDICIÓN DE HOY</small>
+          <strong>Aprende algo nuevo.<br>Desbloquea otra criatura.</strong>
+        </div>
+      </section>
+
       <button id="continueLearningBtn" class="continue-card" type="button">
         <span class="continue-icon">▶</span>
         <span class="continue-copy">
-          <small>CONTINUAR DONDE QUEDASTE</small>
+          <small>✨ SIGUE TU AVENTURA</small>
           <strong id="continueLearningTitle">Matemáticas</strong>
           <em id="continueLearningMeta">Preparando tu progreso…</em>
           <span class="continue-progress" aria-hidden="true"><span id="continueLearningProgressBar"></span></span>
@@ -209,16 +223,16 @@
       <section class="hub-section" aria-labelledby="subjectsTitle">
         <div class="hub-section-head">
           <div>
-            <span>APRENDER</span>
-            <h2 id="subjectsTitle">Mis materias</h2>
+            <span>🌈 ELIGE TU MUNDO</span>
+            <h2 id="subjectsTitle">¿Qué quieres explorar?</h2>
           </div>
         </div>
 
         <div class="subject-grid clean-subject-grid">
           <button id="mathSubjectBtn" class="subject-card subject-card-active" type="button">
-            <span class="subject-icon">➗</span>
+            <span class="subject-icon math-icon">➗</span>
             <span class="subject-copy">
-              <small>EN CURSO</small>
+              <small>🚀 EN AVENTURA</small>
               <strong>Matemáticas</strong>
               <em id="hubMathStatus">Preparando tu progreso…</em>
               <span class="subject-progress" aria-hidden="true"><span id="hubMathProgressBar"></span></span>
@@ -227,7 +241,7 @@
           </button>
 
           <article class="subject-card subject-card-soon">
-            <span class="subject-icon">📖</span>
+            <span class="subject-icon language-icon">📖</span>
             <span class="subject-copy">
               <small>PRÓXIMAMENTE</small>
               <strong>Lenguaje</strong>
@@ -236,7 +250,7 @@
           </article>
 
           <article class="subject-card subject-card-soon">
-            <span class="subject-icon">🔬</span>
+            <span class="subject-icon science-icon">🔬</span>
             <span class="subject-copy">
               <small>PRÓXIMAMENTE</small>
               <strong>Ciencias</strong>
@@ -261,15 +275,15 @@
         <div class="subject-hero-icon">➗</div>
         <div>
           <p class="eyebrow">MATEMÁTICAS</p>
-          <h1>Tu camino de aprendizaje</h1>
-          <p>Avanza en orden. Primero comprende la división y después domina el procedimiento.</p>
+          <h1>Tu aventura de Matemáticas</h1>
+          <p>Cada etapa desbloquea nuevas habilidades. Avanza a tu ritmo y deja que NOVA te acompañe.</p>
         </div>
       </section>
 
       <button id="mathContinueBtn" class="continue-card subject-continue-card" type="button">
         <span class="continue-icon">▶</span>
         <span class="continue-copy">
-          <small>SIGUIENTE ACTIVIDAD</small>
+          <small>✨ TU PRÓXIMA MISIÓN</small>
           <strong id="mathContinueTitle">Continuar</strong>
           <em id="mathContinueMeta">Preparando tu progreso…</em>
         </span>
@@ -279,8 +293,8 @@
       <section class="learning-path" aria-labelledby="mathPathTitle">
         <div class="hub-section-head path-head">
           <div>
-            <span>RUTA DE APRENDIZAJE</span>
-            <h2 id="mathPathTitle">División</h2>
+            <span>🧭 TU RUTA</span>
+            <h2 id="mathPathTitle">Domina la división</h2>
           </div>
           <small>2 etapas</small>
         </div>
@@ -289,9 +303,9 @@
           <button id="atlasPathBtn" class="path-card" type="button">
             <span class="path-index">01</span>
             <span class="path-main">
-              <span class="path-kicker">COMPRENDER</span>
+              <span class="path-kicker">🌍 ETAPA 1 · DESCUBRIR</span>
               <strong>Atlas Animal</strong>
-              <em>Aprende qué significa dividir mediante 36 misiones.</em>
+              <em>Descubre qué significa dividir resolviendo 36 misiones con criaturas sorprendentes.</em>
               <span class="path-progress" aria-hidden="true"><span id="atlasPathProgressBar"></span></span>
               <small id="atlasPathStatus">Misión 1 de 36</small>
             </span>
@@ -303,9 +317,9 @@
           <button id="academyPathBtn" class="path-card" type="button">
             <span class="path-index">02</span>
             <span class="path-main">
-              <span class="path-kicker">EJECUTAR Y AUTOMATIZAR</span>
+              <span class="path-kicker">🎓 ETAPA 2 · ENTRENAR</span>
               <strong>Academia de División con NOVA</strong>
-              <em>Domina el algoritmo escrito y fortalece cada habilidad.</em>
+              <em>Entrena paso a paso hasta poder resolver divisiones en tu cuaderno por tu cuenta.</em>
               <span class="path-progress" aria-hidden="true"><span id="academyPathProgressBar"></span></span>
               <small id="academyPathStatus">Se desbloquea al completar el Atlas</small>
             </span>
@@ -317,7 +331,7 @@
       <section class="nova-route-note">
         <div class="nova-orb small">N</div>
         <div>
-          <span>NOVA · RECOMENDACIÓN</span>
+          <span>NOVA · TU SIGUIENTE PASO</span>
           <p id="mathRecommendation">Completa primero el Atlas Animal para construir una base sólida.</p>
         </div>
       </section>
@@ -739,13 +753,13 @@
       <div class="modal-head">
         <div>
           <p class="eyebrow">PERFIL</p>
-          <h2 id="settingsTitle">Perfil y ajustes</h2>
+          <h2 id="settingsTitle">Mi perfil</h2>
         </div>
         <button id="closeSettingsBtn" class="icon-btn" aria-label="Cerrar configuración">✕</button>
       </div>
 
       <div class="settings-list">
-        <p class="settings-section-label">EXPERIENCIA</p>
+        <p class="settings-section-label">MI EXPERIENCIA</p>
         <div class="settings-row">
           <div class="settings-copy">
             <strong>Sonido</strong>
@@ -754,7 +768,7 @@
           <button id="soundBtn" class="settings-toggle" type="button" aria-label="Activar o desactivar sonido" aria-pressed="true">🔊 Activado</button>
         </div>
 
-        <p class="settings-section-label">CUENTA Y ACCESO</p>
+        <p class="settings-section-label">FAMILIA</p>
         <div class="settings-row">
           <div class="settings-copy">
             <strong>Cuenta familiar</strong>
@@ -765,30 +779,30 @@
 
         <div class="settings-row">
           <div class="settings-copy">
-            <strong>Suscripción familiar</strong>
-            <span id="subscriptionSettingsText">Comprobando acceso...</span>
+            <strong>Plan familiar</strong>
+            <span id="subscriptionSettingsText">Revisando el plan...</span>
           </div>
-          <button id="subscriptionSettingsBtn" class="settings-toggle" type="button">💳 Verificar</button>
+          <button id="subscriptionSettingsBtn" class="settings-toggle" type="button">Actualizar</button>
         </div>
 
-        <p class="settings-section-label">SOLO ADULTOS</p>
+        <p class="settings-section-label">ZONA PARA ADULTOS</p>
         <div class="settings-row">
           <div class="settings-copy">
-            <strong>Modo de pruebas</strong>
-            <span>Abre cualquier misión o ruta sin alterar el progreso real del niño.</span>
+            <strong>Revisión de contenido</strong>
+            <span>Permite revisar misiones y rutas sin cambiar el avance del niño.</span>
           </div>
-          <button id="testerSettingsBtn" class="settings-toggle" type="button">🧪 Abrir</button>
+          <button id="testerSettingsBtn" class="settings-toggle" type="button">Abrir</button>
         </div>
 
         <div class="settings-row settings-row-danger">
           <div class="settings-copy">
             <strong>Reiniciar aventura</strong>
-            <span>Borra el progreso local y vuelve a la misión 1. El progreso en la nube se actualizará después.</span>
+            <span>Vuelve a comenzar desde la primera misión.</span>
           </div>
           <button id="resetBtn" class="settings-danger-btn" type="button">Reiniciar</button>
         </div>
 
-        <p class="settings-warning">Las rutas de aprendizaje se abren desde Matemáticas. Aquí solo gestionas cuenta, sonido y opciones para adultos.</p>
+        <p class="settings-warning">Las opciones para adultos están separadas de la aventura para que el niño pueda concentrarse en aprender.</p>
       </div>
     </div>
   </div>

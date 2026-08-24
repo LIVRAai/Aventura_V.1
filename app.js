@@ -452,7 +452,7 @@
 
   function showLearningHubView() {
     if (!commercialAccessGranted) {
-      showCommercialGate('Necesitas una suscripción activa para entrar.');
+      showCommercialGate('Activa el plan familiar para comenzar la aventura.');
       return;
     }
     closeNavigationOverlays();
@@ -470,7 +470,7 @@
 
   function showMathHubView() {
     if (!commercialAccessGranted) {
-      showCommercialGate('Necesitas una suscripción activa para entrar a Matemáticas.');
+      showCommercialGate('Activa el plan familiar para explorar Matemáticas.');
       return;
     }
     closeNavigationOverlays();
@@ -488,7 +488,7 @@
 
   function showAtlasView({ respectIntro = true } = {}) {
     if (!commercialAccessGranted) {
-      showCommercialGate('Necesitas una suscripción activa para entrar al Atlas.');
+      showCommercialGate('Activa el plan familiar para entrar al Atlas.');
       return;
     }
     closeNavigationOverlays();
@@ -522,7 +522,7 @@
 
   function showAcademyView() {
     if (!commercialAccessGranted) {
-      showCommercialGate('Necesitas una suscripción activa para entrar a la Academia.');
+      showCommercialGate('Activa el plan familiar para entrar a la Academia.');
       return;
     }
     if (!gameCompleted && unlockedCount() < missions.length && !testerMode) {
@@ -577,11 +577,11 @@
 
     const profile = familyProfile();
     if (reason === 'owner') {
-      setSubscriptionSettings('Modo de pruebas del adulto. No representa una suscripción pagada.');
+      setSubscriptionSettings('Acceso de administración activo.');
     } else if (profile.email || currentUser?.email) {
-      setSubscriptionSettings(`Activa · ${currentUser?.email || profile.email}`);
+      setSubscriptionSettings('Plan activo ✅');
     } else {
-      setSubscriptionSettings('Suscripción activa.');
+      setSubscriptionSettings('Plan activo ✅');
     }
   }
 
@@ -630,7 +630,7 @@
       }
     } catch (error) {
       console.error('public config error', error);
-      setAuthStatus('No pudimos conectar la cuenta familiar. Revisa las variables de Supabase en Vercel.', 'error');
+      setAuthStatus('No pudimos iniciar la cuenta en este momento. Intenta de nuevo en unos minutos.', 'error');
     }
 
     if (subscriptionPrice) {
@@ -639,7 +639,7 @@
     }
     if (mpSubmitBtn) {
       const price = subscriptionConfig.formattedAmount || formatCop(subscriptionConfig.amount);
-      mpSubmitBtn.textContent = `Confirmar suscripción · ${price}/mes`;
+      mpSubmitBtn.textContent = `Activar plan · ${price}/mes`;
     }
   }
 
@@ -659,9 +659,12 @@
   }
 
   function paymentErrorMessage(data = {}) {
-    const reference = data?.mercadoPagoRequestId ? ` Referencia MP: ${data.mercadoPagoRequestId}.` : '';
-    const base = data?.error || 'Mercado Pago no pudo crear la suscripción.';
-    return `${base}${reference}`;
+    const raw = String(data?.error || '').toLowerCase();
+    if (raw.includes('insufficient') || raw.includes('fondos') || raw.includes('saldo')) return 'No hay fondos suficientes en este medio de pago. Puedes intentar con otra tarjeta.';
+    if (raw.includes('rejected') || raw.includes('rechaz')) return 'El banco no autorizó el pago. Prueba con otra tarjeta o revisa con tu banco.';
+    if (raw.includes('expired') || raw.includes('venc')) return 'Revisa la fecha de vencimiento de la tarjeta.';
+    if (raw.includes('security') || raw.includes('cvv')) return 'Revisa el código de seguridad de la tarjeta.';
+    return 'No pudimos autorizar el pago. Revisa los datos o intenta con otra tarjeta.';
   }
 
   async function submitAuthorizedSubscription(cardData = {}) {
@@ -676,7 +679,7 @@
       return;
     }
 
-    setPaymentBusy(true, 'Validando la tarjeta y activando la suscripción…');
+    setPaymentBusy(true, 'Activando tu plan…');
 
     try {
       const res = await fetch('/api/subscription-create', {
@@ -707,13 +710,13 @@
       });
 
       if (data.active || String(data.status).toLowerCase() === 'authorized') {
-        setAccessStatus('Suscripción activa ✅ Entrando a La Expedición…', 'success');
+        setAccessStatus('¡Plan activo! 🚀 Preparando la aventura…', 'success');
         grantCommercialAccess('subscription');
         return;
       }
 
       if (verifySubscriptionBtn) verifySubscriptionBtn.hidden = false;
-      setAccessStatus(`Mercado Pago creó la suscripción con estado ${data.status || 'pendiente'}. Vamos a verificarla.`, 'warning');
+      setAccessStatus('El pago está siendo confirmado. Esto puede tardar unos segundos.', 'warning');
       await verifySubscription({ silent: false });
     } catch (error) {
       console.error('authorized subscription error', error);
@@ -733,10 +736,10 @@
 
     mercadoPagoInitPromise = (async () => {
       if (!subscriptionConfig.publicKey) {
-        throw new Error('Falta MERCADOPAGO_PUBLIC_KEY en Vercel.');
+        throw new Error('El pago no está disponible en este momento.');
       }
       if (!window.MercadoPago) {
-        throw new Error('No fue posible cargar MercadoPago.js. Revisa la conexión e intenta nuevamente.');
+        throw new Error('No pudimos cargar el formulario de pago. Revisa tu conexión e intenta nuevamente.');
       }
       if (mercadoPagoFormInitializing) return mercadoPagoCardForm;
       mercadoPagoFormInitializing = true;
@@ -764,12 +767,12 @@
             if (error) {
               mercadoPagoFormReady = false;
               console.error('Mercado Pago CardForm mount error', error);
-              setAccessStatus('Mercado Pago no pudo cargar el formulario de tarjeta.', 'error');
+              setAccessStatus('No pudimos cargar el formulario de pago. Intenta nuevamente.', 'error');
               return;
             }
             mercadoPagoFormReady = true;
             setPaymentBusy(false);
-            setAccessStatus('Formulario seguro listo. Completa los datos para activar la suscripción.', 'info');
+            setAccessStatus('Todo listo. Completa los datos para activar el plan.', 'info');
           },
           onSubmit: event => {
             event.preventDefault();
@@ -794,23 +797,20 @@
 
   async function openPaymentPanel() {
     if (!subscriptionConfig.paymentConfigured) {
-      const missing = !subscriptionConfig.publicKey
-        ? 'Falta la Public Key productiva de Mercado Pago en Vercel.'
-        : 'Mercado Pago todavía no está configurado completamente en Vercel.';
-      setAccessStatus(missing, 'warning');
+      setAccessStatus('El pago no está disponible en este momento. Intenta nuevamente más tarde.', 'warning');
       return;
     }
     if (!paymentPanel) return;
     paymentPanel.hidden = false;
     fillPaymentAccountEmail();
     if (subscribeBtn) subscribeBtn.hidden = true;
-    setAccessStatus('Cargando el formulario seguro de Mercado Pago…', 'loading');
+    setAccessStatus('Preparando el pago seguro…', 'loading');
     try {
       await initializeMercadoPagoCardForm();
       paymentPanel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     } catch (error) {
       console.error('Mercado Pago initialization error', error);
-      setAccessStatus(error.message || 'No fue posible cargar Mercado Pago.', 'error');
+      setAccessStatus('No pudimos abrir el pago seguro. Revisa tu conexión e intenta nuevamente.', 'error');
       if (subscribeBtn) subscribeBtn.hidden = false;
       paymentPanel.hidden = true;
     }
@@ -1041,11 +1041,11 @@
 
   async function verifySubscription({ silent = false } = {}) {
     if (!currentSession?.access_token) {
-      if (!silent) setAccessStatus('Inicia sesión para verificar tu suscripción.', 'warning');
+      if (!silent) setAccessStatus('Inicia sesión para revisar tu acceso.', 'warning');
       return false;
     }
 
-    if (!silent) setAccessStatus('Comprobando la suscripción con Mercado Pago…', 'loading');
+    if (!silent) setAccessStatus('Revisando tu acceso…', 'loading');
     if (verifySubscriptionBtn) verifySubscriptionBtn.disabled = true;
 
     try {
@@ -1059,8 +1059,8 @@
 
       if (res.status === 404) {
         if (verifySubscriptionBtn) verifySubscriptionBtn.hidden = true;
-        setSubscriptionSettings('Todavía no hay una suscripción activa.');
-        if (!silent) setAccessStatus('Tu cuenta está lista. Puedes activar el plan mensual cuando quieras.', 'info');
+        setSubscriptionSettings('Aún no hay un plan activo.');
+        if (!silent) setAccessStatus('Tu cuenta está lista. Activa el plan familiar para comenzar.', 'info');
         return false;
       }
       if (!res.ok) throw new Error(data.error || 'No pudimos verificar el pago.');
@@ -1073,25 +1073,25 @@
       });
 
       if (data.active) {
-        setAccessStatus('Suscripción activa. Entrando a La Expedición…', 'success');
+        setAccessStatus('¡Plan activo! 🚀 Entrando a La Expedición…', 'success');
         grantCommercialAccess('subscription');
         return true;
       }
 
       if (verifySubscriptionBtn) verifySubscriptionBtn.hidden = false;
       const labels = {
-        pending: 'Mercado Pago todavía no ha autorizado la suscripción. Puedes verificar nuevamente en unos segundos.',
-        paused: 'La suscripción está pausada.',
-        cancelled: 'La suscripción está cancelada.',
-        canceled: 'La suscripción está cancelada.'
+        pending: 'El pago todavía está pendiente. Puedes actualizar el acceso en unos segundos.',
+        paused: 'El plan está pausado.',
+        cancelled: 'El plan está cancelado.',
+        canceled: 'El plan está cancelado.'
       };
-      const text = labels[data.status] || `La suscripción todavía no está activa (${data.status || 'sin estado'}).`;
+      const text = labels[data.status] || 'El plan todavía no está activo.';
       if (!silent) setAccessStatus(text, 'warning');
       setSubscriptionSettings(text);
       return false;
     } catch (error) {
-      if (!silent) setAccessStatus(error.message || 'No pudimos verificar la suscripción.', 'error');
-      setSubscriptionSettings('No fue posible verificar la suscripción.');
+      if (!silent) setAccessStatus('No pudimos revisar el acceso en este momento. Intenta nuevamente.', 'error');
+      setSubscriptionSettings('No pudimos revisar el plan.');
       return false;
     } finally {
       if (verifySubscriptionBtn) verifySubscriptionBtn.disabled = false;
@@ -1115,20 +1115,20 @@
       showAccountStage('subscriber');
       const hydration = await hydrateCloudProgress();
       if (hydration.reloadNeeded) {
-        setAccessStatus('Encontré progreso guardado en la nube. Cargándolo…', 'success');
+        setAccessStatus('Encontré tu progreso. Cargando la aventura…', 'success');
         setTimeout(() => window.location.reload(), 250);
         return;
       }
 
       if (hydration.migratedLocal || hydration.uploadedLocal) {
-        setAccessStatus('Progreso anterior guardado en Supabase ✅', 'success');
+        setAccessStatus('Tu progreso está guardado ✅', 'success');
       } else {
-        setAccessStatus('Cuenta y progreso sincronizados con Supabase.', 'success');
+        setAccessStatus('Cuenta y progreso listos ✅', 'success');
       }
 
       if (subscriptionConfig.enabled === false) {
         grantCommercialAccess('owner');
-        setSubscriptionSettings('Suscripciones desactivadas por configuración.');
+        setSubscriptionSettings('Acceso habilitado para administración.');
         return;
       }
 
@@ -1138,7 +1138,7 @@
         showAccountStage('subscriber');
         const returned = new URLSearchParams(window.location.search).get('subscription') === 'return';
         setAccessStatus(
-          returned ? 'Volviste de Mercado Pago. Pulsa “Ya pagué · verificar acceso”.' : 'Tu cuenta está lista. Activa la suscripción para entrar.',
+          returned ? 'Estamos confirmando tu pago. Pulsa “Actualizar acceso”.' : 'Tu cuenta está lista. Activa el plan familiar para comenzar.',
           returned ? 'info' : 'info'
         );
         if (returned && verifySubscriptionBtn) verifySubscriptionBtn.hidden = false;
@@ -1211,7 +1211,7 @@
 
     if (!supabaseClient) {
       showAccountStage('auth');
-      setAuthStatus('Supabase no está configurado o no pudo cargarse. Revisa SUPABASE_URL y SUPABASE_PUBLISHABLE_KEY en Vercel.', 'error');
+      setAuthStatus('El acceso no está disponible en este momento. Intenta nuevamente más tarde.', 'error');
       return;
     }
 
@@ -2870,7 +2870,7 @@
 
   function openApp(withSound = true) {
     if (!commercialAccessGranted) {
-      showCommercialGate('Necesitas una suscripción activa para entrar a la Expedición.');
+      showCommercialGate('Activa el plan familiar para entrar a La Expedición.');
       return;
     }
     if (withSound) playStart();
@@ -3578,7 +3578,7 @@
       if (requestId !== tutorRequestId) return;
       pending.remove();
       const message = err.message.includes('configurada')
-        ? 'NOVA todavía no está conectado. Un adulto debe revisar OPENAI_API_KEY en Vercel.'
+        ? 'NOVA está descansando un momento. Puedes seguir con una pista y volver a preguntarle después.'
         : 'No pude conectarme ahora. Podemos seguir con la pista normal y volver a intentarlo después.';
       appendTutorMessage('assistant', message);
       aiStatus.textContent = 'SIN CONEXIÓN';
@@ -4264,7 +4264,7 @@
   authForm?.addEventListener('submit', async (e) => {
     e.preventDefault();
     if (!supabaseClient) {
-      setAuthStatus('Supabase no está disponible. Revisa la configuración en Vercel.', 'error');
+      setAuthStatus('No pudimos abrir el acceso en este momento. Intenta nuevamente.', 'error');
       return;
     }
 
@@ -4368,7 +4368,7 @@
         return;
       }
       showAccountStage('subscriber');
-      setAccessStatus('Perfil creado y sincronizado ✅ Ahora puedes activar la suscripción.', 'success');
+      setAccessStatus('¡Perfil listo! ✨ Ahora puedes activar el plan familiar.', 'success');
       await verifySubscription({ silent: true });
     } catch (error) {
       console.error('create child error', error);
@@ -4390,7 +4390,7 @@
     }
 
     if (!subscriptionConfig.paymentConfigured) {
-      setAccessStatus('Mercado Pago no está configurado completamente. Revisa Access Token y Public Key en Vercel.', 'warning');
+      setAccessStatus('El pago no está disponible en este momento. Intenta nuevamente más tarde.', 'warning');
       return;
     }
 
@@ -4407,7 +4407,7 @@
       return;
     }
     const active = await verifySubscription({ silent: false });
-    showToast(active ? 'Suscripción activa ✅' : 'Revisa el estado de la suscripción.');
+    showToast(active ? 'Plan activo ✅' : 'El plan todavía no está activo.');
   });
 
   accessSignOutBtn?.addEventListener('click', () => signOutFamily());

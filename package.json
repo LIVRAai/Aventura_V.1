@@ -1,9 +1,9 @@
 {
   "name": "la-expedicion",
-  "version": "12.0.0",
+  "version": "13.0.0",
   "private": true,
   "type": "module",
-  "description": "La Expedición - navegación jerárquica Inicio > Matemáticas > etapa > actividad, con NOVA y suscripción productiva",
+  "description": "La Expedición - producto final infantil con navegación simple, NOVA, progreso en la nube y plan familiar productivo",
   "engines": {
     "node": ">=20"
   },

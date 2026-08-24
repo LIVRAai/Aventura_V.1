@@ -1,4 +1,4 @@
-# La Expedición v12 — configuración productiva en Vercel
+# La Expedición v13 Final — configuración productiva en Vercel
 
 Esta versión elimina el flujo anterior `pending → checkout externo` y usa el flujo productivo de Mercado Pago con **CardForm + CardToken + `/preapproval` autorizado**.
 
@@ -38,7 +38,7 @@ Puedes eliminar o dejar sin efecto:
 - `MERCADOPAGO_MODE`
 - `MERCADOPAGO_TEST_PAYER_EMAIL`
 
-La v12 siempre usa el correo real de la cuenta autenticada y las credenciales productivas que tengas configuradas.
+La v13 siempre usa el correo real de la cuenta autenticada y las credenciales productivas que tengas configuradas.
 
 ## Webhook productivo
 
