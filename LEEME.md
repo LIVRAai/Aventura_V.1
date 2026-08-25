@@ -29,3 +29,12 @@ No requiere nuevas variables de entorno ni nuevas tablas.
 - Cambiar de pestaña o un recargado accidental ya no debe borrar la conversación.
 - Los eventos repetidos de autenticación al recuperar el foco no reconstruyen la app si es el mismo usuario con acceso vigente.
 - La conversación temporal se elimina al cerrar sesión para no mezclarla con otra cuenta.
+
+
+## V21 · primaria 1.º a 5.º
+
+La experiencia principal ahora se organiza por grado y por cinco materias: Matemáticas, Lenguaje, Ciencias, Sociales e Inglés. Cada materia incluye una ruta inicial de seis aprendizajes clave por grado.
+
+El laboratorio de división existente se conserva completo como entrenamiento intensivo, con el mismo progreso, almacenamiento e integraciones. También se conserva **Pregúntale a NOVA** como tutor libre para cualquier materia.
+
+Esta versión no modifica archivos de `/api`, variables de entorno, Supabase, Mercado Pago, webhooks ni la estructura de sincronización existente. El grado y la actividad curricular se guardan únicamente como preferencias locales del navegador para evitar cambios de esquema.

@@ -39,7 +39,7 @@
       </div>
 
       <p class="access-lead">
-        <strong>Tu profe de refuerzo en casa.</strong><br>Refuerzo escolar personalizado para niños de 1.º a 5.º. Matemáticas disponible hoy y nuevas materias en camino.
+        <strong>Tu profe de refuerzo en casa.</strong><br>Refuerzo escolar personalizado para niños de 1.º a 5.º en Matemáticas, Lenguaje, Ciencias, Sociales e Inglés.
       </p>
 
       <div id="accountLoadingView" class="account-loading-view" hidden aria-live="polite" aria-busy="true">
@@ -123,7 +123,7 @@
             <div class="premium-plan-intro">
               <span class="premium-step-label">APRENDE CON NOVA</span>
               <h2>Tu profe de refuerzo<br><span>en casa.</span></h2>
-              <p>Refuerzo escolar personalizado para niños de 1.º a 5.º. Hoy incluye Matemáticas, con nuevas materias en camino.</p>
+              <p>Refuerzo escolar personalizado para niños de 1.º a 5.º con rutas por grado en Matemáticas, Lenguaje, Ciencias, Sociales e Inglés.</p>
             </div>
 
             <div class="access-plan premium-plan-card">
@@ -252,35 +252,50 @@
 
 
   <section id="learningHub" class="learning-hub" hidden aria-label="Inicio">
-    <div class="hub-shell">
+    <div class="hub-shell curriculum-home-shell">
       <header class="hub-head home-head">
         <div>
           <p class="eyebrow">APRENDE CON NOVA</p>
           <h1>Hola, <span id="hubChildName">Explorador</span> 👋</h1>
-          <p>Hoy hay una nueva misión esperándote.</p>
+          <p>Refuerza lo que ves en el colegio, a tu ritmo y con NOVA a tu lado.</p>
         </div>
         <button id="hubProfileBtn" class="profile-btn" type="button" aria-label="Abrir perfil y ajustes">
           <span>👤</span><small>Perfil</small>
         </button>
       </header>
 
-      <section class="home-adventure-banner" aria-hidden="true">
-        <div class="home-planet">🌍</div>
-        <div class="home-friend friend-one">🦎</div>
-        <div class="home-friend friend-two">🐬</div>
-        <div class="home-friend friend-three">🦥</div>
-        <div class="home-stars">✦ ✧ ✦</div>
-        <div class="home-banner-copy">
-          <small>TU MISIÓN DE HOY</small>
-          <strong>Practica con NOVA.<br>Avanza a tu ritmo.</strong>
+      <section class="curriculum-hero" aria-label="Ruta escolar">
+        <div class="curriculum-hero-copy">
+          <small>REFUERZO DE PRIMARIA · 1.º A 5.º</small>
+          <strong>Lo importante del colegio,<br>organizado para entenderlo.</strong>
+          <p>Selecciona el grado y entra a la materia que quieras reforzar. NOVA explica, practica y acompaña.</p>
+        </div>
+        <div class="curriculum-hero-orbit" aria-hidden="true">
+          <span>➕</span><span>📖</span><span>🔬</span><span>🌎</span><span>💬</span>
+          <b>N</b>
         </div>
       </section>
 
-      <button id="continueLearningBtn" class="continue-card" type="button">
+      <section class="grade-panel" aria-labelledby="gradePanelTitle">
+        <div class="grade-panel-copy">
+          <small>TU GRADO</small>
+          <strong id="gradePanelTitle">¿En qué grado estás?</strong>
+          <span id="gradePanelHint">Así NOVA te muestra los temas adecuados para ti.</span>
+        </div>
+        <div id="gradeSelector" class="grade-selector" role="group" aria-label="Seleccionar grado escolar">
+          <button type="button" data-grade="1">1.º</button>
+          <button type="button" data-grade="2">2.º</button>
+          <button type="button" data-grade="3">3.º</button>
+          <button type="button" data-grade="4">4.º</button>
+          <button type="button" data-grade="5">5.º</button>
+        </div>
+      </section>
+
+      <button id="continueLearningBtn" class="continue-card curriculum-continue-card" type="button">
         <span class="continue-icon">▶</span>
         <span class="continue-copy">
-          <small>✨ SIGUE APRENDIENDO</small>
-          <strong id="continueLearningTitle">Matemáticas</strong>
+          <small>✨ RETOMA TU PRÁCTICA</small>
+          <strong id="continueLearningTitle">División</strong>
           <em id="continueLearningMeta">Preparando tu progreso…</em>
           <span class="continue-progress" aria-hidden="true"><span id="continueLearningProgressBar"></span></span>
         </span>
@@ -292,50 +307,125 @@
         <span class="nova-direct-copy">
           <small>TU PROFE DE REFUERZO EN CASA</small>
           <strong>Pregúntale a NOVA</strong>
-          <em>¿Tienes una duda o una tarea? Escríbela y la vemos juntos.</em>
+          <em>¿Tienes una duda, una tarea o algo que no entendiste? Pregunta directamente.</em>
         </span>
         <span class="nova-direct-arrow" aria-hidden="true">→</span>
       </button>
 
-      <section class="hub-section" aria-labelledby="subjectsTitle">
+      <section class="hub-section curriculum-subject-section" aria-labelledby="subjectsTitle">
         <div class="hub-section-head">
           <div>
             <span>📚 TUS MATERIAS</span>
-            <h2 id="subjectsTitle">¿Qué quieres practicar?</h2>
+            <h2 id="subjectsTitle">¿Qué quieres reforzar?</h2>
           </div>
+          <small id="subjectsGradeLabel">Elige tu grado</small>
         </div>
 
-        <div class="subject-grid clean-subject-grid">
-          <button id="mathSubjectBtn" class="subject-card subject-card-active" type="button">
+        <div class="subject-grid curriculum-subject-grid">
+          <button id="mathSubjectBtn" class="subject-card curriculum-subject-btn math-subject" data-subject="math" type="button">
             <span class="subject-icon math-icon">➗</span>
-            <span class="subject-copy">
-              <small>✓ DISPONIBLE</small>
-              <strong>Matemáticas</strong>
-              <em id="hubMathStatus">Preparando tu progreso…</em>
-              <span class="subject-progress" aria-hidden="true"><span id="hubMathProgressBar"></span></span>
-            </span>
-            <span class="subject-arrow" aria-hidden="true">→</span>
+            <span class="subject-copy"><small>MATEMÁTICAS</small><strong>Números y problemas</strong><em id="hubMathStatus">Selecciona tu grado</em><span class="subject-progress"><span id="hubMathProgressBar"></span></span></span>
+            <span class="subject-arrow">→</span>
           </button>
-
-          <article class="subject-card subject-card-soon">
+          <button class="subject-card curriculum-subject-btn language-subject" data-subject="language" type="button">
             <span class="subject-icon language-icon">📖</span>
-            <span class="subject-copy">
-              <small>PRÓXIMAMENTE</small>
-              <strong>Lenguaje</strong>
-              <em>Lectura, comprensión y escritura</em>
-            </span>
-          </article>
-
-          <article class="subject-card subject-card-soon">
+            <span class="subject-copy"><small>LENGUAJE</small><strong>Leer, escribir y comunicar</strong><em data-subject-status="language">Selecciona tu grado</em><span class="subject-progress"><span data-subject-bar="language"></span></span></span>
+            <span class="subject-arrow">→</span>
+          </button>
+          <button class="subject-card curriculum-subject-btn science-subject" data-subject="science" type="button">
             <span class="subject-icon science-icon">🔬</span>
-            <span class="subject-copy">
-              <small>PRÓXIMAMENTE</small>
-              <strong>Ciencias</strong>
-              <em>Explorar, observar y comprender</em>
-            </span>
-          </article>
+            <span class="subject-copy"><small>CIENCIAS</small><strong>Observar y comprender</strong><em data-subject-status="science">Selecciona tu grado</em><span class="subject-progress"><span data-subject-bar="science"></span></span></span>
+            <span class="subject-arrow">→</span>
+          </button>
+          <button class="subject-card curriculum-subject-btn social-subject" data-subject="social" type="button">
+            <span class="subject-icon social-icon">🌎</span>
+            <span class="subject-copy"><small>SOCIALES</small><strong>Comprender y convivir</strong><em data-subject-status="social">Selecciona tu grado</em><span class="subject-progress"><span data-subject-bar="social"></span></span></span>
+            <span class="subject-arrow">→</span>
+          </button>
+          <button class="subject-card curriculum-subject-btn english-subject" data-subject="english" type="button">
+            <span class="subject-icon english-icon">💬</span>
+            <span class="subject-copy"><small>INGLÉS</small><strong>Comunicarte con confianza</strong><em data-subject-status="english">Selecciona tu grado</em><span class="subject-progress"><span data-subject-bar="english"></span></span></span>
+            <span class="subject-arrow">→</span>
+          </button>
         </div>
       </section>
+
+      <section class="core-skills-strip" aria-label="Habilidades fundamentales">
+        <small>MIENTRAS APRENDES, TAMBIÉN FORTALECES</small>
+        <div><span>🧠 Pensamiento crítico</span><span>💬 Comunicación</span><span>🤝 Convivencia</span><span>🔎 Curiosidad</span><span>🌐 Competencia global</span></div>
+      </section>
+    </div>
+  </section>
+
+  <section id="curriculumSubjectHub" class="learning-hub curriculum-subject-hub" hidden aria-label="Materia">
+    <div class="hub-shell curriculum-content-shell">
+      <header class="subject-page-head">
+        <button id="curriculumSubjectBackBtn" class="hierarchy-back" type="button">← Inicio</button>
+        <button id="curriculumSubjectProfileBtn" class="profile-btn compact" type="button" aria-label="Abrir perfil y ajustes"><span>👤</span><small>Perfil</small></button>
+      </header>
+
+      <section class="curriculum-subject-hero" id="curriculumSubjectHero">
+        <div id="curriculumSubjectIcon" class="curriculum-subject-icon">➗</div>
+        <div>
+          <p id="curriculumSubjectKicker" class="eyebrow">MATEMÁTICAS · 3.º</p>
+          <h1 id="curriculumSubjectTitle">Matemáticas</h1>
+          <p id="curriculumSubjectDescription">Fortalece el pensamiento numérico y la solución de problemas.</p>
+        </div>
+      </section>
+
+      <div class="curriculum-grade-inline">
+        <span>GRADO</span>
+        <div id="subjectGradeSelector" class="grade-selector compact" role="group" aria-label="Cambiar grado">
+          <button type="button" data-grade="1">1.º</button><button type="button" data-grade="2">2.º</button><button type="button" data-grade="3">3.º</button><button type="button" data-grade="4">4.º</button><button type="button" data-grade="5">5.º</button>
+        </div>
+      </div>
+
+      <section class="curriculum-path-section">
+        <div class="hub-section-head">
+          <div><span>🧭 RUTA DE REFUERZO</span><h2>Aprendizajes clave de <span id="curriculumGradeTitle">3.º</span></h2></div>
+          <small id="curriculumTopicCount">6 temas</small>
+        </div>
+        <div id="curriculumTopicGrid" class="curriculum-topic-grid"></div>
+      </section>
+
+      <section class="curriculum-competency-card">
+        <div class="nova-orb small">N</div>
+        <div><span>LO QUE NOVA BUSCA FORTALECER</span><p id="curriculumCompetencyText">Comprender, explicar y aplicar lo aprendido en situaciones reales.</p></div>
+      </section>
+
+      <p class="curriculum-reference-note">Ruta orientativa de refuerzo para primaria en Colombia. El orden exacto de los temas puede variar entre colegios.</p>
+    </div>
+  </section>
+
+  <section id="curriculumTopicHub" class="learning-hub curriculum-topic-hub" hidden aria-label="Tema de refuerzo">
+    <div class="hub-shell curriculum-topic-shell">
+      <header class="subject-page-head">
+        <button id="curriculumTopicBackBtn" class="hierarchy-back" type="button">← Materia</button>
+        <button id="curriculumTopicProfileBtn" class="profile-btn compact" type="button" aria-label="Abrir perfil y ajustes"><span>👤</span><small>Perfil</small></button>
+      </header>
+
+      <section class="topic-focus-card">
+        <div class="topic-focus-top">
+          <span id="curriculumTopicIcon" class="topic-focus-icon">🧠</span>
+          <div><p id="curriculumTopicKicker" class="eyebrow">MATEMÁTICAS · 3.º</p><h1 id="curriculumTopicTitle">Tema</h1></div>
+        </div>
+        <div class="topic-learning-grid">
+          <article><small>QUÉ VAS A REFORZAR</small><p id="curriculumTopicGoal"></p></article>
+          <article><small>PARA QUÉ TE SIRVE</small><p id="curriculumTopicRealWorld"></p></article>
+          <article class="topic-skill"><small>HABILIDAD QUE FORTALECES</small><strong id="curriculumTopicSkill">Pensamiento crítico</strong></article>
+        </div>
+      </section>
+
+      <section class="topic-nova-card">
+        <div class="nova-orb">N</div>
+        <div class="topic-nova-copy"><small>NOVA · TU PROFE DE REFUERZO</small><h2>Practiquemos este tema juntos</h2><p>NOVA empieza con una explicación corta, luego te pregunta y adapta la práctica según tus respuestas.</p></div>
+        <button id="curriculumPracticeBtn" class="topic-primary-btn" type="button">Practicar con NOVA →</button>
+        <button id="curriculumAskBtn" class="topic-secondary-btn" type="button">Tengo una duda sobre este tema</button>
+      </section>
+
+      <button id="curriculumDivisionLabBtn" class="division-lab-card" type="button" hidden>
+        <span>➗</span><div><small>ENTRENAMIENTO INTENSIVO</small><strong>Laboratorio de división</strong><em>Conserva tu progreso actual: aventura, procedimiento escrito y práctica guiada.</em></div><b>→</b>
+      </button>
     </div>
   </section>
 
@@ -343,9 +433,12 @@
     <div class="hub-shell nova-tutor-shell">
       <header class="subject-page-head nova-tutor-page-head">
         <button id="novaTutorBackBtn" class="hierarchy-back" type="button">← Inicio</button>
-        <button id="novaTutorProfileBtn" class="profile-btn" type="button" aria-label="Abrir perfil y ajustes">
+        <div class="nova-tutor-head-actions">
+          <button id="novaNewConversationBtn" class="nova-new-conversation" type="button">＋ Nueva conversación</button>
+          <button id="novaTutorProfileBtn" class="profile-btn" type="button" aria-label="Abrir perfil y ajustes">
           <span>👤</span><small>Perfil</small>
-        </button>
+          </button>
+        </div>
       </header>
 
       <section class="nova-tutor-hero">
@@ -391,9 +484,9 @@
       <section class="subject-hero">
         <div class="subject-hero-icon">➗</div>
         <div>
-          <p class="eyebrow">MATEMÁTICAS</p>
-          <h1>División</h1>
-          <p>Aprende qué significa dividir, domina el procedimiento escrito y úsalo para resolver problemas.</p>
+          <p class="eyebrow">MATEMÁTICAS · ENTRENAMIENTO INTENSIVO</p>
+          <h1>Laboratorio de división</h1>
+          <p>Profundiza en división con una ruta extensa de comprensión, procedimiento escrito y resolución de problemas.</p>
         </div>
       </section>
 
@@ -410,10 +503,10 @@
       <section class="learning-path" aria-labelledby="mathPathTitle">
         <div class="hub-section-head path-head">
           <div>
-            <span>🧭 TEMA ACTUAL</span>
-            <h2 id="mathPathTitle">Lo que vas a reforzar</h2>
+            <span>🧭 RUTA ESPECIALIZADA</span>
+            <h2 id="mathPathTitle">Entrenamiento de división</h2>
           </div>
-          <small>2 etapas</small>
+          <small>Ruta intensiva</small>
         </div>
 
         <div class="path-stack">
@@ -916,15 +1009,15 @@
         <div id="testerSettingsRow" class="settings-row">
           <div class="settings-copy">
             <strong>Revisión de contenido</strong>
-            <span>Permite revisar misiones y habilidades sin cambiar el avance del niño.</span>
+            <span>Permite revisar temas, misiones y habilidades sin cambiar el avance del niño.</span>
           </div>
           <button id="testerSettingsBtn" class="settings-toggle" type="button">Abrir</button>
         </div>
 
         <div class="settings-row settings-row-danger">
           <div class="settings-copy">
-            <strong>Reiniciar aventura</strong>
-            <span>Vuelve a comenzar desde la primera misión.</span>
+            <strong>Reiniciar laboratorio de división</strong>
+            <span>Vuelve a comenzar únicamente la ruta intensiva de división.</span>
           </div>
           <button id="resetBtn" class="settings-danger-btn" type="button">Reiniciar</button>
         </div>
@@ -1026,16 +1119,22 @@
       <div class="modal-head parent-progress-head">
         <div>
           <p class="eyebrow">PROGRESO DE APRENDIZAJE</p>
-          <h2 id="learningProgressTitle">¿Qué está reforzando?</h2>
-          <p id="learningProgressChild" class="parent-progress-child">Matemáticas · División</p>
+          <h2 id="learningProgressTitle">Plan de refuerzo</h2>
+          <p id="learningProgressChild" class="parent-progress-child">Primaria · grado por seleccionar</p>
         </div>
         <button id="closeLearningProgressBtn" class="icon-btn" aria-label="Cerrar progreso">✕</button>
       </div>
 
+      <section class="parent-curriculum-summary">
+        <div><small>RUTA ACADÉMICA ACTUAL</small><strong id="parentCurriculumGrade">Selecciona el grado desde Inicio</strong><p>El contenido se organiza por Matemáticas, Lenguaje, Ciencias, Sociales e Inglés.</p></div>
+        <div id="parentCurriculumSubjects" class="parent-curriculum-subjects"></div>
+      </section>
+
+      <p class="parent-measured-label">PROGRESO MEDIDO HASTA AHORA · LABORATORIO DE DIVISIÓN</p>
       <section class="parent-topic-summary">
         <div class="parent-topic-icon">➗</div>
         <div>
-          <span>MATEMÁTICAS</span>
+          <span>MATEMÁTICAS · MÓDULO ESPECIALIZADO</span>
           <strong>División</strong>
           <p>El objetivo es comprender qué significa dividir, resolver el procedimiento escrito y usar la división en situaciones reales.</p>
         </div>
@@ -1109,7 +1208,7 @@
         </div>
       </section>
 
-      <p class="parent-progress-note">Los estados de dominio se calculan con las respuestas observadas durante la práctica. Avanzar por una misión no se interpreta automáticamente como dominar una habilidad.</p>
+      <p class="parent-progress-note">Los estados de dominio que aparecen aquí provienen de respuestas observadas en el laboratorio de división. Visitar un tema del currículo o conversar con NOVA no se interpreta automáticamente como dominarlo.</p>
     </div>
   </div>
 

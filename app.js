@@ -115,6 +115,35 @@
   const finalChildName = $('#finalChildName');
   const learningHub = $('#learningHub');
   const mathHub = $('#mathHub');
+  const curriculumSubjectHub = $('#curriculumSubjectHub');
+  const curriculumTopicHub = $('#curriculumTopicHub');
+  const gradeSelector = $('#gradeSelector');
+  const subjectGradeSelector = $('#subjectGradeSelector');
+  const subjectsGradeLabel = $('#subjectsGradeLabel');
+  const curriculumSubjectBackBtn = $('#curriculumSubjectBackBtn');
+  const curriculumSubjectProfileBtn = $('#curriculumSubjectProfileBtn');
+  const curriculumSubjectIcon = $('#curriculumSubjectIcon');
+  const curriculumSubjectKicker = $('#curriculumSubjectKicker');
+  const curriculumSubjectTitle = $('#curriculumSubjectTitle');
+  const curriculumSubjectDescription = $('#curriculumSubjectDescription');
+  const curriculumGradeTitle = $('#curriculumGradeTitle');
+  const curriculumTopicCount = $('#curriculumTopicCount');
+  const curriculumTopicGrid = $('#curriculumTopicGrid');
+  const curriculumCompetencyText = $('#curriculumCompetencyText');
+  const curriculumTopicBackBtn = $('#curriculumTopicBackBtn');
+  const curriculumTopicProfileBtn = $('#curriculumTopicProfileBtn');
+  const curriculumTopicIcon = $('#curriculumTopicIcon');
+  const curriculumTopicKicker = $('#curriculumTopicKicker');
+  const curriculumTopicTitle = $('#curriculumTopicTitle');
+  const curriculumTopicGoal = $('#curriculumTopicGoal');
+  const curriculumTopicRealWorld = $('#curriculumTopicRealWorld');
+  const curriculumTopicSkill = $('#curriculumTopicSkill');
+  const curriculumPracticeBtn = $('#curriculumPracticeBtn');
+  const curriculumAskBtn = $('#curriculumAskBtn');
+  const curriculumDivisionLabBtn = $('#curriculumDivisionLabBtn');
+  const novaNewConversationBtn = $('#novaNewConversationBtn');
+  const parentCurriculumGrade = $('#parentCurriculumGrade');
+  const parentCurriculumSubjects = $('#parentCurriculumSubjects');
   const novaTutorHub = $('#novaTutorHub');
   const askNovaHomeBtn = $('#askNovaHomeBtn');
   const novaTutorBackBtn = $('#novaTutorBackBtn');
@@ -286,6 +315,19 @@
     academy: 'emilianoAcademyV1'
   };
 
+  const CURRICULUM_GRADE_KEY = 'novaCurriculumGradeV1';
+  const CURRICULUM_ACTIVITY_KEY = 'novaCurriculumActivityV1';
+  const CURRICULUM_SUBJECTS = {
+    math: { name:'Matemáticas', icon:'➗', description:'Números, operaciones, geometría, datos y solución de problemas.', competency:'Pensamiento lógico, razonamiento numérico y solución de problemas.' },
+    language: { name:'Lenguaje', icon:'📖', description:'Lectura, escritura, comprensión, expresión y argumentación.', competency:'Comprensión lectora, comunicación clara y capacidad de argumentar.' },
+    science: { name:'Ciencias', icon:'🔬', description:'Seres vivos, materia, energía, Tierra e investigación.', competency:'Curiosidad, pensamiento científico y uso de evidencia.' },
+    social: { name:'Sociales', icon:'🌎', description:'Territorio, historia, ciudadanía, diversidad y convivencia.', competency:'Ciudadanía, pensamiento histórico y comprensión del entorno social.' },
+    english: { name:'Inglés', icon:'💬', description:'Comprensión y comunicación básica y progresiva en inglés.', competency:'Comunicación funcional y apertura a contextos globales.' }
+  };
+  const CURRICULUM = {"1":{"math":[{"id":"math-1-1","title":"Números hasta 100","goal":"Leer, escribir, comparar y ordenar números; reconocer unidades y decenas.","realWorld":"Contar objetos, saber cuánto hay y comparar cantidades.","skill":"Pensamiento numérico","legacyDivision":false},{"id":"math-1-2","title":"Sumar y restar","goal":"Comprender la suma como juntar y la resta como quitar, comparar o encontrar lo que falta.","realWorld":"Resolver situaciones sencillas con objetos, puntos, dinero y cantidades.","skill":"Razonamiento lógico","legacyDivision":false},{"id":"math-1-3","title":"Patrones y secuencias","goal":"Reconocer qué se repite, qué cambia y cuál elemento continúa.","realWorld":"Anticipar, ordenar y descubrir reglas.","skill":"Pensamiento lógico","legacyDivision":false},{"id":"math-1-4","title":"Figuras y ubicación","goal":"Reconocer figuras básicas y usar palabras como arriba, abajo, dentro, fuera, izquierda y derecha.","realWorld":"Orientarse y describir posiciones y formas del entorno.","skill":"Orientación espacial","legacyDivision":false},{"id":"math-1-5","title":"Medir y comparar","goal":"Comparar longitud, peso, capacidad y duración con unidades cotidianas.","realWorld":"Decidir qué es más largo, pesado, lleno o duradero.","skill":"Resolución práctica","legacyDivision":false},{"id":"math-1-6","title":"Problemas de la vida diaria","goal":"Elegir si conviene sumar o restar a partir de una situación corta.","realWorld":"Usar los números para tomar decisiones sencillas.","skill":"Solución de problemas","legacyDivision":false}],"language":[{"id":"language-1-1","title":"Letras, sonidos y palabras","goal":"Relacionar sonidos con letras, formar palabras y reconocer sílabas frecuentes.","realWorld":"Leer nombres, avisos y palabras de uso cotidiano.","skill":"Comunicación","legacyDivision":false},{"id":"language-1-2","title":"Leer oraciones cortas","goal":"Leer frases sencillas y comprender quién hace qué.","realWorld":"Seguir instrucciones y comprender mensajes breves.","skill":"Comprensión lectora","legacyDivision":false},{"id":"language-1-3","title":"Ordenar una historia","goal":"Identificar qué pasó primero, después y al final.","realWorld":"Contar experiencias de forma clara y ordenada.","skill":"Organización de ideas","legacyDivision":false},{"id":"language-1-4","title":"Escribir oraciones","goal":"Construir oraciones con sentido, mayúscula inicial y punto final.","realWorld":"Expresar por escrito ideas sencillas.","skill":"Expresión escrita","legacyDivision":false},{"id":"language-1-5","title":"Comprender cuentos","goal":"Reconocer personajes, lugares, acciones y hechos explícitos.","realWorld":"Entender relatos y conversar sobre lo leído.","skill":"Comprensión y conversación","legacyDivision":false},{"id":"language-1-6","title":"Hablar y escuchar","goal":"Explicar una idea, escuchar turnos y hacer preguntas relacionadas.","realWorld":"Participar en conversaciones con claridad y respeto.","skill":"Comunicación social","legacyDivision":false}],"science":[{"id":"science-1-1","title":"Mi cuerpo y los sentidos","goal":"Reconocer partes del cuerpo y cómo los sentidos ayudan a conocer el entorno.","realWorld":"Cuidarse y describir lo que observa, escucha, toca, huele o saborea.","skill":"Observación","legacyDivision":false},{"id":"science-1-2","title":"Seres vivos y no vivos","goal":"Distinguir seres vivos de objetos y reconocer necesidades básicas de los seres vivos.","realWorld":"Comprender y cuidar plantas, animales y personas.","skill":"Clasificación","legacyDivision":false},{"id":"science-1-3","title":"Plantas y animales","goal":"Reconocer características, necesidades y hábitats cercanos.","realWorld":"Observar semejanzas y diferencias en la naturaleza.","skill":"Pensamiento científico","legacyDivision":false},{"id":"science-1-4","title":"Materiales que me rodean","goal":"Comparar objetos por textura, dureza, forma y uso.","realWorld":"Elegir materiales según lo que se necesita construir o usar.","skill":"Exploración","legacyDivision":false},{"id":"science-1-5","title":"Día, noche y clima","goal":"Observar cambios entre el día y la noche y reconocer condiciones del tiempo.","realWorld":"Relacionar rutinas con el ambiente y prepararse para el clima.","skill":"Observación del entorno","legacyDivision":false},{"id":"science-1-6","title":"Cuidar nuestro entorno","goal":"Reconocer acciones para cuidar agua, animales, plantas y espacios comunes.","realWorld":"Tomar decisiones responsables con el ambiente.","skill":"Responsabilidad","legacyDivision":false}],"social":[{"id":"social-1-1","title":"Mi familia y quienes me cuidan","goal":"Reconocer roles, vínculos y formas diversas de familia y cuidado.","realWorld":"Valorar a las personas con quienes convive.","skill":"Identidad y empatía","legacyDivision":false},{"id":"social-1-2","title":"Mi colegio","goal":"Reconocer espacios, personas, normas y responsabilidades del entorno escolar.","realWorld":"Participar mejor en la vida del colegio.","skill":"Convivencia","legacyDivision":false},{"id":"social-1-3","title":"Normas y acuerdos","goal":"Comprender por qué existen reglas y cómo ayudan a convivir.","realWorld":"Resolver situaciones cotidianas respetando acuerdos.","skill":"Ciudadanía","legacyDivision":false},{"id":"social-1-4","title":"Mi casa y mi barrio","goal":"Describir lugares cercanos y reconocer puntos importantes del entorno.","realWorld":"Ubicarse y comprender la comunidad donde vive.","skill":"Pertenencia","legacyDivision":false},{"id":"social-1-5","title":"Antes, ahora y después","goal":"Ordenar hechos personales y familiares en el tiempo.","realWorld":"Comprender cambios y construir memoria.","skill":"Pensamiento temporal","legacyDivision":false},{"id":"social-1-6","title":"Somos diferentes","goal":"Reconocer gustos, costumbres y características diferentes entre personas.","realWorld":"Relacionarse con respeto y valorar la diversidad.","skill":"Respeto y diversidad","legacyDivision":false}],"english":[{"id":"english-1-1","title":"Hello!","goal":"Usar saludos, despedidas y expresiones básicas de cortesía.","realWorld":"Iniciar y cerrar interacciones sencillas.","skill":"Comunicación básica","legacyDivision":false},{"id":"english-1-2","title":"Numbers and colors","goal":"Reconocer y usar números básicos y colores frecuentes.","realWorld":"Describir objetos y cantidades sencillas.","skill":"Vocabulario funcional","legacyDivision":false},{"id":"english-1-3","title":"My family","goal":"Nombrar miembros de la familia y usar expresiones muy simples sobre ellos.","realWorld":"Hablar de personas cercanas.","skill":"Expresión personal","legacyDivision":false},{"id":"english-1-4","title":"My classroom","goal":"Reconocer objetos del salón y seguir instrucciones básicas.","realWorld":"Comprender rutinas frecuentes de clase.","skill":"Comprensión oral","legacyDivision":false},{"id":"english-1-5","title":"My body","goal":"Nombrar partes principales del cuerpo y acciones sencillas.","realWorld":"Comprender canciones, juegos e instrucciones.","skill":"Vocabulario corporal","legacyDivision":false},{"id":"english-1-6","title":"I like / I don’t like","goal":"Expresar gustos y preferencias con estructuras sencillas.","realWorld":"Comunicar lo que le gusta y escuchar preferencias de otros.","skill":"Interacción social","legacyDivision":false}]},"2":{"math":[{"id":"math-2-1","title":"Números hasta 1.000","goal":"Leer, escribir, descomponer, comparar y ordenar números de tres cifras.","realWorld":"Comprender cantidades mayores y usarlas en situaciones reales.","skill":"Pensamiento numérico","legacyDivision":false},{"id":"math-2-2","title":"Suma y resta con reagrupación","goal":"Resolver sumas y restas comprendiendo unidades, decenas y centenas.","realWorld":"Calcular cambios, totales y diferencias.","skill":"Precisión y razonamiento","legacyDivision":false},{"id":"math-2-3","title":"Primeras multiplicaciones","goal":"Comprender la multiplicación como grupos iguales y suma repetida.","realWorld":"Calcular colecciones organizadas en grupos.","skill":"Pensamiento multiplicativo","legacyDivision":false},{"id":"math-2-4","title":"Repartos y grupos iguales","goal":"Introducir la división como repartir o formar grupos del mismo tamaño.","realWorld":"Compartir cantidades de manera justa y contar grupos.","skill":"Razonamiento lógico","legacyDivision":false},{"id":"math-2-5","title":"Hora, dinero y medidas","goal":"Leer horas sencillas, reconocer monedas y comparar medidas.","realWorld":"Organizar rutinas y resolver compras o mediciones básicas.","skill":"Autonomía cotidiana","legacyDivision":false},{"id":"math-2-6","title":"Figuras, datos y problemas","goal":"Reconocer formas, leer pictogramas/tablas sencillas y elegir operaciones.","realWorld":"Interpretar información y resolver situaciones.","skill":"Solución de problemas","legacyDivision":false}],"language":[{"id":"language-2-1","title":"Leer con fluidez y sentido","goal":"Leer textos breves respetando pausas y comprender información explícita.","realWorld":"Entender instrucciones, cuentos y mensajes cotidianos.","skill":"Comprensión lectora","legacyDivision":false},{"id":"language-2-2","title":"Idea principal","goal":"Identificar de qué trata principalmente un texto corto.","realWorld":"Resumir lo más importante sin perderse en detalles.","skill":"Síntesis","legacyDivision":false},{"id":"language-2-3","title":"Narrar y describir","goal":"Diferenciar textos que cuentan hechos de textos que describen personas, lugares u objetos.","realWorld":"Explicar experiencias y describir con precisión.","skill":"Comunicación","legacyDivision":false},{"id":"language-2-4","title":"Sustantivos, verbos y adjetivos","goal":"Reconocer palabras que nombran, indican acciones y describen.","realWorld":"Construir oraciones más claras y completas.","skill":"Lenguaje y expresión","legacyDivision":false},{"id":"language-2-5","title":"Ortografía básica","goal":"Practicar mayúsculas, punto, separación de palabras y combinaciones frecuentes.","realWorld":"Escribir mensajes comprensibles.","skill":"Precisión escrita","legacyDivision":false},{"id":"language-2-6","title":"Escribir textos cortos","goal":"Planear y escribir pequeños relatos, descripciones o mensajes con inicio y cierre.","realWorld":"Comunicar ideas por escrito.","skill":"Organización de ideas","legacyDivision":false}],"science":[{"id":"science-2-1","title":"Ciclos de vida","goal":"Reconocer cambios en plantas, animales y seres humanos a lo largo del tiempo.","realWorld":"Comprender crecimiento y transformación de los seres vivos.","skill":"Pensamiento temporal","legacyDivision":false},{"id":"science-2-2","title":"Hábitats y necesidades","goal":"Relacionar seres vivos con alimento, agua, refugio y condiciones del lugar donde viven.","realWorld":"Comprender por qué los ambientes deben cuidarse.","skill":"Relación causa-efecto","legacyDivision":false},{"id":"science-2-3","title":"Cuidado del cuerpo","goal":"Reconocer hábitos de higiene, alimentación, descanso y actividad física.","realWorld":"Tomar decisiones cotidianas de autocuidado.","skill":"Autonomía","legacyDivision":false},{"id":"science-2-4","title":"Sólidos, líquidos y cambios","goal":"Observar propiedades de materiales y cambios sencillos por temperatura o mezcla.","realWorld":"Explicar fenómenos cotidianos con evidencia.","skill":"Experimentación","legacyDivision":false},{"id":"science-2-5","title":"Luz, sonido y movimiento","goal":"Reconocer fuentes de luz y sonido y describir movimientos y fuerzas sencillas.","realWorld":"Entender situaciones del entorno físico.","skill":"Curiosidad científica","legacyDivision":false},{"id":"science-2-6","title":"El tiempo atmosférico","goal":"Observar lluvia, viento, temperatura y nubosidad y registrar cambios.","realWorld":"Leer el entorno y hacer predicciones sencillas.","skill":"Registro de información","legacyDivision":false}],"social":[{"id":"social-2-1","title":"Mi comunidad","goal":"Reconocer personas, oficios, servicios e instituciones cercanas.","realWorld":"Comprender cómo las personas colaboran para que una comunidad funcione.","skill":"Participación","legacyDivision":false},{"id":"social-2-2","title":"Derechos y responsabilidades","goal":"Reconocer derechos básicos y responsabilidades en casa y colegio.","realWorld":"Convivir con mayor autonomía y respeto.","skill":"Ciudadanía","legacyDivision":false},{"id":"social-2-3","title":"Mapas y símbolos","goal":"Usar croquis, puntos de referencia, símbolos y direcciones básicas.","realWorld":"Ubicarse y comunicar rutas sencillas.","skill":"Orientación espacial","legacyDivision":false},{"id":"social-2-4","title":"Campo y ciudad","goal":"Comparar características, actividades y formas de vida de espacios rurales y urbanos.","realWorld":"Comprender diversidad de territorios y trabajos.","skill":"Pensamiento comparativo","legacyDivision":false},{"id":"social-2-5","title":"Tradiciones y cultura","goal":"Reconocer celebraciones, costumbres y expresiones culturales de distintas comunidades.","realWorld":"Valorar la diversidad cultural.","skill":"Identidad y respeto","legacyDivision":false},{"id":"social-2-6","title":"Cambios en el tiempo","goal":"Comparar objetos, lugares y costumbres de antes y de ahora.","realWorld":"Comprender que las sociedades cambian.","skill":"Pensamiento histórico","legacyDivision":false}],"english":[{"id":"english-2-1","title":"About me","goal":"Decir nombre, edad y datos personales muy básicos con frases sencillas.","realWorld":"Presentarse en situaciones básicas.","skill":"Comunicación","legacyDivision":false},{"id":"english-2-2","title":"Daily routines","goal":"Comprender y nombrar acciones frecuentes del día.","realWorld":"Hablar de hábitos y seguir secuencias.","skill":"Autonomía","legacyDivision":false},{"id":"english-2-3","title":"My home","goal":"Nombrar espacios y objetos comunes de la casa.","realWorld":"Describir dónde están objetos de forma sencilla.","skill":"Vocabulario funcional","legacyDivision":false},{"id":"english-2-4","title":"Food and drinks","goal":"Reconocer alimentos frecuentes y expresar gustos básicos.","realWorld":"Participar en intercambios sencillos sobre comida.","skill":"Comunicación cotidiana","legacyDivision":false},{"id":"english-2-5","title":"Can / can’t","goal":"Expresar habilidades sencillas y comprender lo que otros pueden hacer.","realWorld":"Hablar de capacidades y pedir ayuda.","skill":"Interacción","legacyDivision":false},{"id":"english-2-6","title":"Simple questions","goal":"Comprender y responder preguntas básicas con what, who, where y how old.","realWorld":"Sostener intercambios muy breves.","skill":"Comprensión e interacción","legacyDivision":false}]},"3":{"math":[{"id":"math-3-1","title":"Valor posicional y números grandes","goal":"Leer, escribir, comparar y descomponer números de varias cifras.","realWorld":"Comprender precios, distancias, cantidades y datos más grandes.","skill":"Pensamiento numérico","legacyDivision":false},{"id":"math-3-2","title":"Multiplicación","goal":"Consolidar tablas, estrategias y multiplicaciones por una cifra.","realWorld":"Calcular grupos, arreglos, costos y cantidades repetidas.","skill":"Agilidad y razonamiento","legacyDivision":false},{"id":"math-3-3","title":"División y reparto","goal":"Comprender la división, relacionarla con multiplicación y resolver divisiones básicas.","realWorld":"Repartir, formar grupos y resolver problemas de partes iguales.","skill":"Solución de problemas","legacyDivision":true},{"id":"math-3-4","title":"Fracciones básicas","goal":"Reconocer mitad, tercio, cuarto y otras partes iguales de una unidad o colección.","realWorld":"Interpretar repartos, recetas y porciones.","skill":"Pensamiento proporcional","legacyDivision":false},{"id":"math-3-5","title":"Medición, perímetro y tiempo","goal":"Medir longitudes y calcular perímetros sencillos; usar unidades de tiempo.","realWorld":"Planear espacios, recorridos y horarios.","skill":"Aplicación matemática","legacyDivision":false},{"id":"math-3-6","title":"Datos y problemas","goal":"Leer tablas y gráficos sencillos y resolver problemas de uno o dos pasos.","realWorld":"Interpretar información y tomar decisiones con datos.","skill":"Pensamiento crítico","legacyDivision":false}],"language":[{"id":"language-3-1","title":"Comprensión e inferencias sencillas","goal":"Identificar ideas principales, detalles y deducir información no dicha de forma directa.","realWorld":"Comprender mejor cuentos, instrucciones y textos informativos.","skill":"Lectura comprensiva","legacyDivision":false},{"id":"language-3-2","title":"Párrafos y secuencias","goal":"Organizar oraciones alrededor de una idea y conectar inicio, desarrollo y cierre.","realWorld":"Escribir explicaciones y relatos más claros.","skill":"Organización de ideas","legacyDivision":false},{"id":"language-3-3","title":"Tipos de texto","goal":"Reconocer narraciones, descripciones, instrucciones e información.","realWorld":"Elegir cómo leer y cómo escribir según el propósito.","skill":"Flexibilidad comunicativa","legacyDivision":false},{"id":"language-3-4","title":"Gramática en contexto","goal":"Usar sustantivos, verbos, adjetivos, pronombres y concordancia básica.","realWorld":"Expresarse con mayor precisión.","skill":"Comunicación","legacyDivision":false},{"id":"language-3-5","title":"Ortografía y puntuación","goal":"Usar mayúsculas, puntos, comas y reglas frecuentes de escritura.","realWorld":"Producir textos fáciles de entender.","skill":"Precisión escrita","legacyDivision":false},{"id":"language-3-6","title":"Explicar y argumentar","goal":"Expresar una opinión sencilla y sostenerla con una razón o ejemplo.","realWorld":"Participar en conversaciones y defender ideas con respeto.","skill":"Argumentación","legacyDivision":false}],"science":[{"id":"science-3-1","title":"Seres vivos y sus funciones","goal":"Reconocer funciones básicas de nutrición, relación y reproducción en seres vivos.","realWorld":"Comprender cómo organismos responden y sobreviven.","skill":"Pensamiento científico","legacyDivision":false},{"id":"science-3-2","title":"Ecosistemas","goal":"Relacionar organismos, alimento, hábitat y condiciones del ambiente.","realWorld":"Comprender consecuencias de cambios ambientales.","skill":"Pensamiento sistémico","legacyDivision":false},{"id":"science-3-3","title":"Materia y sus cambios","goal":"Comparar materiales, estados y cambios físicos observables.","realWorld":"Explicar transformaciones cotidianas.","skill":"Observación y explicación","legacyDivision":false},{"id":"science-3-4","title":"Luz, sonido y energía","goal":"Explorar cómo se producen y perciben luz y sonido y reconocer usos de la energía.","realWorld":"Comprender tecnologías y fenómenos del entorno.","skill":"Curiosidad científica","legacyDivision":false},{"id":"science-3-5","title":"Tierra y sistema solar","goal":"Reconocer movimientos y características básicas de la Tierra, el Sol y la Luna.","realWorld":"Interpretar día, noche y algunos ciclos naturales.","skill":"Pensamiento espacial","legacyDivision":false},{"id":"science-3-6","title":"Investigar como científico","goal":"Hacer preguntas, observar, registrar datos y comparar resultados.","realWorld":"Resolver dudas usando evidencia y no solo suposiciones.","skill":"Pensamiento crítico","legacyDivision":false}],"social":[{"id":"social-3-1","title":"Colombia y su territorio","goal":"Ubicar Colombia y reconocer elementos básicos de su territorio.","realWorld":"Comprender dónde vive y cómo se organiza el espacio nacional.","skill":"Identidad territorial","legacyDivision":false},{"id":"social-3-2","title":"Regiones y paisajes","goal":"Comparar paisajes, climas, recursos y formas de vida de distintas regiones.","realWorld":"Entender la diversidad geográfica del país.","skill":"Pensamiento comparativo","legacyDivision":false},{"id":"social-3-3","title":"Municipio y departamento","goal":"Reconocer niveles cercanos de organización territorial y autoridades básicas.","realWorld":"Comprender cómo se organiza la comunidad.","skill":"Ciudadanía","legacyDivision":false},{"id":"social-3-4","title":"Diversidad cultural","goal":"Reconocer aportes de pueblos indígenas, afrocolombianos y otras comunidades.","realWorld":"Valorar identidades y combatir prejuicios.","skill":"Respeto y diversidad","legacyDivision":false},{"id":"social-3-5","title":"Pasado y presente","goal":"Usar fuentes sencillas para comparar formas de vida de diferentes épocas.","realWorld":"Comprender cambios sociales y culturales.","skill":"Pensamiento histórico","legacyDivision":false},{"id":"social-3-6","title":"Convivencia y participación","goal":"Resolver desacuerdos, respetar normas y participar en decisiones sencillas.","realWorld":"Construir relaciones y ciudadanía democrática.","skill":"Competencia ciudadana","legacyDivision":false}],"english":[{"id":"english-3-1","title":"Present simple","goal":"Usar frases sencillas para hablar de rutinas, gustos y hechos habituales.","realWorld":"Hablar de la vida diaria.","skill":"Comunicación funcional","legacyDivision":false},{"id":"english-3-2","title":"Questions and answers","goal":"Formar y responder preguntas sencillas sobre personas, lugares y rutinas.","realWorld":"Sostener conversaciones cortas.","skill":"Interacción","legacyDivision":false},{"id":"english-3-3","title":"Descriptions","goal":"Describir personas, animales y lugares con vocabulario frecuente.","realWorld":"Compartir información con mayor detalle.","skill":"Expresión oral","legacyDivision":false},{"id":"english-3-4","title":"School and community","goal":"Usar vocabulario de colegio, lugares y actividades del entorno.","realWorld":"Comprender instrucciones y situaciones conocidas.","skill":"Vocabulario contextual","legacyDivision":false},{"id":"english-3-5","title":"Reading short texts","goal":"Comprender idea general y datos explícitos en textos breves.","realWorld":"Leer mensajes, diálogos y descripciones.","skill":"Comprensión lectora","legacyDivision":false},{"id":"english-3-6","title":"Writing simple paragraphs","goal":"Escribir varias oraciones conectadas sobre un tema familiar.","realWorld":"Comunicar ideas breves por escrito.","skill":"Producción escrita","legacyDivision":false}]},"4":{"math":[{"id":"math-4-1","title":"Operaciones con números naturales","goal":"Resolver sumas, restas y multiplicaciones de varias cifras usando estrategias y algoritmos.","realWorld":"Calcular costos, diferencias y cantidades en problemas de varios pasos.","skill":"Razonamiento numérico","legacyDivision":false},{"id":"math-4-2","title":"División paso a paso","goal":"Resolver divisiones con una o más cifras y comprender cociente y residuo.","realWorld":"Distribuir cantidades y resolver problemas más complejos.","skill":"Solución de problemas","legacyDivision":true},{"id":"math-4-3","title":"Fracciones equivalentes","goal":"Representar, comparar y encontrar fracciones equivalentes.","realWorld":"Interpretar porciones y distintas formas de representar la misma cantidad.","skill":"Pensamiento proporcional","legacyDivision":false},{"id":"math-4-4","title":"Decimales","goal":"Leer, comparar y usar décimas y centésimas en contextos sencillos.","realWorld":"Trabajar con dinero, medidas y cantidades no enteras.","skill":"Precisión numérica","legacyDivision":false},{"id":"math-4-5","title":"Área, perímetro y geometría","goal":"Calcular perímetros y áreas de figuras comunes y describir ángulos y propiedades.","realWorld":"Analizar espacios, diseños y medidas.","skill":"Pensamiento espacial","legacyDivision":false},{"id":"math-4-6","title":"Datos, probabilidad y problemas","goal":"Interpretar tablas y gráficos, comparar datos y estimar posibilidades sencillas.","realWorld":"Tomar decisiones con información cuantitativa.","skill":"Pensamiento crítico","legacyDivision":false}],"language":[{"id":"language-4-1","title":"Lectura inferencial","goal":"Relacionar pistas del texto para deducir causas, intenciones y consecuencias.","realWorld":"Comprender mensajes que no dicen todo de forma explícita.","skill":"Pensamiento crítico","legacyDivision":false},{"id":"language-4-2","title":"Resumen e idea central","goal":"Distinguir información principal de detalles y producir resúmenes claros.","realWorld":"Estudiar mejor y comunicar lo esencial.","skill":"Síntesis","legacyDivision":false},{"id":"language-4-3","title":"Textos narrativos e informativos","goal":"Analizar estructura, propósito y recursos de diferentes tipos de texto.","realWorld":"Adaptar la lectura a lo que se necesita comprender.","skill":"Comprensión textual","legacyDivision":false},{"id":"language-4-4","title":"Oraciones y conectores","goal":"Construir oraciones y párrafos usando conectores de causa, secuencia, contraste y consecuencia.","realWorld":"Explicar ideas de forma lógica.","skill":"Comunicación estructurada","legacyDivision":false},{"id":"language-4-5","title":"Ortografía y revisión","goal":"Aplicar reglas frecuentes y revisar un texto antes de entregarlo.","realWorld":"Escribir con mayor claridad y autonomía.","skill":"Autocorrección","legacyDivision":false},{"id":"language-4-6","title":"Opinión con razones","goal":"Formular una postura y respaldarla con razones, ejemplos o información del texto.","realWorld":"Debatir y participar respetuosamente.","skill":"Argumentación","legacyDivision":false}],"science":[{"id":"science-4-1","title":"Células y organización de los seres vivos","goal":"Reconocer la célula como unidad básica y relacionarla con tejidos, órganos y sistemas.","realWorld":"Comprender cómo se organiza la vida.","skill":"Pensamiento sistémico","legacyDivision":false},{"id":"science-4-2","title":"Cadenas alimentarias y ecosistemas","goal":"Analizar productores, consumidores, descomponedores y relaciones en ecosistemas.","realWorld":"Comprender impactos cuando cambia una parte del ambiente.","skill":"Relación causa-efecto","legacyDivision":false},{"id":"science-4-3","title":"Mezclas y materiales","goal":"Distinguir sustancias, mezclas y métodos sencillos de separación.","realWorld":"Explicar procesos cotidianos como filtrar o decantar.","skill":"Experimentación","legacyDivision":false},{"id":"science-4-4","title":"Fuerza y energía","goal":"Relacionar fuerzas con cambios de movimiento y reconocer formas y transformaciones de energía.","realWorld":"Comprender máquinas y fenómenos cotidianos.","skill":"Razonamiento científico","legacyDivision":false},{"id":"science-4-5","title":"Tierra, agua y atmósfera","goal":"Reconocer componentes y cambios básicos de los sistemas terrestres.","realWorld":"Comprender fenómenos ambientales y cuidado de recursos.","skill":"Pensamiento ambiental","legacyDivision":false},{"id":"science-4-6","title":"Diseñar una investigación","goal":"Plantear preguntas, variables simples, registros y conclusiones basadas en resultados.","realWorld":"Aprender a comprobar ideas con evidencia.","skill":"Pensamiento crítico","legacyDivision":false}],"social":[{"id":"social-4-1","title":"Regiones naturales de Colombia","goal":"Comparar características geográficas, culturales y económicas de las regiones.","realWorld":"Comprender la diversidad territorial del país.","skill":"Pensamiento geográfico","legacyDivision":false},{"id":"social-4-2","title":"Mapas y escalas básicas","goal":"Interpretar convenciones, coordenadas sencillas, orientación y distancias aproximadas.","realWorld":"Leer información espacial con autonomía.","skill":"Orientación y análisis","legacyDivision":false},{"id":"social-4-3","title":"Pueblos y procesos históricos","goal":"Reconocer sociedades prehispánicas, encuentro de culturas y cambios de la época colonial.","realWorld":"Comprender que la historia tiene múltiples actores y perspectivas.","skill":"Pensamiento histórico","legacyDivision":false},{"id":"social-4-4","title":"Independencia y cambios políticos","goal":"Reconocer causas y consecuencias básicas de procesos de independencia y organización republicana.","realWorld":"Relacionar hechos y cambios políticos.","skill":"Causa y consecuencia","legacyDivision":false},{"id":"social-4-5","title":"Economía y territorio","goal":"Distinguir actividades económicas y su relación con recursos y regiones.","realWorld":"Comprender cómo se producen bienes y servicios.","skill":"Pensamiento económico","legacyDivision":false},{"id":"social-4-6","title":"Democracia y convivencia","goal":"Reconocer formas de participación, autoridades y estrategias pacíficas para resolver conflictos.","realWorld":"Participar de manera informada y respetuosa.","skill":"Ciudadanía","legacyDivision":false}],"english":[{"id":"english-4-1","title":"Present simple and frequency","goal":"Hablar de rutinas usando expresiones de frecuencia y vocabulario cotidiano.","realWorld":"Describir hábitos propios y de otros.","skill":"Comunicación","legacyDivision":false},{"id":"english-4-2","title":"Present continuous","goal":"Describir acciones que ocurren en este momento.","realWorld":"Hablar de situaciones visibles o actuales.","skill":"Expresión oral","legacyDivision":false},{"id":"english-4-3","title":"Comparatives","goal":"Comparar personas, animales, objetos y lugares con estructuras sencillas.","realWorld":"Explicar semejanzas y diferencias.","skill":"Pensamiento comparativo","legacyDivision":false},{"id":"english-4-4","title":"Directions and places","goal":"Dar y seguir indicaciones básicas y nombrar lugares de la comunidad.","realWorld":"Orientarse y pedir ayuda en contextos sencillos.","skill":"Comunicación funcional","legacyDivision":false},{"id":"english-4-5","title":"Reading for details","goal":"Identificar idea general y detalles específicos en textos cortos.","realWorld":"Comprender información práctica.","skill":"Comprensión lectora","legacyDivision":false},{"id":"english-4-6","title":"Short messages and descriptions","goal":"Escribir mensajes, descripciones y pequeños textos con vocabulario conocido.","realWorld":"Comunicar información por escrito.","skill":"Producción escrita","legacyDivision":false}]},"5":{"math":[{"id":"math-5-1","title":"Operaciones y problemas multietapa","goal":"Combinar operaciones con números naturales y justificar el procedimiento elegido.","realWorld":"Resolver situaciones con varios datos y pasos.","skill":"Planificación y razonamiento","legacyDivision":false},{"id":"math-5-2","title":"Fracciones y operaciones","goal":"Comparar fracciones y resolver sumas o restas sencillas con fracciones compatibles.","realWorld":"Trabajar con repartos, recetas y medidas.","skill":"Pensamiento proporcional","legacyDivision":false},{"id":"math-5-3","title":"Decimales, porcentajes y dinero","goal":"Relacionar decimales con fracciones y porcentajes básicos en contextos cotidianos.","realWorld":"Interpretar descuentos, cantidades y dinero.","skill":"Competencia financiera básica","legacyDivision":false},{"id":"math-5-4","title":"Divisibilidad y razonamiento multiplicativo","goal":"Usar múltiplos, divisores, divisiones y relaciones entre operaciones para resolver problemas.","realWorld":"Detectar patrones numéricos y organizar cantidades.","skill":"Razonamiento lógico","legacyDivision":true},{"id":"math-5-5","title":"Área, volumen y geometría","goal":"Calcular áreas y explorar volumen, ángulos, simetría y propiedades de figuras.","realWorld":"Analizar objetos, espacios y diseños.","skill":"Pensamiento espacial","legacyDivision":false},{"id":"math-5-6","title":"Estadística y decisiones","goal":"Leer, producir y comparar tablas/gráficos; usar promedio simple e interpretar datos.","realWorld":"Tomar decisiones sustentadas en información.","skill":"Pensamiento crítico","legacyDivision":false}],"language":[{"id":"language-5-1","title":"Lectura crítica inicial","goal":"Distinguir hechos, opiniones, propósitos y puntos de vista en textos apropiados para la edad.","realWorld":"Evaluar mejor la información que recibe.","skill":"Pensamiento crítico","legacyDivision":false},{"id":"language-5-2","title":"Inferir y relacionar información","goal":"Conectar diferentes partes de un texto y usar conocimientos previos para construir significado.","realWorld":"Comprender textos más complejos.","skill":"Comprensión profunda","legacyDivision":false},{"id":"language-5-3","title":"Planear y escribir textos","goal":"Definir propósito, organizar ideas, redactar, revisar y mejorar un texto.","realWorld":"Comunicarse con mayor autonomía.","skill":"Producción escrita","legacyDivision":false},{"id":"language-5-4","title":"Argumentar con evidencia","goal":"Presentar una idea y apoyarla con razones, ejemplos o información verificable.","realWorld":"Defender puntos de vista sin agredir.","skill":"Argumentación","legacyDivision":false},{"id":"language-5-5","title":"Gramática y estilo","goal":"Usar tiempos verbales, pronombres, conectores y puntuación para mejorar claridad.","realWorld":"Expresarse con precisión.","skill":"Comunicación","legacyDivision":false},{"id":"language-5-6","title":"Medios e información","goal":"Analizar mensajes de medios, publicidad y contenidos digitales sencillos.","realWorld":"Reconocer intención, fuente y posibles sesgos.","skill":"Alfabetización mediática","legacyDivision":false}],"science":[{"id":"science-5-1","title":"Células y sistemas del cuerpo","goal":"Relacionar células, tejidos, órganos y sistemas y comprender funciones básicas del cuerpo.","realWorld":"Entender cómo se coordinan procesos del organismo.","skill":"Pensamiento sistémico","legacyDivision":false},{"id":"science-5-2","title":"Ecosistemas y equilibrio","goal":"Analizar redes alimentarias, adaptaciones y efectos de cambios ambientales.","realWorld":"Comprender consecuencias ecológicas y tomar decisiones responsables.","skill":"Pensamiento ambiental","legacyDivision":false},{"id":"science-5-3","title":"Materia, mezclas y cambios","goal":"Comparar propiedades, cambios físicos y químicos sencillos y métodos de separación.","realWorld":"Explicar transformaciones de materiales.","skill":"Experimentación","legacyDivision":false},{"id":"science-5-4","title":"Energía, electricidad y máquinas","goal":"Explorar circuitos simples, transformaciones de energía y máquinas sencillas.","realWorld":"Comprender tecnologías del entorno.","skill":"Razonamiento científico","legacyDivision":false},{"id":"science-5-5","title":"Tierra, sistema solar y universo","goal":"Relacionar movimientos de la Tierra y la Luna con fenómenos observables.","realWorld":"Interpretar ciclos y modelos básicos del sistema solar.","skill":"Pensamiento espacial","legacyDivision":false},{"id":"science-5-6","title":"Método científico y evidencia","goal":"Formular preguntas, hipótesis, procedimientos, datos y conclusiones.","realWorld":"Evaluar afirmaciones usando evidencia.","skill":"Pensamiento crítico","legacyDivision":false}],"social":[{"id":"social-5-1","title":"Colombia: territorio y población","goal":"Relacionar relieve, clima, regiones, población y actividades humanas.","realWorld":"Comprender cómo territorio y sociedad se influyen.","skill":"Pensamiento geográfico","legacyDivision":false},{"id":"social-5-2","title":"Colombia republicana","goal":"Reconocer procesos y cambios fundamentales de la vida republicana en un nivel introductorio.","realWorld":"Comprender cómo decisiones del pasado afectan el presente.","skill":"Pensamiento histórico","legacyDivision":false},{"id":"social-5-3","title":"Constitución, derechos y democracia","goal":"Comprender principios básicos de derechos, deberes, participación y organización del Estado.","realWorld":"Ejercer ciudadanía informada desde la escuela.","skill":"Ciudadanía","legacyDivision":false},{"id":"social-5-4","title":"Economía y consumo responsable","goal":"Reconocer producción, intercambio, trabajo, ahorro y decisiones de consumo.","realWorld":"Tomar decisiones económicas básicas con responsabilidad.","skill":"Competencia económica","legacyDivision":false},{"id":"social-5-5","title":"Diversidad, paz y resolución de conflictos","goal":"Analizar diferencias, prejuicios, acuerdos y formas pacíficas de manejar conflictos.","realWorld":"Convivir en contextos diversos.","skill":"Competencia social","legacyDivision":false},{"id":"social-5-6","title":"Información y ciudadanía digital","goal":"Distinguir fuentes, reconocer información confiable y comportarse responsablemente en entornos digitales.","realWorld":"Participar de forma segura y crítica en sociedad.","skill":"Ciudadanía digital","legacyDivision":false}],"english":[{"id":"english-5-1","title":"Present and past simple","goal":"Usar estructuras frecuentes para hablar de rutinas y acontecimientos pasados sencillos.","realWorld":"Contar experiencias y describir hábitos.","skill":"Comunicación","legacyDivision":false},{"id":"english-5-2","title":"Future intentions","goal":"Usar expresiones básicas para planes e intenciones futuras.","realWorld":"Hablar de metas y planes.","skill":"Expresión personal","legacyDivision":false},{"id":"english-5-3","title":"Comparing and describing","goal":"Comparar y describir personas, lugares y objetos con mayor variedad de vocabulario.","realWorld":"Comunicar diferencias y preferencias.","skill":"Comunicación precisa","legacyDivision":false},{"id":"english-5-4","title":"Reading short informational texts","goal":"Comprender idea general, secuencia y detalles en textos apropiados para primaria.","realWorld":"Acceder a información sencilla en inglés.","skill":"Comprensión lectora","legacyDivision":false},{"id":"english-5-5","title":"Writing connected texts","goal":"Escribir párrafos breves conectando ideas con and, but, because, then y otras expresiones conocidas.","realWorld":"Explicar y narrar por escrito.","skill":"Producción escrita","legacyDivision":false},{"id":"english-5-6","title":"Everyday conversation","goal":"Participar en intercambios sobre escuela, gustos, rutinas, lugares, planes y necesidades.","realWorld":"Desenvolverse en conversaciones sencillas.","skill":"Competencia comunicativa","legacyDivision":false}]}};
+  let curriculumCurrentSubject = 'math';
+  let curriculumCurrentTopicIndex = 0;
+
   let commercialAccessGranted = false;
   let supabaseClient = null;
   let currentSession = null;
@@ -343,6 +385,236 @@
     return explorerName().toLocaleUpperCase('es-CO');
   }
 
+
+  function curriculumScopeSuffix() {
+    const userId = String(currentUser?.id || 'anonymous');
+    const childId = String(activeChild?.id || familyProfile()?.childId || explorerName() || 'child');
+    return `${userId}:${childId}`;
+  }
+
+  function curriculumGradeStorageKey() {
+    return `${CURRICULUM_GRADE_KEY}:${curriculumScopeSuffix()}`;
+  }
+
+  function curriculumActivityStorageKey() {
+    return `${CURRICULUM_ACTIVITY_KEY}:${curriculumScopeSuffix()}`;
+  }
+
+  function selectedCurriculumGrade() {
+    const value = Number(localStorage.getItem(curriculumGradeStorageKey()) || 0);
+    return value >= 1 && value <= 5 ? value : 0;
+  }
+
+  function curriculumActivity() {
+    return readLocalJson(curriculumActivityStorageKey()) || { started:{} };
+  }
+
+  function saveCurriculumActivity(value) {
+    writeLocalJson(curriculumActivityStorageKey(), value);
+  }
+
+  function markCurriculumTopicStarted(subjectKey, grade, topicId) {
+    const activity = curriculumActivity();
+    if (!activity.started || typeof activity.started !== 'object') activity.started = {};
+    activity.started[`${grade}:${subjectKey}:${topicId}`] = Date.now();
+    saveCurriculumActivity(activity);
+  }
+
+  function visitedCurriculumTopics(subjectKey, grade) {
+    const activity = curriculumActivity();
+    const topics = CURRICULUM[String(grade)]?.[subjectKey] || [];
+    return topics.filter(topic => activity.started?.[`${grade}:${subjectKey}:${topic.id}`]).length;
+  }
+
+  function setCurriculumGrade(grade) {
+    const value = Number(grade);
+    if (value < 1 || value > 5) return;
+    try { localStorage.setItem(curriculumGradeStorageKey(), String(value)); } catch {}
+    renderCurriculumHome();
+    if (curriculumSubjectHub && !curriculumSubjectHub.hidden) renderCurriculumSubject(curriculumCurrentSubject);
+    renderParentCurriculumPlan();
+    playTap();
+  }
+
+  function syncGradeSelectors() {
+    const grade = selectedCurriculumGrade();
+    [gradeSelector, subjectGradeSelector].forEach(container => {
+      container?.querySelectorAll('[data-grade]').forEach(btn => {
+        const active = Number(btn.dataset.grade) === grade;
+        btn.classList.toggle('active', active);
+        btn.setAttribute('aria-pressed', String(active));
+      });
+    });
+  }
+
+  function renderCurriculumHome() {
+    const grade = selectedCurriculumGrade();
+    syncGradeSelectors();
+    if (subjectsGradeLabel) subjectsGradeLabel.textContent = grade ? `${grade}.º de primaria` : 'Elige tu grado';
+
+    Object.keys(CURRICULUM_SUBJECTS).forEach(subjectKey => {
+      const topics = grade ? (CURRICULUM[String(grade)]?.[subjectKey] || []) : [];
+      const visited = grade ? visitedCurriculumTopics(subjectKey, grade) : 0;
+      const status = subjectKey === 'math'
+        ? hubMathStatus
+        : document.querySelector(`[data-subject-status="${subjectKey}"]`);
+      const bar = subjectKey === 'math'
+        ? hubMathProgressBar
+        : document.querySelector(`[data-subject-bar="${subjectKey}"]`);
+
+      if (status) status.textContent = grade
+        ? `${topics.length} aprendizajes clave${visited ? ` · ${visited} explorado${visited === 1 ? '' : 's'}` : ''}`
+        : 'Selecciona tu grado';
+      if (bar) bar.style.width = grade && topics.length ? `${Math.round((visited / topics.length) * 100)}%` : '0%';
+    });
+  }
+
+  function renderParentCurriculumPlan() {
+    if (!parentCurriculumGrade || !parentCurriculumSubjects) return;
+    const grade = selectedCurriculumGrade();
+    parentCurriculumGrade.textContent = grade ? `${grade}.º de primaria` : 'Selecciona el grado desde Inicio';
+    if (learningProgressChild) learningProgressChild.textContent = grade ? `Primaria · ${grade}.º` : 'Primaria · grado por seleccionar';
+    parentCurriculumSubjects.innerHTML = '';
+    Object.entries(CURRICULUM_SUBJECTS).forEach(([key, meta]) => {
+      const count = grade ? (CURRICULUM[String(grade)]?.[key] || []).length : 0;
+      const visited = grade ? visitedCurriculumTopics(key, grade) : 0;
+      const item = document.createElement('div');
+      item.innerHTML = `<span>${meta.icon}</span><p><strong>${meta.name}</strong><small>${grade ? `${count} aprendizajes · ${visited} explorados` : 'Pendiente de grado'}</small></p>`;
+      parentCurriculumSubjects.appendChild(item);
+    });
+  }
+
+  function curriculumTopicIconFor(subjectKey, index) {
+    const pools = {
+      math:['🔢','➕','✖️','➗','📐','📊'],
+      language:['🔤','📚','✍️','🧩','📝','💬'],
+      science:['🧬','🌱','🧪','⚡','🌍','🔎'],
+      social:['🧭','🏘️','🗺️','🏛️','🤝','🕰️'],
+      english:['👋','🔤','🗣️','📖','✍️','🌐']
+    };
+    return (pools[subjectKey] || ['🧠'])[index % 6];
+  }
+
+  function renderCurriculumSubject(subjectKey = curriculumCurrentSubject) {
+    const grade = selectedCurriculumGrade();
+    if (!grade) return;
+    const meta = CURRICULUM_SUBJECTS[subjectKey] || CURRICULUM_SUBJECTS.math;
+    const topics = CURRICULUM[String(grade)]?.[subjectKey] || [];
+    curriculumCurrentSubject = subjectKey;
+    syncGradeSelectors();
+
+    if (curriculumSubjectIcon) curriculumSubjectIcon.textContent = meta.icon;
+    if (curriculumSubjectKicker) curriculumSubjectKicker.textContent = `${meta.name.toLocaleUpperCase('es-CO')} · ${grade}.º`;
+    if (curriculumSubjectTitle) curriculumSubjectTitle.textContent = meta.name;
+    if (curriculumSubjectDescription) curriculumSubjectDescription.textContent = meta.description;
+    if (curriculumGradeTitle) curriculumGradeTitle.textContent = `${grade}.º`;
+    if (curriculumTopicCount) curriculumTopicCount.textContent = `${topics.length} aprendizajes`;
+    if (curriculumCompetencyText) curriculumCompetencyText.textContent = meta.competency;
+
+    if (curriculumTopicGrid) {
+      curriculumTopicGrid.innerHTML = '';
+      const activity = curriculumActivity();
+      topics.forEach((topic, index) => {
+        const started = Boolean(activity.started?.[`${grade}:${subjectKey}:${topic.id}`]);
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = `curriculum-topic-card${started ? ' started' : ''}`;
+        btn.dataset.topicIndex = String(index);
+        btn.innerHTML = `
+          <span class="curriculum-topic-icon">${curriculumTopicIconFor(subjectKey,index)}</span>
+          <span class="curriculum-topic-copy">
+            <small>${String(index + 1).padStart(2,'0')} · ${started ? 'EXPLORADO' : 'APRENDIZAJE CLAVE'}</small>
+            <strong>${topic.title}</strong>
+            <em>${topic.goal}</em>
+            <b>${topic.skill}</b>
+          </span>
+          <span class="curriculum-topic-arrow">→</span>`;
+        btn.addEventListener('click', () => {
+          playTap();
+          showCurriculumTopic(subjectKey, index);
+        });
+        curriculumTopicGrid.appendChild(btn);
+      });
+    }
+  }
+
+  function hideCurriculumViews() {
+    if (curriculumSubjectHub) curriculumSubjectHub.hidden = true;
+    if (curriculumTopicHub) curriculumTopicHub.hidden = true;
+  }
+
+  function showCurriculumSubject(subjectKey = 'math') {
+    if (!commercialAccessGranted) {
+      showCommercialGate('Activa el plan familiar para explorar las materias con NOVA.');
+      return;
+    }
+    const grade = selectedCurriculumGrade();
+    if (!grade) {
+      showLearningHubView();
+      showToast('Primero elige el grado escolar para mostrarte la ruta correcta ✨', 3000);
+      return;
+    }
+
+    closeNavigationOverlays();
+    saveGameState();
+    saveNotebookState();
+    saveAcademyState();
+    if (intro) intro.hidden = true;
+    if (app) app.hidden = true;
+    if (learningHub) learningHub.hidden = true;
+    if (mathHub) mathHub.hidden = true;
+    if (novaTutorHub) novaTutorHub.hidden = true;
+    if (curriculumTopicHub) curriculumTopicHub.hidden = true;
+    if (curriculumSubjectHub) curriculumSubjectHub.hidden = false;
+    renderCurriculumSubject(subjectKey);
+    document.body.classList.remove('content-focus');
+    resetViewScroll(curriculumSubjectHub);
+  }
+
+  function showCurriculumTopic(subjectKey, index) {
+    const grade = selectedCurriculumGrade();
+    const meta = CURRICULUM_SUBJECTS[subjectKey];
+    const topic = CURRICULUM[String(grade)]?.[subjectKey]?.[index];
+    if (!grade || !meta || !topic) return;
+    curriculumCurrentSubject = subjectKey;
+    curriculumCurrentTopicIndex = index;
+
+    if (curriculumSubjectHub) curriculumSubjectHub.hidden = true;
+    if (curriculumTopicHub) curriculumTopicHub.hidden = false;
+    if (curriculumTopicIcon) curriculumTopicIcon.textContent = curriculumTopicIconFor(subjectKey,index);
+    if (curriculumTopicKicker) curriculumTopicKicker.textContent = `${meta.name.toLocaleUpperCase('es-CO')} · ${grade}.º`;
+    if (curriculumTopicTitle) curriculumTopicTitle.textContent = topic.title;
+    if (curriculumTopicGoal) curriculumTopicGoal.textContent = topic.goal;
+    if (curriculumTopicRealWorld) curriculumTopicRealWorld.textContent = topic.realWorld;
+    if (curriculumTopicSkill) curriculumTopicSkill.textContent = topic.skill;
+    if (curriculumDivisionLabBtn) curriculumDivisionLabBtn.hidden = !topic.legacyDivision;
+    resetViewScroll(curriculumTopicHub);
+  }
+
+  function currentCurriculumTopic() {
+    const grade = selectedCurriculumGrade();
+    const subjectKey = curriculumCurrentSubject;
+    const meta = CURRICULUM_SUBJECTS[subjectKey];
+    const topic = CURRICULUM[String(grade)]?.[subjectKey]?.[curriculumCurrentTopicIndex];
+    return { grade, subjectKey, meta, topic };
+  }
+
+  function practiceCurrentCurriculumTopic({ askOnly = false } = {}) {
+    const { grade, subjectKey, meta, topic } = currentCurriculumTopic();
+    if (!grade || !meta || !topic) return;
+    markCurriculumTopicStarted(subjectKey, grade, topic.id);
+    renderCurriculumHome();
+    renderParentCurriculumPlan();
+    showNovaTutorView();
+
+    if (!askOnly) {
+      const prompt = `Estoy en ${grade}.º de primaria y quiero reforzar ${topic.title} en ${meta.name}. ${topic.goal} Explícame primero la idea con un ejemplo corto y luego hazme una sola pregunta para que yo la intente. No me des la respuesta antes de que yo responda.`;
+      setTimeout(() => askGeneralNova(prompt, `Quiero practicar: ${topic.title}`), 140);
+    } else if (novaGeneralInput) {
+      novaGeneralInput.placeholder = `Pregunta sobre ${topic.title}…`;
+    }
+  }
+
   function updatePersonalization() {
     const name = explorerName();
     if (introChildName) introChildName.textContent = name.toLocaleUpperCase('es-CO');
@@ -363,6 +635,9 @@
         ? `${currentUser.email} · Perfil: ${name}`
         : 'Sin sesión iniciada.';
     }
+
+    renderCurriculumHome();
+    renderParentCurriculumPlan();
   }
 
   function formatCop(amount) {
@@ -605,16 +880,9 @@
 
   function updateHubProgress() {
     const snap = learningSnapshot();
+    const hasDivisionProgress = snap.atlasPct > 0 || snap.academyStarted || snap.atlasCompleted;
+    if (continueLearningBtn) continueLearningBtn.hidden = !hasDivisionProgress;
 
-    if (hubMathStatus) {
-      hubMathStatus.textContent = snap.atlasCompleted
-        ? (snap.academyStarted ? `División · práctica ${snap.academyPct}%` : 'División · comprensión completada')
-        : `División · comprensión · misión ${snap.currentMission + 1} de ${snap.total}`;
-    }
-    if (hubMathProgressBar) {
-      const combined = snap.atlasCompleted ? Math.round(50 + (snap.academyPct / 2)) : Math.round(snap.atlasPct / 2);
-      hubMathProgressBar.style.width = `${combined}%`;
-    }
 
     if (continueLearningTitle) {
       continueLearningTitle.textContent = snap.atlasCompleted
@@ -661,6 +929,7 @@
           ? `Continúa con “${snap.route.title}”. NOVA retomará el punto donde quedaste.`
           : 'Ya comprendiste la base. Ahora puedes empezar a resolver divisiones paso a paso con NOVA.';
     }
+    renderCurriculumHome();
   }
 
   function continueLearning() {
@@ -701,7 +970,9 @@
     if (app) app.hidden = true;
     if (mathHub) mathHub.hidden = true;
     if (novaTutorHub) novaTutorHub.hidden = true;
+    hideCurriculumViews();
     if (learningHub) learningHub.hidden = false;
+    renderCurriculumHome();
     document.body.classList.remove('content-focus');
     resetViewScroll(learningHub);
   }
@@ -720,6 +991,7 @@
     if (app) app.hidden = true;
     if (learningHub) learningHub.hidden = true;
     if (novaTutorHub) novaTutorHub.hidden = true;
+    hideCurriculumViews();
     if (mathHub) mathHub.hidden = false;
     document.body.classList.remove('content-focus');
     resetViewScroll(mathHub);
@@ -740,6 +1012,7 @@
     if (app) app.hidden = true;
     if (learningHub) learningHub.hidden = true;
     if (mathHub) mathHub.hidden = true;
+    hideCurriculumViews();
     if (novaTutorHub) novaTutorHub.hidden = false;
 
     renderGeneralTutorConversation();
@@ -760,6 +1033,7 @@
     if (learningHub) learningHub.hidden = true;
     if (mathHub) mathHub.hidden = true;
     if (novaTutorHub) novaTutorHub.hidden = true;
+    hideCurriculumViews();
     const introSeen = localStorage.getItem('emilianoIntroSeen') === 'yes';
     if (respectIntro && !introSeen) {
       if (app) app.hidden = true;
@@ -800,6 +1074,7 @@
     if (learningHub) learningHub.hidden = true;
     if (mathHub) mathHub.hidden = true;
     if (novaTutorHub) novaTutorHub.hidden = true;
+    hideCurriculumViews();
     if (intro) intro.hidden = true;
     if (app) app.hidden = false;
     openNotebookModule();
@@ -885,6 +1160,7 @@
     if (learningHub) learningHub.hidden = true;
     if (mathHub) mathHub.hidden = true;
     if (novaTutorHub) novaTutorHub.hidden = true;
+    hideCurriculumViews();
     if (intro) intro.hidden = true;
     if (app) app.hidden = true;
     document.body.classList.add('access-locked');
@@ -2104,6 +2380,7 @@
     if (!commercialAccessGranted || !learningProgressModal) return;
     playTap();
     renderParentLearningProgress();
+    renderParentCurriculumPlan();
     settingsModal.hidden = true;
     learningProgressModal.hidden = false;
     document.body.classList.add('modal-open');
@@ -4317,17 +4594,18 @@
     if (novaGeneralSendBtn) novaGeneralSendBtn.disabled = isBusy;
   }
 
-  async function askGeneralNova(question = '') {
+  async function askGeneralNova(question = '', displayQuestion = '') {
     if (generalTutorBusy) return;
 
     const cleanQuestion = String(question || '').trim().slice(0, 420);
+    const visibleQuestion = String(displayQuestion || cleanQuestion).trim().slice(0, 420);
     if (!cleanQuestion) return;
 
     const requestId = ++generalTutorRequestId;
     const previousHistory = generalTutorHistory.slice(-12);
 
-    appendGeneralTutorMessage('user', cleanQuestion);
-    generalTutorHistory.push({ role: 'user', content: cleanQuestion });
+    appendGeneralTutorMessage('user', visibleQuestion);
+    generalTutorHistory.push({ role: 'user', content: visibleQuestion });
     generalTutorHistory = generalTutorHistory.slice(-12);
     saveGeneralTutorSession();
 
@@ -5116,10 +5394,51 @@
     }
   });
 
-  mathSubjectBtn?.addEventListener('click', () => {
+  document.querySelectorAll('.curriculum-subject-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      playTap();
+      showCurriculumSubject(btn.dataset.subject || 'math');
+    });
+  });
+
+  [gradeSelector, subjectGradeSelector].forEach(container => {
+    container?.querySelectorAll('[data-grade]').forEach(btn => {
+      btn.addEventListener('click', () => setCurriculumGrade(btn.dataset.grade));
+    });
+  });
+
+  curriculumSubjectBackBtn?.addEventListener('click', () => {
     playTap();
-    updatePersonalization();
+    showLearningHubView();
+  });
+  curriculumSubjectProfileBtn?.addEventListener('click', () => { playTap(); openSettingsView(); });
+  curriculumTopicProfileBtn?.addEventListener('click', () => { playTap(); openSettingsView(); });
+  curriculumTopicBackBtn?.addEventListener('click', () => {
+    playTap();
+    showCurriculumSubject(curriculumCurrentSubject);
+  });
+  curriculumPracticeBtn?.addEventListener('click', () => {
+    playTap();
+    practiceCurrentCurriculumTopic();
+  });
+  curriculumAskBtn?.addEventListener('click', () => {
+    playTap();
+    practiceCurrentCurriculumTopic({ askOnly:true });
+  });
+  curriculumDivisionLabBtn?.addEventListener('click', () => {
+    playTap();
     showMathHubView();
+  });
+  novaNewConversationBtn?.addEventListener('click', () => {
+    playTap();
+    clearGeneralTutorSession();
+    renderGeneralTutorConversation();
+    if (novaGeneralInput) {
+      novaGeneralInput.value = '';
+      novaGeneralInput.placeholder = 'Escribe tu pregunta aquí…';
+      novaGeneralInput.focus({ preventScroll:true });
+    }
+    showToast('Nueva conversación lista ✨', 1800);
   });
 
   continueLearningBtn?.addEventListener('click', () => {
@@ -5134,7 +5453,7 @@
 
   mathBackBtn?.addEventListener('click', () => {
     playTap();
-    showLearningHubView();
+    showCurriculumSubject('math');
   });
 
   hubProfileBtn?.addEventListener('click', () => {
