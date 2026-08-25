@@ -1,31 +1,23 @@
-# La Expedición · V18
+# Aprende con NOVA
 
-Versión productiva enfocada en **acceso familiar y experiencia de inicio de sesión**.
+Producto de **NOVA Educación** para refuerzo escolar personalizado de niños de 1.º a 5.º.
 
-## Cambios de esta versión
+## Experiencia actual
 
-- El formulario de acceso queda centrado dentro de la tarjeta en PC, tablet y celular.
-- Después de iniciar sesión aparece una transición neutra: **“Preparando tu aventura…”**.
-- La pantalla de pago **no se muestra** hasta que `/api/subscription-status` confirme que la cuenta no tiene acceso vigente.
-- Una cuenta con plan activo —incluido acceso vigente con renovación desactivada— entra directamente a La Expedición.
-- Si el estado del plan no se puede verificar por un problema temporal, la app **no ofrece pagar**. Muestra “Intentar de nuevo” para evitar posibles dobles cobros.
-- Después de crear un perfil infantil también se verifica primero el acceso antes de presentar el checkout.
-- El checkout de dos columnas se reserva para escritorios amplios; laptops y tablets horizontales usan una columna centrada para evitar recortes.
-- Se eliminaron mensajes intermedios como “cuenta y progreso listos” del recorrido normal.
-- Se agregó favicon propio y se retiró el archivo público de previsualización de desarrollo.
+- Cuenta familiar y perfil infantil.
+- Matemáticas como primera materia estructurada.
+- Progreso por habilidades.
+- NOVA como profe de refuerzo dentro de las actividades.
+- Módulo principal **Pregúntale a NOVA** para consultar directamente dudas o tareas de cualquier materia, sin escoger una categoría antes.
+- Plan familiar con Mercado Pago, consulta de estado y cancelación de renovación.
+- Progreso local + sincronización con Supabase.
 
-## No cambia
+## Importante
 
-- Mercado Pago / CardForm.
-- Cancelación de renovación implementada en V17.1.
-- Supabase y tablas actuales.
-- Webhooks.
-- NOVA y `/api/tutor`.
-- Progreso local + nube.
-- Contenido pedagógico.
+El módulo **Pregúntale a NOVA** reutiliza `/api/tutor` con un modo general. No modifica la lógica de cobros, suscripciones, cancelación, progreso ni las actividades de Matemáticas.
 
 ## Despliegue
 
 Reemplaza la versión anterior por esta carpeta y haz un redeploy en Vercel.
 
-**No requiere nuevas variables de entorno ni nuevas tablas.**
+No requiere nuevas variables de entorno ni nuevas tablas.

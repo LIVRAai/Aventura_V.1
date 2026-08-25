@@ -3850,3 +3850,285 @@ body {
   .access-brand h1 { line-height:1.02; }
   .access-lead strong { font-size:.98rem; }
 }
+
+
+/* ===== V20 · PREGÚNTALE A NOVA · TUTOR GENERAL ===== */
+.nova-direct-card {
+  position:relative;
+  isolation:isolate;
+  width:100%;
+  margin:18px 0 24px;
+  padding:18px 20px;
+  display:grid;
+  grid-template-columns:auto minmax(0,1fr) auto;
+  align-items:center;
+  gap:16px;
+  overflow:hidden;
+  border:1px solid rgba(160,132,255,.38);
+  border-radius:28px;
+  background:
+    radial-gradient(circle at 86% 10%,rgba(88,230,255,.25),transparent 30%),
+    linear-gradient(135deg,rgba(101,75,232,.90),rgba(31,42,111,.96) 58%,rgba(14,77,112,.94));
+  color:#fff;
+  text-align:left;
+  box-shadow:0 22px 48px rgba(26,22,91,.28);
+  cursor:pointer;
+  transition:transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+}
+.nova-direct-card::after {
+  content:"";
+  position:absolute;
+  inset:auto -40px -70px auto;
+  width:170px;
+  height:170px;
+  border-radius:50%;
+  background:rgba(255,216,77,.14);
+  filter:blur(2px);
+  z-index:-1;
+}
+.nova-direct-card:hover {
+  transform:translateY(-3px);
+  border-color:rgba(88,230,255,.55);
+  box-shadow:0 28px 58px rgba(26,22,91,.34);
+}
+.nova-direct-card:active { transform:translateY(1px) scale(.995); }
+.nova-direct-avatar {
+  width:58px;
+  height:58px;
+  display:grid;
+  place-items:center;
+  border-radius:20px;
+  background:linear-gradient(145deg,#fff1a6,#ffd84d);
+  color:#4433a8;
+  font-size:1.55rem;
+  font-weight:1000;
+  box-shadow:0 12px 28px rgba(255,216,77,.24);
+}
+.nova-direct-copy { min-width:0;display:block; }
+.nova-direct-copy small {
+  display:block;
+  margin-bottom:4px;
+  color:#8cf2ff;
+  font-size:.64rem;
+  font-weight:1000;
+  letter-spacing:.11em;
+}
+.nova-direct-copy strong {
+  display:block;
+  font-size:clamp(1.18rem,2.5vw,1.5rem);
+  line-height:1.05;
+}
+.nova-direct-copy em {
+  display:block;
+  margin-top:6px;
+  color:rgba(246,248,255,.80);
+  font-size:.79rem;
+  line-height:1.4;
+  font-style:normal;
+}
+.nova-direct-arrow {
+  width:42px;
+  height:42px;
+  display:grid;
+  place-items:center;
+  border-radius:15px;
+  background:rgba(255,255,255,.12);
+  border:1px solid rgba(255,255,255,.13);
+  color:#fff;
+  font-size:1.2rem;
+  font-weight:1000;
+}
+
+.nova-tutor-hub {
+  min-height:100dvh;
+  padding-bottom:max(28px,env(safe-area-inset-bottom));
+}
+.nova-tutor-shell { width:min(100%,900px); }
+.nova-tutor-page-head { margin-bottom:18px; }
+
+.nova-tutor-hero {
+  display:grid;
+  grid-template-columns:auto minmax(0,1fr);
+  align-items:center;
+  gap:18px;
+  padding:22px 24px;
+  border-radius:30px;
+  border:1px solid rgba(157,124,255,.28);
+  background:
+    radial-gradient(circle at 90% 0%,rgba(88,230,255,.18),transparent 34%),
+    linear-gradient(145deg,rgba(157,124,255,.16),rgba(255,255,255,.07));
+  box-shadow:0 20px 48px rgba(0,0,0,.17);
+}
+.nova-tutor-orb {
+  width:72px;
+  height:72px;
+  display:grid;
+  place-items:center;
+  border-radius:25px;
+  background:linear-gradient(145deg,#fff2a6,#ffd84d);
+  color:#4c38b5;
+  font-size:1.9rem;
+  font-weight:1000;
+  box-shadow:0 16px 36px rgba(255,216,77,.20);
+}
+.nova-tutor-hero .eyebrow { margin-bottom:5px;color:#78edff; }
+.nova-tutor-hero h1 {
+  margin:0;
+  font-size:clamp(1.75rem,4vw,2.45rem);
+  letter-spacing:-.045em;
+}
+.nova-tutor-hero p:last-child {
+  margin:8px 0 0;
+  max-width:680px;
+  color:rgba(240,244,255,.78);
+  font-size:.92rem;
+  line-height:1.55;
+}
+
+.nova-general-card {
+  margin-top:16px;
+  padding:18px;
+  min-height:470px;
+  display:flex;
+  flex-direction:column;
+  border-radius:30px;
+  border:1px solid rgba(255,255,255,.12);
+  background:linear-gradient(155deg,rgba(10,16,55,.78),rgba(20,34,84,.72));
+  box-shadow:0 24px 56px rgba(0,0,0,.20);
+  backdrop-filter:blur(12px);
+}
+.nova-general-chat {
+  flex:1;
+  min-height:300px;
+  max-height:min(56dvh,540px);
+  margin-top:0;
+  padding:4px 4px 14px;
+}
+.nova-general-card .tutor-message {
+  width:min(84%,620px);
+  padding:13px 15px;
+  border-radius:19px;
+}
+.nova-general-card .nova-message {
+  background:rgba(255,255,255,.09);
+  border-color:rgba(255,255,255,.11);
+}
+.nova-general-card .emi-message {
+  background:linear-gradient(145deg,rgba(88,230,255,.20),rgba(157,124,255,.16));
+  border-color:rgba(88,230,255,.24);
+}
+
+.nova-general-form {
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto;
+  gap:10px;
+  align-items:end;
+  padding:12px;
+  border-radius:23px;
+  background:rgba(255,255,255,.075);
+  border:1px solid rgba(255,255,255,.11);
+}
+.nova-general-form textarea {
+  width:100%;
+  min-height:58px;
+  max-height:150px;
+  resize:vertical;
+  border:0;
+  outline:0;
+  border-radius:16px;
+  padding:15px 16px;
+  background:rgba(5,11,35,.60);
+  color:#fff;
+  font:inherit;
+  font-size:16px;
+  line-height:1.45;
+}
+.nova-general-form textarea::placeholder { color:rgba(235,240,255,.48); }
+.nova-general-form textarea:focus {
+  box-shadow:0 0 0 3px rgba(88,230,255,.10);
+  background:rgba(5,11,35,.76);
+}
+.nova-general-form button {
+  min-height:58px;
+  padding:0 18px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  border:0;
+  border-radius:16px;
+  background:linear-gradient(145deg,#ffd84d,#ffec94);
+  color:#24235d;
+  font-weight:1000;
+  cursor:pointer;
+  box-shadow:0 8px 18px rgba(255,216,77,.14);
+}
+.nova-general-form button:disabled,
+.nova-general-form textarea:disabled {
+  opacity:.55;
+  cursor:progress;
+}
+.nova-general-note {
+  margin:10px 4px 0;
+  color:rgba(232,237,255,.55);
+  font-size:.7rem;
+  line-height:1.4;
+}
+
+@media (max-width:720px) {
+  .nova-direct-card {
+    margin:14px 0 20px;
+    padding:16px;
+    gap:12px;
+    border-radius:24px;
+  }
+  .nova-direct-avatar { width:52px;height:52px;border-radius:18px; }
+  .nova-direct-copy em { font-size:.75rem; }
+  .nova-tutor-hero {
+    padding:18px;
+    gap:14px;
+    border-radius:25px;
+  }
+  .nova-tutor-orb { width:60px;height:60px;border-radius:21px;font-size:1.65rem; }
+  .nova-general-card {
+    min-height:calc(100dvh - 280px);
+    padding:13px;
+    border-radius:25px;
+  }
+  .nova-general-chat { min-height:260px;max-height:none; }
+  .nova-general-card .tutor-message { width:91%; }
+}
+
+@media (max-width:520px) {
+  .nova-direct-card {
+    grid-template-columns:auto minmax(0,1fr);
+  }
+  .nova-direct-arrow { display:none; }
+  .nova-direct-copy small { font-size:.58rem; }
+  .nova-direct-copy strong { font-size:1.13rem; }
+  .nova-direct-copy em { margin-top:4px; }
+  .nova-tutor-page-head { margin-bottom:12px; }
+  .nova-tutor-hero {
+    grid-template-columns:1fr;
+    padding:17px 15px;
+  }
+  .nova-tutor-orb { width:54px;height:54px;border-radius:18px; }
+  .nova-tutor-hero h1 { font-size:1.72rem; }
+  .nova-tutor-hero p:last-child { font-size:.82rem; }
+  .nova-general-card {
+    margin-top:12px;
+    min-height:calc(100dvh - 300px);
+    padding:11px;
+  }
+  .nova-general-form {
+    grid-template-columns:1fr;
+    padding:9px;
+  }
+  .nova-general-form button {
+    width:100%;
+    min-height:50px;
+  }
+  .nova-general-card .tutor-message { width:95%; }
+  .nova-general-note { text-align:center; }
+}
+

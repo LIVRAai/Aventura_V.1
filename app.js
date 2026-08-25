@@ -115,6 +115,14 @@
   const finalChildName = $('#finalChildName');
   const learningHub = $('#learningHub');
   const mathHub = $('#mathHub');
+  const novaTutorHub = $('#novaTutorHub');
+  const askNovaHomeBtn = $('#askNovaHomeBtn');
+  const novaTutorBackBtn = $('#novaTutorBackBtn');
+  const novaTutorProfileBtn = $('#novaTutorProfileBtn');
+  const novaGeneralChat = $('#novaGeneralChat');
+  const novaGeneralForm = $('#novaGeneralForm');
+  const novaGeneralInput = $('#novaGeneralInput');
+  const novaGeneralSendBtn = $('#novaGeneralSendBtn');
   const hubChildName = $('#hubChildName');
   const hubProfileBtn = $('#hubProfileBtn');
   const mathProfileBtn = $('#mathProfileBtn');
@@ -692,6 +700,7 @@
     if (intro) intro.hidden = true;
     if (app) app.hidden = true;
     if (mathHub) mathHub.hidden = true;
+    if (novaTutorHub) novaTutorHub.hidden = true;
     if (learningHub) learningHub.hidden = false;
     document.body.classList.remove('content-focus');
     resetViewScroll(learningHub);
@@ -710,9 +719,35 @@
     if (intro) intro.hidden = true;
     if (app) app.hidden = true;
     if (learningHub) learningHub.hidden = true;
+    if (novaTutorHub) novaTutorHub.hidden = true;
     if (mathHub) mathHub.hidden = false;
     document.body.classList.remove('content-focus');
     resetViewScroll(mathHub);
+  }
+
+  function showNovaTutorView() {
+    if (!commercialAccessGranted) {
+      showCommercialGate('Activa el plan familiar para preguntarle a NOVA.');
+      return;
+    }
+
+    closeNavigationOverlays();
+    saveGameState();
+    saveNotebookState();
+    saveAcademyState();
+
+    if (intro) intro.hidden = true;
+    if (app) app.hidden = true;
+    if (learningHub) learningHub.hidden = true;
+    if (mathHub) mathHub.hidden = true;
+    if (novaTutorHub) novaTutorHub.hidden = false;
+
+    document.body.classList.remove('content-focus');
+    resetViewScroll(novaTutorHub);
+
+    setTimeout(() => {
+      novaGeneralInput?.focus({ preventScroll: true });
+    }, 80);
   }
 
   function showAtlasView({ respectIntro = true } = {}) {
@@ -723,6 +758,7 @@
     closeNavigationOverlays();
     if (learningHub) learningHub.hidden = true;
     if (mathHub) mathHub.hidden = true;
+    if (novaTutorHub) novaTutorHub.hidden = true;
     const introSeen = localStorage.getItem('emilianoIntroSeen') === 'yes';
     if (respectIntro && !introSeen) {
       if (app) app.hidden = true;
@@ -762,6 +798,7 @@
     closeNavigationOverlays();
     if (learningHub) learningHub.hidden = true;
     if (mathHub) mathHub.hidden = true;
+    if (novaTutorHub) novaTutorHub.hidden = true;
     if (intro) intro.hidden = true;
     if (app) app.hidden = false;
     openNotebookModule();
@@ -831,6 +868,7 @@
     document.body.classList.remove('access-locked');
     if (learningHub && app?.hidden) learningHub.hidden = false;
     if (mathHub) mathHub.hidden = true;
+    if (novaTutorHub) novaTutorHub.hidden = true;
     updateHubProgress();
 
     if (reason === 'owner') {
@@ -845,6 +883,7 @@
     if (accessGate) accessGate.hidden = false;
     if (learningHub) learningHub.hidden = true;
     if (mathHub) mathHub.hidden = true;
+    if (novaTutorHub) novaTutorHub.hidden = true;
     if (intro) intro.hidden = true;
     if (app) app.hidden = true;
     document.body.classList.add('access-locked');
@@ -3400,6 +3439,10 @@
   let feedbackRequestId = 0;
   let tutorHistory = [];
   let tutorBusy = false;
+
+  let generalTutorHistory = [];
+  let generalTutorBusy = false;
+  let generalTutorRequestId = 0;
   let currentMissionCompleted = false;
   let gameCompleted = Boolean(savedGame?.gameCompleted);
   let mechanicState = {};
@@ -4135,6 +4178,84 @@
     aiTutorQuickBtns.forEach(btn => btn.disabled = isBusy);
   }
 
+  function appendGeneralTutorMessage(role, text, pending = false) {
+    if (!novaGeneralChat) return null;
+
+    const wrap = document.createElement('div');
+    wrap.className = `tutor-message ${role === 'user' ? 'emi-message' : 'nova-message'}${pending ? ' pending' : ''}`;
+
+    const label = document.createElement('span');
+    label.textContent = role === 'user' ? explorerLabel() : 'NOVA';
+
+    const p = document.createElement('p');
+    p.textContent = text;
+
+    wrap.append(label, p);
+    novaGeneralChat.appendChild(wrap);
+    novaGeneralChat.scrollTop = novaGeneralChat.scrollHeight;
+    return wrap;
+  }
+
+  function setGeneralTutorBusy(isBusy) {
+    generalTutorBusy = isBusy;
+    if (novaGeneralInput) novaGeneralInput.disabled = isBusy;
+    if (novaGeneralSendBtn) novaGeneralSendBtn.disabled = isBusy;
+  }
+
+  async function askGeneralNova(question = '') {
+    if (generalTutorBusy) return;
+
+    const cleanQuestion = String(question || '').trim().slice(0, 420);
+    if (!cleanQuestion) return;
+
+    const requestId = ++generalTutorRequestId;
+    const previousHistory = generalTutorHistory.slice(-12);
+
+    appendGeneralTutorMessage('user', cleanQuestion);
+    generalTutorHistory.push({ role: 'user', content: cleanQuestion });
+
+    const pending = appendGeneralTutorMessage('assistant', 'Estoy pensando cómo explicártelo…', true);
+    setGeneralTutorBusy(true);
+
+    try {
+      const res = await fetch('/api/tutor', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          mode: 'general',
+          question: cleanQuestion,
+          history: previousHistory,
+          studentName: explorerName()
+        })
+      });
+
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.error || 'No pude conectar con NOVA.');
+
+      if (requestId !== generalTutorRequestId) return;
+
+      pending?.remove();
+      const message = data.message || 'Cuéntame un poco más sobre lo que necesitas entender y lo revisamos juntos.';
+      appendGeneralTutorMessage('assistant', message);
+      generalTutorHistory.push({ role: 'assistant', content: message });
+      generalTutorHistory = generalTutorHistory.slice(-12);
+      playTap();
+    } catch (error) {
+      if (requestId !== generalTutorRequestId) return;
+
+      pending?.remove();
+      appendGeneralTutorMessage(
+        'assistant',
+        'No pude conectarme en este momento. Intenta preguntarme de nuevo en unos segundos.'
+      );
+    } finally {
+      if (requestId === generalTutorRequestId) {
+        setGeneralTutorBusy(false);
+        novaGeneralInput?.focus({ preventScroll: true });
+      }
+    }
+  }
+
   async function requestTutor(reason = 'question', question = '') {
     if (tutorBusy) return;
     const m = missions[mission];
@@ -4846,6 +4967,36 @@
     askNotebookNova(question);
   });
 
+
+  askNovaHomeBtn?.addEventListener('click', () => {
+    playTap();
+    showNovaTutorView();
+  });
+
+  novaTutorBackBtn?.addEventListener('click', () => {
+    playTap();
+    showLearningHubView();
+  });
+
+  novaTutorProfileBtn?.addEventListener('click', () => {
+    playTap();
+    openSettingsView();
+  });
+
+  novaGeneralForm?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const question = String(novaGeneralInput?.value || '').trim();
+    if (!question) return;
+    if (novaGeneralInput) novaGeneralInput.value = '';
+    askGeneralNova(question);
+  });
+
+  novaGeneralInput?.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      novaGeneralForm?.requestSubmit();
+    }
+  });
 
   mathSubjectBtn?.addEventListener('click', () => {
     playTap();

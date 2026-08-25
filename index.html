@@ -33,7 +33,7 @@
           <div class="access-friends" aria-hidden="true"><span>🦎</span><span>🐼</span><span>🐙</span></div>
         </div>
         <div>
-          <p class="eyebrow"></p>
+          <p class="eyebrow">NOVA EDUCACIÓN</p>
           <h1>Aprende con <span>NOVA</span></h1>
         </div>
       </div>
@@ -287,6 +287,16 @@
         <b aria-hidden="true">→</b>
       </button>
 
+      <button id="askNovaHomeBtn" class="nova-direct-card" type="button" aria-label="Pregúntale a NOVA">
+        <span class="nova-direct-avatar" aria-hidden="true">N</span>
+        <span class="nova-direct-copy">
+          <small>TU PROFE DE REFUERZO EN CASA</small>
+          <strong>Pregúntale a NOVA</strong>
+          <em>¿Tienes una duda o una tarea? Escríbela y la vemos juntos.</em>
+        </span>
+        <span class="nova-direct-arrow" aria-hidden="true">→</span>
+      </button>
+
       <section class="hub-section" aria-labelledby="subjectsTitle">
         <div class="hub-section-head">
           <div>
@@ -325,6 +335,46 @@
             </span>
           </article>
         </div>
+      </section>
+    </div>
+  </section>
+
+  <section id="novaTutorHub" class="learning-hub nova-tutor-hub" hidden aria-label="Pregúntale a NOVA">
+    <div class="hub-shell nova-tutor-shell">
+      <header class="subject-page-head nova-tutor-page-head">
+        <button id="novaTutorBackBtn" class="hierarchy-back" type="button">← Inicio</button>
+        <button id="novaTutorProfileBtn" class="profile-btn" type="button" aria-label="Abrir perfil y ajustes">
+          <span>👤</span><small>Perfil</small>
+        </button>
+      </header>
+
+      <section class="nova-tutor-hero">
+        <div class="nova-tutor-orb" aria-hidden="true">N</div>
+        <div>
+          <p class="eyebrow">NOVA · TU PROFE DE REFUERZO</p>
+          <h1>Pregúntale a NOVA</h1>
+          <p>Cuéntame qué no entendiste, qué tarea estás haciendo o qué quieres practicar. Lo vemos juntos, paso a paso.</p>
+        </div>
+      </section>
+
+      <section class="nova-general-card" aria-label="Conversación con NOVA">
+        <div id="novaGeneralChat" class="tutor-chat nova-general-chat" aria-live="polite">
+          <div class="tutor-message nova-message">
+            <span>NOVA</span>
+            <p>Hola 👋. Soy NOVA. ¿Qué quieres preguntarme hoy?</p>
+          </div>
+        </div>
+
+        <form id="novaGeneralForm" class="nova-general-form">
+          <label for="novaGeneralInput" class="sr-only">Escribe tu pregunta para NOVA</label>
+          <textarea id="novaGeneralInput" rows="2" maxlength="420" placeholder="Escribe tu pregunta aquí…"></textarea>
+          <button id="novaGeneralSendBtn" type="submit">
+            <span>Preguntar</span>
+            <b aria-hidden="true">➜</b>
+          </button>
+        </form>
+
+        <p class="nova-general-note">NOVA te ayuda a entender. No necesitas escoger una materia antes de preguntar.</p>
       </section>
     </div>
   </section>
