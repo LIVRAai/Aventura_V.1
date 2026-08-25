@@ -70,6 +70,8 @@
   const mpSubmitBtn = $('#form-checkout__submit');
   const verifySubscriptionBtn = $('#verifySubscriptionBtn');
   const subscriptionPrice = $('#subscriptionPrice');
+  const subscribePriceText = $('#subscribePriceText');
+  const mpSubmitPriceText = $('#mpSubmitPriceText');
   const accessStatus = $('#accessStatus');
   const ownerAccessBtn = $('#ownerAccessBtn');
   const ownerPinForm = $('#ownerPinForm');
@@ -353,9 +355,9 @@
     paymentConfigured: false,
     publicKey: '',
     flow: 'authorized-card-token',
-    amount: 24900,
+    amount: null,
     currency: 'COP',
-    formattedAmount: '$24.900'
+    formattedAmount: ''
   };
 
   function readLocalJson(key) {
@@ -695,7 +697,7 @@
       accessUntil: data.accessUntil || null,
       canceledAt: data.canceledAt || null,
       nextPaymentDate: data.nextPaymentDate || null,
-      amount: data.amount ?? subscriptionConfig.amount ?? 24900,
+      amount: data.amount ?? subscriptionConfig.amount ?? null,
       currency: data.currency || subscriptionConfig.currency || 'COP'
     };
   }
@@ -1178,6 +1180,31 @@
     return token ? { ...extra, Authorization: `Bearer ${token}` } : extra;
   }
 
+  function currentSubscriptionPriceLabel() {
+    const amount = Number(subscriptionConfig.amount);
+    if (!Number.isFinite(amount) || amount <= 0) return '';
+    return subscriptionConfig.formattedAmount || formatCop(amount);
+  }
+
+  function renderSubscriptionPrice() {
+    const price = currentSubscriptionPriceLabel();
+    const currency = subscriptionConfig.currency || 'COP';
+
+    if (subscriptionPrice) {
+      subscriptionPrice.innerHTML = price
+        ? `${price} <small>${currency} / mes</small>`
+        : '<span class="price-loading">Precio no disponible</span>';
+    }
+
+    if (subscribePriceText) {
+      subscribePriceText.textContent = price ? `${price} / mes` : 'Precio no disponible';
+    }
+
+    if (mpSubmitPriceText) {
+      mpSubmitPriceText.textContent = price ? `${price} / mes` : 'Precio no disponible';
+    }
+  }
+
   async function loadPublicConfig() {
     try {
       const res = await fetch('/api/public-config', { headers: { Accept: 'application/json' }, cache: 'no-store' });
@@ -1207,14 +1234,7 @@
       setAuthStatus('No pudimos iniciar la cuenta en este momento. Intenta de nuevo en unos minutos.', 'error');
     }
 
-    if (subscriptionPrice) {
-      const price = subscriptionConfig.formattedAmount || formatCop(subscriptionConfig.amount);
-      subscriptionPrice.innerHTML = `${price} <small>${subscriptionConfig.currency || 'COP'} / mes</small>`;
-    }
-    if (mpSubmitBtn) {
-      const price = subscriptionConfig.formattedAmount || formatCop(subscriptionConfig.amount);
-      mpSubmitBtn.textContent = `Activar plan · ${price}/mes`;
-    }
+    renderSubscriptionPrice();
   }
 
   function setPaymentBusy(busy, message = '') {
@@ -1323,6 +1343,10 @@
       if (!subscriptionConfig.publicKey) {
         throw new Error('El pago no está disponible en este momento.');
       }
+      const configuredAmount = Number(subscriptionConfig.amount);
+      if (!Number.isFinite(configuredAmount) || configuredAmount <= 0) {
+        throw new Error('El precio del plan no está disponible en este momento.');
+      }
       if (!window.MercadoPago) {
         throw new Error('No pudimos cargar el formulario de pago. Revisa tu conexión e intenta nuevamente.');
       }
@@ -1332,7 +1356,7 @@
 
       mercadoPagoClient = new window.MercadoPago(subscriptionConfig.publicKey, { locale: 'es-CO' });
       mercadoPagoCardForm = mercadoPagoClient.cardForm({
-        amount: String(Number(subscriptionConfig.amount || 24900)),
+        amount: String(configuredAmount),
         iframe: true,
         form: {
           id: 'form-checkout',

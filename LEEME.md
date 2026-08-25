@@ -38,3 +38,14 @@ La experiencia principal ahora se organiza por grado y por cinco materias: Matem
 El laboratorio de división existente se conserva completo como entrenamiento intensivo, con el mismo progreso, almacenamiento e integraciones. También se conserva **Pregúntale a NOVA** como tutor libre para cualquier materia.
 
 Esta versión no modifica archivos de `/api`, variables de entorno, Supabase, Mercado Pago, webhooks ni la estructura de sincronización existente. El grado y la actividad curricular se guardan únicamente como preferencias locales del navegador para evitar cambios de esquema.
+
+## V21.1 · precio centralizado
+
+El precio visible del plan ya no está escrito manualmente en la interfaz. La UI y el checkout leen `SUBSCRIPTION_AMOUNT` desde Vercel a través de la configuración pública del servidor.
+
+Para cambiar el precio:
+1. cambia `SUBSCRIPTION_AMOUNT` en Vercel;
+2. haz un redeploy;
+3. la nueva tarifa aparecerá automáticamente en la experiencia de compra.
+
+Las suscripciones ya creadas mantienen su monto contractual actual.

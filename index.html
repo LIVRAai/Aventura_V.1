@@ -132,7 +132,7 @@
                   <span>PLAN FAMILIAR</span>
                   <small>Acceso mensual</small>
                 </div>
-                <strong id="subscriptionPrice">$24.900 <small>COP / mes</small></strong>
+                <strong id="subscriptionPrice"><span class="price-loading">Cargando precio…</span></strong>
               </div>
               <ul class="premium-benefits">
                 <li><span>✓</span><div><strong>Refuerzo por habilidades</strong><small>La práctica se organiza según lo que el niño necesita reforzar.</small></div></li>
@@ -157,7 +157,7 @@
 
             <form id="subscriptionForm" class="access-form compact-form premium-start-form">
               <button id="subscribeBtn" class="access-primary premium-primary-cta" type="submit">
-                <span>Continuar al pago</span><small>$24.900 / mes</small>
+                <span>Continuar al pago</span><small id="subscribePriceText">Cargando precio…</small>
               </button>
             </form>
 
@@ -216,7 +216,7 @@
 
                 <progress id="paymentProgress" class="mp-payment-progress" value="0" max="1">Procesando...</progress>
                 <button id="form-checkout__submit" class="access-primary mp-submit-btn premium-primary-cta" type="submit" disabled>
-                  <span>Activar plan familiar</span><small>$24.900 / mes</small>
+                  <span>Activar plan familiar</span><small id="mpSubmitPriceText">Cargando precio…</small>
                 </button>
                 <div class="premium-payment-foot">
                   <span>🔒</span>
@@ -1047,7 +1047,7 @@
               <p id="planStatusDetail">Tu plan se renueva mensualmente.</p>
             </div>
             <div class="plan-status-price">
-              <strong id="planManagementPrice">$24.900</strong>
+              <strong id="planManagementPrice">—</strong>
               <small>COP / mes</small>
             </div>
           </div>

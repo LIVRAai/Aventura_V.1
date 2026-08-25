@@ -104,3 +104,26 @@ Las filas antiguas `pending` pueden permanecer como historial. La aplicación da
 ## Cancelación autoservicio
 
 La V17 agrega `POST /api/subscription-cancel`. No necesita variables nuevas: usa `MERCADOPAGO_ACCESS_TOKEN` y la sesión autenticada de Supabase ya existentes. Tampoco requiere tablas ni columnas nuevas.
+
+## Precio administrado desde Vercel
+
+El precio comercial de nuevas suscripciones se controla con una sola variable:
+
+`SUBSCRIPTION_AMOUNT`
+
+Ejemplo para cobrar $29.900 COP al mes:
+
+`SUBSCRIPTION_AMOUNT=29900`
+
+Después de cambiarla en Vercel, haz un **Redeploy** del proyecto.
+
+La app obtiene ese valor desde `/api/public-config` y lo refleja automáticamente en:
+- tarjeta del plan familiar;
+- botón para continuar al pago;
+- botón final de activación;
+- formulario de Mercado Pago;
+- cualquier vista que use el precio vigente para una nueva suscripción.
+
+No necesitas editar `index.html` ni `app.js` para cambiar el precio.
+
+Importante: una suscripción que ya fue creada en Mercado Pago conserva el monto con el que fue autorizada. Cambiar `SUBSCRIPTION_AMOUNT` define el precio para nuevas suscripciones; no altera automáticamente contratos ya existentes.
