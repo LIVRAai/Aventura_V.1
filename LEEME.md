@@ -21,3 +21,11 @@ El módulo **Pregúntale a NOVA** reutiliza `/api/tutor` con un modo general. No
 Reemplaza la versión anterior por esta carpeta y haz un redeploy en Vercel.
 
 No requiere nuevas variables de entorno ni nuevas tablas.
+
+
+## V20.1 · continuidad del tutor
+
+- La conversación de **Pregúntale a NOVA** se conserva durante la sesión del navegador.
+- Cambiar de pestaña o un recargado accidental ya no debe borrar la conversación.
+- Los eventos repetidos de autenticación al recuperar el foco no reconstruyen la app si es el mismo usuario con acceso vigente.
+- La conversación temporal se elimina al cerrar sesión para no mezclarla con otra cuenta.

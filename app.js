@@ -742,6 +742,7 @@
     if (mathHub) mathHub.hidden = true;
     if (novaTutorHub) novaTutorHub.hidden = false;
 
+    renderGeneralTutorConversation();
     document.body.classList.remove('content-focus');
     resetViewScroll(novaTutorHub);
 
@@ -1632,6 +1633,7 @@
     testerUnlocked = false;
     testerSnapshot = null;
     sessionStorage.removeItem(OWNER_DEMO_KEY);
+    clearGeneralTutorSession();
     commercialAccessGranted = false;
     cloudReady = false;
     activeChild = null;
@@ -1667,6 +1669,7 @@
     }
 
     sessionStorage.removeItem(OWNER_DEMO_KEY);
+    clearGeneralTutorSession();
     cloudReady = false;
     activeChild = null;
     currentUser = null;
@@ -1702,7 +1705,44 @@
         currentUser = session?.user || currentUser;
         return;
       }
-      if (event === 'SIGNED_IN' || event === 'SIGNED_OUT' || event === 'USER_UPDATED') {
+
+      if (event === 'SIGNED_OUT') {
+        setTimeout(() => { handleAuthSession(null); }, 0);
+        return;
+      }
+
+      if (event === 'SIGNED_IN') {
+        const incomingUserId = session?.user?.id || null;
+        const sameUser = Boolean(
+          incomingUserId &&
+          currentUser?.id &&
+          incomingUserId === currentUser.id
+        );
+
+        currentSession = session || currentSession;
+        currentUser = session?.user || currentUser;
+
+        // Supabase puede volver a confirmar SIGNED_IN cuando la pestaña recupera
+        // el foco. Si es el mismo usuario y ya tiene acceso, no reconstruimos
+        // toda la aplicación ni sacamos al niño de la pantalla en la que estaba.
+        if (sameUser && commercialAccessGranted) {
+          updatePersonalization();
+          return;
+        }
+
+        setTimeout(() => { handleAuthSession(session); }, 0);
+        return;
+      }
+
+      if (event === 'USER_UPDATED') {
+        currentSession = session || currentSession;
+        currentUser = session?.user || currentUser;
+
+        if (commercialAccessGranted) {
+          updatePersonalization();
+          return;
+        }
+
         setTimeout(() => { handleAuthSession(session); }, 0);
       }
     });
@@ -3443,6 +3483,7 @@
   let generalTutorHistory = [];
   let generalTutorBusy = false;
   let generalTutorRequestId = 0;
+  let generalTutorSessionLoadedFor = '';
   let currentMissionCompleted = false;
   let gameCompleted = Boolean(savedGame?.gameCompleted);
   let mechanicState = {};
@@ -4178,6 +4219,80 @@
     aiTutorQuickBtns.forEach(btn => btn.disabled = isBusy);
   }
 
+  function generalTutorStorageKey() {
+    const userId = String(currentUser?.id || 'anonymous');
+    const childId = String(activeChild?.id || familyProfile()?.childId || 'child');
+    return `novaGeneralTutorV1:${userId}:${childId}`;
+  }
+
+  function normalizeGeneralTutorHistory(value) {
+    if (!Array.isArray(value)) return [];
+    return value
+      .filter((item) =>
+        item &&
+        (item.role === 'user' || item.role === 'assistant') &&
+        typeof item.content === 'string' &&
+        item.content.trim()
+      )
+      .slice(-12)
+      .map((item) => ({
+        role: item.role,
+        content: String(item.content).trim().slice(0, 1200)
+      }));
+  }
+
+  function loadGeneralTutorSession() {
+    const key = generalTutorStorageKey();
+    if (generalTutorSessionLoadedFor === key) return;
+
+    generalTutorSessionLoadedFor = key;
+    try {
+      generalTutorHistory = normalizeGeneralTutorHistory(
+        JSON.parse(sessionStorage.getItem(key) || '[]')
+      );
+    } catch {
+      generalTutorHistory = [];
+    }
+  }
+
+  function saveGeneralTutorSession() {
+    const key = generalTutorStorageKey();
+    try {
+      sessionStorage.setItem(
+        key,
+        JSON.stringify(normalizeGeneralTutorHistory(generalTutorHistory))
+      );
+      generalTutorSessionLoadedFor = key;
+    } catch {}
+  }
+
+  function clearGeneralTutorSession() {
+    try {
+      sessionStorage.removeItem(generalTutorStorageKey());
+    } catch {}
+    generalTutorHistory = [];
+    generalTutorSessionLoadedFor = '';
+  }
+
+  function renderGeneralTutorConversation() {
+    if (!novaGeneralChat) return;
+
+    loadGeneralTutorSession();
+    novaGeneralChat.innerHTML = '';
+
+    if (!generalTutorHistory.length) {
+      appendGeneralTutorMessage(
+        'assistant',
+        'Hola 👋. Soy NOVA. ¿Qué quieres preguntarme hoy?'
+      );
+      return;
+    }
+
+    generalTutorHistory.forEach((item) => {
+      appendGeneralTutorMessage(item.role, item.content);
+    });
+  }
+
   function appendGeneralTutorMessage(role, text, pending = false) {
     if (!novaGeneralChat) return null;
 
@@ -4213,6 +4328,8 @@
 
     appendGeneralTutorMessage('user', cleanQuestion);
     generalTutorHistory.push({ role: 'user', content: cleanQuestion });
+    generalTutorHistory = generalTutorHistory.slice(-12);
+    saveGeneralTutorSession();
 
     const pending = appendGeneralTutorMessage('assistant', 'Estoy pensando cómo explicártelo…', true);
     setGeneralTutorBusy(true);
@@ -4239,6 +4356,7 @@
       appendGeneralTutorMessage('assistant', message);
       generalTutorHistory.push({ role: 'assistant', content: message });
       generalTutorHistory = generalTutorHistory.slice(-12);
+      saveGeneralTutorSession();
       playTap();
     } catch (error) {
       if (requestId !== generalTutorRequestId) return;
@@ -5290,6 +5408,7 @@
     saveGameState();
     saveNotebookState();
     saveAcademyState();
+    saveGeneralTutorSession();
     syncProgressToCloud();
   });
   document.addEventListener('visibilitychange', () => {
@@ -5297,6 +5416,7 @@
       saveGameState();
       saveNotebookState();
       saveAcademyState();
+      saveGeneralTutorSession();
       syncProgressToCloud();
     }
   });
