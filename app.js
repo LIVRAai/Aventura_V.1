@@ -170,6 +170,16 @@
   const novaNewConversationBtn = $('#novaNewConversationBtn');
   const parentCurriculumGrade = $('#parentCurriculumGrade');
   const parentCurriculumSubjects = $('#parentCurriculumSubjects');
+  const parentGradeSelector = $('#parentGradeSelector');
+  const gradePanelTitle = $('#gradePanelTitle');
+  const gradePanelHint = $('#gradePanelHint');
+  const gradeJourneyCard = $('#gradeJourneyCard');
+  const gradeJourneyTitle = $('#gradeJourneyTitle');
+  const gradeJourneyText = $('#gradeJourneyText');
+  const gradeJourneyProgressBar = $('#gradeJourneyProgressBar');
+  const gradeJourneyPercent = $('#gradeJourneyPercent');
+  const advanceGradeBtn = $('#advanceGradeBtn');
+  const curriculumGameStageLabel = $('#curriculumGameStageLabel');
   const novaTutorHub = $('#novaTutorHub');
   const askNovaHomeBtn = $('#askNovaHomeBtn');
   const novaTutorBackBtn = $('#novaTutorBackBtn');
@@ -344,6 +354,8 @@
   const CURRICULUM_GRADE_KEY = 'novaCurriculumGradeV1';
   const CURRICULUM_ACTIVITY_KEY = 'novaCurriculumActivityV1';
   const CURRICULUM_GAME_PROGRESS_KEY = 'novaCurriculumGameProgressV1';
+  const CURRICULUM_MASTERY_TOTAL = 20;
+  const CURRICULUM_MASTERY_RATE = 0.80;
   const CURRICULUM_SUBJECTS = {
     math: { name:'Matemáticas', icon:'➗', description:'Números, operaciones, geometría, datos y solución de problemas.', competency:'Pensamiento lógico, razonamiento numérico y solución de problemas.' },
     language: { name:'Lenguaje', icon:'📖', description:'Lectura, escritura, comprensión, expresión y argumentación.', competency:'Comprensión lectora, comunicación clara y capacidad de argumentar.' },
@@ -454,24 +466,125 @@
     return topics.filter(topic => activity.started?.[`${grade}:${subjectKey}:${topic.id}`]).length;
   }
 
-  function setCurriculumGrade(grade) {
+  function curriculumTopicMastery(grade, subjectKey, topicId) {
+    const saved = curriculumGameProgress()[curriculumGameTopicKey(grade, subjectKey, topicId)] || {};
+    const bestTotal = Number(saved.bestTotal || saved.total || 0);
+    const bestScore = Number(saved.bestScore || 0);
+    const bestRate = Number.isFinite(Number(saved.bestRate))
+      ? Number(saved.bestRate)
+      : (bestTotal > 0 ? bestScore / bestTotal : 0);
+    const deepRoundCompleted = Boolean(saved.masteryRoundCompleted) || bestTotal >= CURRICULUM_MASTERY_TOTAL;
+    const mastered = Boolean(saved.mastered) || (deepRoundCompleted && bestRate >= CURRICULUM_MASTERY_RATE);
+    return {
+      saved,
+      bestScore,
+      bestTotal,
+      bestRate: Math.max(0, Math.min(1, bestRate || 0)),
+      percent: Math.round(Math.max(0, Math.min(1, bestRate || 0)) * 100),
+      mastered,
+      deepRoundCompleted
+    };
+  }
+
+  function curriculumGradeProgress(grade) {
     const value = Number(grade);
-    if (value < 1 || value > 5) return;
+    if (value < 1 || value > 5) return { grade:value, total:0, mastered:0, started:0, percent:0, complete:false };
+    let total = 0;
+    let mastered = 0;
+    let started = 0;
+    Object.keys(CURRICULUM_SUBJECTS).forEach(subjectKey => {
+      const topics = CURRICULUM[String(value)]?.[subjectKey] || [];
+      topics.forEach(topic => {
+        total += 1;
+        const state = curriculumTopicMastery(value, subjectKey, topic.id);
+        if (state.saved?.plays) started += 1;
+        if (state.mastered) mastered += 1;
+      });
+    });
+    return {
+      grade:value,
+      total,
+      mastered,
+      started,
+      percent: total ? Math.round((mastered / total) * 100) : 0,
+      complete: Boolean(total && mastered >= total)
+    };
+  }
+
+  function canAdvanceCurriculumGrade(grade = selectedCurriculumGrade()) {
+    const value = Number(grade);
+    if (!value || value >= 5) return false;
+    return curriculumGradeProgress(value).complete;
+  }
+
+  function curriculumSchoolBlock(index, total) {
+    const safeTotal = Math.max(1, Number(total) || 1);
+    return Math.min(4, Math.floor((Number(index) || 0) * 4 / safeTotal) + 1);
+  }
+
+  function setCurriculumGrade(grade, { source = 'child', force = false } = {}) {
+    const value = Number(grade);
+    if (value < 1 || value > 5) return false;
+
+    const current = selectedCurriculumGrade();
+    const parentOverride = source === 'parent' || force;
+    const childCanAdvance = current && value === current + 1 && canAdvanceCurriculumGrade(current);
+
+    if (current && value !== current && !parentOverride && !childCanAdvance) {
+      showToast(`Tu ruta está en ${current}.º. Completa ese grado para avanzar. Un adulto puede cambiarlo desde Perfil.`, 3600);
+      syncGradeSelectors();
+      return false;
+    }
+
     try { localStorage.setItem(curriculumGradeStorageKey(), String(value)); } catch {}
     renderCurriculumHome();
     if (curriculumSubjectHub && !curriculumSubjectHub.hidden) renderCurriculumSubject(curriculumCurrentSubject);
     renderParentCurriculumPlan();
     playTap();
+
+    if (parentOverride && current && value !== current) {
+      showToast(`Grado actualizado a ${value}.º. El progreso de otros grados se conserva.`, 3000);
+    } else if (!current) {
+      showToast(`¡Listo! Tu ruta de ${value}.º quedó activa ✨`, 2600);
+    } else if (childCanAdvance) {
+      showToast(`🎉 ¡Bienvenido a ${value}.º de primaria!`, 3200);
+    }
+    return true;
   }
 
   function syncGradeSelectors() {
     const grade = selectedCurriculumGrade();
-    [gradeSelector, subjectGradeSelector].forEach(container => {
-      container?.querySelectorAll('[data-grade]').forEach(btn => {
-        const active = Number(btn.dataset.grade) === grade;
-        btn.classList.toggle('active', active);
-        btn.setAttribute('aria-pressed', String(active));
-      });
+    const canAdvance = grade ? canAdvanceCurriculumGrade(grade) : false;
+
+    gradeSelector?.querySelectorAll('[data-grade]').forEach(btn => {
+      const btnGrade = Number(btn.dataset.grade);
+      const active = btnGrade === grade;
+      const nextAvailable = Boolean(grade && canAdvance && btnGrade === grade + 1);
+      const unlocked = !grade || active || nextAvailable;
+
+      btn.disabled = !unlocked;
+      btn.classList.toggle('active', active);
+      btn.classList.toggle('locked', Boolean(grade && !unlocked));
+      btn.classList.toggle('next-grade', nextAvailable);
+      btn.setAttribute('aria-pressed', String(active));
+      btn.setAttribute('aria-label', active
+        ? `${btnGrade}.º, grado activo`
+        : nextAvailable
+          ? `${btnGrade}.º, disponible porque completaste el grado anterior`
+          : unlocked
+            ? `${btnGrade}.º`
+            : `${btnGrade}.º bloqueado hasta completar ${grade}.º`);
+      btn.innerHTML = active ? `${btnGrade}.º <span>✓</span>` : nextAvailable ? `${btnGrade}.º <span>→</span>` : grade ? `🔒 ${btnGrade}.º` : `${btnGrade}.º`;
+    });
+
+    if (subjectGradeSelector) {
+      subjectGradeSelector.textContent = grade ? `${grade}.º de primaria` : 'Grado por seleccionar';
+    }
+
+    parentGradeSelector?.querySelectorAll('[data-parent-grade]').forEach(btn => {
+      const active = Number(btn.dataset.parentGrade) === grade;
+      btn.classList.toggle('active', active);
+      btn.setAttribute('aria-pressed', String(active));
     });
   }
 
@@ -480,9 +593,33 @@
     syncGradeSelectors();
     if (subjectsGradeLabel) subjectsGradeLabel.textContent = grade ? `${grade}.º de primaria` : 'Elige tu grado';
 
+    if (gradePanelTitle) gradePanelTitle.textContent = grade ? `Tu ruta: ${grade}.º de primaria` : '¿En qué grado estás?';
+    if (gradePanelHint) gradePanelHint.textContent = grade
+      ? 'Este es tu grado activo. Para cambiarlo antes de terminarlo debe hacerlo un adulto desde Perfil.'
+      : 'Elige el grado que estás cursando. Después tu ruta quedará enfocada únicamente en ese nivel.';
+
+    const gradeProgress = grade ? curriculumGradeProgress(grade) : null;
+    if (gradeJourneyCard) gradeJourneyCard.hidden = !grade;
+    if (grade && gradeProgress) {
+      if (gradeJourneyTitle) gradeJourneyTitle.textContent = `${gradeProgress.mastered} de ${gradeProgress.total} aprendizajes dominados en ${grade}.º`;
+      if (gradeJourneyText) {
+        gradeJourneyText.textContent = gradeProgress.complete
+          ? (grade < 5 ? `¡Completaste ${grade}.º! Ya puedes comenzar ${grade + 1}.º.` : '¡Completaste la ruta de primaria de Aprende con NOVA!')
+          : `Supera cada aprendizaje con al menos 80% en una ronda de 20 retos. Puedes reforzar cualquier tema de ${grade}.º según lo que estén viendo en el colegio.`;
+      }
+      if (gradeJourneyProgressBar) gradeJourneyProgressBar.style.width = `${gradeProgress.percent}%`;
+      if (gradeJourneyPercent) gradeJourneyPercent.textContent = `${gradeProgress.percent}%`;
+      if (advanceGradeBtn) {
+        const canAdvance = gradeProgress.complete && grade < 5;
+        advanceGradeBtn.hidden = !canAdvance;
+        if (canAdvance) advanceGradeBtn.textContent = `Comenzar ${grade + 1}.º →`;
+      }
+    }
+
     Object.keys(CURRICULUM_SUBJECTS).forEach(subjectKey => {
       const topics = grade ? (CURRICULUM[String(grade)]?.[subjectKey] || []) : [];
-      const visited = grade ? visitedCurriculumTopics(subjectKey, grade) : 0;
+      const subjectMastered = grade ? topics.filter(topic => curriculumTopicMastery(grade, subjectKey, topic.id).mastered).length : 0;
+      const subjectStarted = grade ? topics.filter(topic => curriculumTopicMastery(grade, subjectKey, topic.id).saved?.plays).length : 0;
       const status = subjectKey === 'math'
         ? hubMathStatus
         : document.querySelector(`[data-subject-status="${subjectKey}"]`);
@@ -491,25 +628,30 @@
         : document.querySelector(`[data-subject-bar="${subjectKey}"]`);
 
       if (status) status.textContent = grade
-        ? `${topics.length} temas para jugar${visited ? ` · ${visited} iniciado${visited === 1 ? '' : 's'}` : ''}`
+        ? `${subjectMastered}/${topics.length} dominados${subjectStarted && subjectMastered < topics.length ? ` · ${subjectStarted} practicados` : ''}`
         : 'Selecciona tu grado';
-      if (bar) bar.style.width = grade && topics.length ? `${Math.round((visited / topics.length) * 100)}%` : '0%';
+      if (bar) bar.style.width = grade && topics.length ? `${Math.round((subjectMastered / topics.length) * 100)}%` : '0%';
     });
   }
 
   function renderParentCurriculumPlan() {
     if (!parentCurriculumGrade || !parentCurriculumSubjects) return;
     const grade = selectedCurriculumGrade();
-    parentCurriculumGrade.textContent = grade ? `${grade}.º de primaria` : 'Selecciona el grado desde Inicio';
+    const gradeProgress = grade ? curriculumGradeProgress(grade) : null;
+    parentCurriculumGrade.textContent = grade
+      ? `${grade}.º de primaria · ${gradeProgress.mastered}/${gradeProgress.total} aprendizajes dominados`
+      : 'Grado por seleccionar';
     if (learningProgressChild) learningProgressChild.textContent = grade ? `Primaria · ${grade}.º` : 'Primaria · grado por seleccionar';
     parentCurriculumSubjects.innerHTML = '';
     Object.entries(CURRICULUM_SUBJECTS).forEach(([key, meta]) => {
-      const count = grade ? (CURRICULUM[String(grade)]?.[key] || []).length : 0;
-      const visited = grade ? visitedCurriculumTopics(key, grade) : 0;
+      const topics = grade ? (CURRICULUM[String(grade)]?.[key] || []) : [];
+      const mastered = grade ? topics.filter(topic => curriculumTopicMastery(grade, key, topic.id).mastered).length : 0;
+      const started = grade ? topics.filter(topic => curriculumTopicMastery(grade, key, topic.id).saved?.plays).length : 0;
       const item = document.createElement('div');
-      item.innerHTML = `<span>${meta.icon}</span><p><strong>${meta.name}</strong><small>${grade ? `${count} aprendizajes · ${visited} explorados` : 'Pendiente de grado'}</small></p>`;
+      item.innerHTML = `<span>${meta.icon}</span><p><strong>${meta.name}</strong><small>${grade ? `${mastered}/${topics.length} dominados · ${started} practicados` : 'Pendiente de grado'}</small></p>`;
       parentCurriculumSubjects.appendChild(item);
     });
+    syncGradeSelectors();
   }
 
   function curriculumTopicIconFor(subjectKey, index) {
@@ -536,7 +678,7 @@
     if (curriculumSubjectTitle) curriculumSubjectTitle.textContent = meta.name;
     if (curriculumSubjectDescription) curriculumSubjectDescription.textContent = meta.description;
     if (curriculumGradeTitle) curriculumGradeTitle.textContent = `${grade}.º`;
-    if (curriculumTopicCount) curriculumTopicCount.textContent = `${topics.length} aprendizajes`;
+    if (curriculumTopicCount) curriculumTopicCount.textContent = `${topics.length} aprendizajes · 20 retos por tema`;
     if (curriculumCompetencyText) curriculumCompetencyText.textContent = meta.competency;
 
     if (curriculumTopicGrid) {
@@ -544,20 +686,26 @@
       const activity = curriculumActivity();
       topics.forEach((topic, index) => {
         const started = Boolean(activity.started?.[`${grade}:${subjectKey}:${topic.id}`]);
-        const gameResult = curriculumGameProgress()[curriculumGameTopicKey(grade, subjectKey, topic.id)];
+        const mastery = curriculumTopicMastery(grade, subjectKey, topic.id);
+        const schoolBlock = curriculumSchoolBlock(index, topics.length);
+        const statusLabel = mastery.mastered
+          ? `DOMINADO · ${mastery.percent}%`
+          : mastery.saved?.plays
+            ? `EN REFUERZO · ${mastery.percent}%`
+            : '20 RETOS · 4 ETAPAS';
         const btn = document.createElement('button');
         btn.type = 'button';
-        btn.className = `curriculum-topic-card${started ? ' started' : ''}`;
+        btn.className = `curriculum-topic-card${started ? ' started' : ''}${mastery.mastered ? ' mastered' : ''}`;
         btn.dataset.topicIndex = String(index);
         btn.innerHTML = `
           <span class="curriculum-topic-icon">${curriculumTopicIconFor(subjectKey,index)}</span>
           <span class="curriculum-topic-copy">
-            <small>${String(index + 1).padStart(2,'0')} · ${gameResult?.plays ? `${'★'.repeat(gameResult.bestStars || 0)}${'☆'.repeat(3-(gameResult.bestStars || 0))} · ${gameResult.bestScore || 0}/5` : (started ? 'EN PRÁCTICA' : '5 RETOS PARA JUGAR')}</small>
+            <small>${String(index + 1).padStart(2,'0')} · BLOQUE ${schoolBlock} DEL AÑO · ${statusLabel}</small>
             <strong>${topic.title}</strong>
             <em>${topic.goal}</em>
             <b>${topic.skill}</b>
           </span>
-          <span class="curriculum-topic-arrow">→</span>`;
+          <span class="curriculum-topic-arrow">${mastery.mastered ? '✓' : '→'}</span>`;
         btn.addEventListener('click', () => {
           playTap();
           showCurriculumTopic(subjectKey, index);
@@ -661,15 +809,35 @@
     }
   }
 
-  function saveCurriculumGameResult(topicKey, score, total = 5) {
+  function saveCurriculumGameResult(topicKey, score, total = CURRICULUM_MASTERY_TOTAL) {
     const progress = curriculumGameProgress();
     const previous = progress[topicKey] || {};
-    const stars = score >= total ? 3 : score >= Math.ceil(total * .8) ? 2 : score >= Math.ceil(total * .6) ? 1 : 0;
+    const rate = total > 0 ? score / total : 0;
+    const previousBestTotal = Number(previous.bestTotal || previous.total || 0);
+    const previousBestScore = Number(previous.bestScore || 0);
+    const previousBestRate = Number.isFinite(Number(previous.bestRate))
+      ? Number(previous.bestRate)
+      : (previousBestTotal > 0 ? previousBestScore / previousBestTotal : 0);
+    const newBest = rate >= previousBestRate;
+    const bestRate = Math.max(previousBestRate, rate);
+    const bestScore = newBest ? score : previousBestScore;
+    const bestTotal = newBest ? total : previousBestTotal;
+    const stars = curriculumGameStarsFor(score, total);
+    const masteryRoundCompleted = Boolean(previous.masteryRoundCompleted) || total >= CURRICULUM_MASTERY_TOTAL;
+    const mastered = masteryRoundCompleted && bestRate >= CURRICULUM_MASTERY_RATE;
+
     progress[topicKey] = {
-      bestScore: Math.max(Number(previous.bestScore || 0), score),
+      ...previous,
+      bestScore,
+      bestTotal,
+      bestRate,
       bestStars: Math.max(Number(previous.bestStars || 0), stars),
       plays: Number(previous.plays || 0) + 1,
-      total,
+      total: bestTotal,
+      latestScore: score,
+      latestTotal: total,
+      masteryRoundCompleted,
+      mastered,
       lastPlayedAt: new Date().toISOString()
     };
     try { localStorage.setItem(curriculumGameStorageKey(), JSON.stringify(progress)); } catch {}
@@ -1193,12 +1361,73 @@
     else if (subjectKey === 'english') pack = englishExercisePack(grade, topic);
 
     const fallback = fallbackCurriculumExercises(grade, subjectKey, topic);
-    pack = [...pack, ...fallback].filter(Boolean).slice(0,5);
-    while (pack.length < 5) pack.push(fallback[pack.length % fallback.length]);
-    return pack.map(item => ({ ...item, options: shuffled(item.options) }));
+    let base = [...pack, ...fallback].filter(Boolean).slice(0,5);
+    while (base.length < 5) base.push(fallback[base.length % fallback.length]);
+    base = base.map(item => ({ ...item, options: shuffled(item.options) }));
+
+    const explanations = base.map(item => item.explanation).filter(Boolean);
+    const stageOne = shuffled(base).map(item => ({
+      ...item,
+      options: shuffled(item.options),
+      stageId:'understand',
+      stageLabel:'ETAPA 1 · ENTIENDO',
+      stageHelp:'Resuelve con calma. Puedes pedir una pista de NOVA.'
+    }));
+
+    const stageTwo = shuffled(base).map(item => {
+      const wrong = shuffled(item.options.filter(option => String(option) !== String(item.answer)))[0] || 'otra opción';
+      return {
+        ...item,
+        question:`Un compañero respondió “${wrong}”. Ayúdalo a corregir el reto:
+${item.question}`,
+        options:shuffled(item.options),
+        explanation:`La respuesta correcta es “${item.answer}”. ${item.explanation || ''}`.trim(),
+        stageId:'practice',
+        stageLabel:'ETAPA 2 · PRACTICO',
+        stageHelp:'Detecta el error y vuelve a resolver el concepto.'
+      };
+    });
+
+    const stageThree = shuffled(base).map((item, itemIndex) => {
+      const wrongExplanations = shuffled(
+        explanations.filter(text => text && text !== item.explanation)
+      ).slice(0,3);
+      while (wrongExplanations.length < 3) {
+        wrongExplanations.push(`Porque esa opción parece correcta, pero no explica la idea principal del reto ${itemIndex + 1}.`);
+      }
+      return gameChoice(
+        `Ya sabes que “${item.answer}” resuelve este reto:
+${item.question}
+¿Cuál explicación demuestra que realmente lo entendiste?`,
+        item.explanation || `La respuesta correcta es ${item.answer}.`,
+        wrongExplanations,
+        item.explanation || `La respuesta correcta es ${item.answer}.`,
+        'No busques solo la respuesta: busca la explicación que conecta con la idea del tema.',
+        '🧠'
+      );
+    }).map(item => ({
+      ...item,
+      options:shuffled(item.options),
+      stageId:'explain',
+      stageLabel:'ETAPA 3 · EXPLICO',
+      stageHelp:'Elegir una buena explicación demuestra comprensión.'
+    }));
+
+    const stageFour = shuffled(base).map(item => ({
+      ...item,
+      question:`Reto final · sin pista:
+${item.question}`,
+      options:shuffled(item.options),
+      noHint:true,
+      stageId:'prove',
+      stageLabel:'ETAPA 4 · DEMUESTRO',
+      stageHelp:'Ahora inténtalo sin ayuda para comprobar que puedes hacerlo solo.'
+    }));
+
+    return [...stageOne, ...stageTwo, ...stageThree, ...stageFour];
   }
 
-  function curriculumGameStarsFor(score, total=5) {
+  function curriculumGameStarsFor(score, total=CURRICULUM_MASTERY_TOTAL) {
     if (score >= total) return 3;
     if (score >= Math.ceil(total * .8)) return 2;
     if (score >= Math.ceil(total * .6)) return 1;
@@ -1209,10 +1438,11 @@
     if (!curriculumGameBest) return;
     const { grade, subjectKey, topic } = currentCurriculumTopic();
     if (!grade || !topic) { curriculumGameBest.hidden = true; return; }
-    const saved = curriculumGameProgress()[curriculumGameTopicKey(grade, subjectKey, topic.id)];
+    const mastery = curriculumTopicMastery(grade, subjectKey, topic.id);
+    const saved = mastery.saved;
     if (!saved?.plays) { curriculumGameBest.hidden = true; return; }
     const stars = '★'.repeat(Number(saved.bestStars || 0)) + '☆'.repeat(Math.max(0,3-Number(saved.bestStars||0)));
-    curriculumGameBest.innerHTML = `<span>${stars}</span><small>Tu mejor ronda: ${saved.bestScore || 0}/${saved.total || 5}</small>`;
+    curriculumGameBest.innerHTML = `<span>${stars}</span><small>${mastery.mastered ? 'APRENDIZAJE DOMINADO' : 'EN REFUERZO'} · mejor resultado ${mastery.percent}%${!mastery.deepRoundCompleted ? ' · completa la ronda de 20 retos' : ''}</small>`;
     curriculumGameBest.hidden = false;
   }
 
@@ -1251,11 +1481,12 @@
     if (curriculumGameScore) curriculumGameScore.textContent = String(state.score);
     if (curriculumGameProgressBar) curriculumGameProgressBar.style.width = `${(state.index / total) * 100}%`;
     if (curriculumGameRound) curriculumGameRound.textContent = `RETO ${state.index + 1} DE ${total}`;
-    if (curriculumGameCombo) curriculumGameCombo.textContent = state.combo >= 2 ? `🔥 RACHA ×${state.combo}` : '⚡ A POR EL RETO';
+    if (curriculumGameStageLabel) curriculumGameStageLabel.textContent = item.stageLabel || 'PRACTICA';
+    if (curriculumGameCombo) curriculumGameCombo.textContent = state.combo >= 2 ? `🔥 RACHA ×${state.combo}` : (item.stageHelp || '⚡ A POR EL RETO');
     if (curriculumGameEmoji) curriculumGameEmoji.textContent = item.emoji || curriculumTopicIconFor(state.subjectKey, curriculumCurrentTopicIndex);
     if (curriculumGamePrompt) curriculumGamePrompt.textContent = item.question;
     if (curriculumGameHint) { curriculumGameHint.hidden = true; curriculumGameHint.textContent = item.hint || 'Piensa en lo que ya aprendiste y elimina las opciones que no encajan.'; }
-    if (curriculumGameHintBtn) { curriculumGameHintBtn.hidden = false; curriculumGameHintBtn.disabled = false; }
+    if (curriculumGameHintBtn) { curriculumGameHintBtn.hidden = Boolean(item.noHint); curriculumGameHintBtn.disabled = Boolean(item.noHint); }
     if (curriculumGameFeedback) { curriculumGameFeedback.hidden = true; curriculumGameFeedback.className = 'curriculum-game-feedback'; curriculumGameFeedback.textContent = ''; }
     if (curriculumGameNextBtn) curriculumGameNextBtn.hidden = true;
     if (curriculumGameOptions) {
@@ -1319,15 +1550,37 @@
     const total = state.pack.length;
     const saved = saveCurriculumGameResult(curriculumGameTopicKey(state.grade,state.subjectKey,state.topic.id), state.score, total);
     const stars = curriculumGameStarsFor(state.score,total);
+    const rate = total ? state.score / total : 0;
+    const mastered = rate >= CURRICULUM_MASTERY_RATE;
+    const gradeProgress = curriculumGradeProgress(state.grade);
     if (curriculumGameProgressBar) curriculumGameProgressBar.style.width = '100%';
     const stage = curriculumGameModal?.querySelector('.curriculum-game-stage');
     if (stage) stage.hidden = true;
     if (curriculumGameFinish) curriculumGameFinish.hidden = false;
     if (curriculumGameFinishStars) curriculumGameFinishStars.textContent = stars ? '⭐'.repeat(stars) : '✨';
-    if (curriculumGameFinishTitle) curriculumGameFinishTitle.textContent = state.score === total ? '¡Dominaste esta ronda!' : state.score >= 3 ? '¡Vas muy bien!' : '¡Cada intento te hace mejor!';
-    if (curriculumGameFinishText) curriculumGameFinishText.textContent = `Acertaste ${state.score} de ${total}. Tu mejor resultado es ${saved.bestScore}/${total}. ${state.score < total ? 'Puedes jugar otra vez o pedirle a NOVA que te explique lo que costó.' : 'Excelente: ahora intenta explicarlo con tus propias palabras.'}`;
+
+    if (curriculumGameFinishTitle) {
+      curriculumGameFinishTitle.textContent = state.score === total
+        ? '¡Dominaste el tema!'
+        : mastered
+          ? '¡Aprendizaje superado!'
+          : rate >= .60
+            ? '¡Estás cerca! Sigue reforzando'
+            : 'Vamos a practicar un poco más';
+    }
+
+    if (curriculumGameFinishText) {
+      const bestRate = Math.round(Number(saved.bestRate || 0) * 100);
+      const gradeMessage = gradeProgress.complete
+        ? (state.grade < 5 ? ` 🎉 Además, completaste ${state.grade}.º: ya puedes avanzar a ${state.grade + 1}.º.` : ' 🎉 Completaste toda la ruta de primaria.')
+        : ` En ${state.grade}.º llevas ${gradeProgress.mastered} de ${gradeProgress.total} aprendizajes dominados.`;
+      curriculumGameFinishText.textContent = mastered
+        ? `Acertaste ${state.score} de ${total} (${Math.round(rate*100)}%). Tu mejor dominio es ${bestRate}%. Este aprendizaje ya cuenta como superado.${gradeMessage}`
+        : `Acertaste ${state.score} de ${total} (${Math.round(rate*100)}%). La meta es 80% (16 de 20). Puedes repetir la ronda o pedirle a NOVA que te explique lo que costó.${gradeMessage}`;
+    }
     renderCurriculumSubject(state.subjectKey);
     renderCurriculumHome();
+    renderParentCurriculumPlan();
   }
 
   function replayCurriculumGame() {
@@ -6159,10 +6412,19 @@
     });
   });
 
-  [gradeSelector, subjectGradeSelector].forEach(container => {
-    container?.querySelectorAll('[data-grade]').forEach(btn => {
-      btn.addEventListener('click', () => setCurriculumGrade(btn.dataset.grade));
-    });
+  gradeSelector?.querySelectorAll('[data-grade]').forEach(btn => {
+    btn.addEventListener('click', () => setCurriculumGrade(btn.dataset.grade, { source:'child' }));
+  });
+
+  parentGradeSelector?.querySelectorAll('[data-parent-grade]').forEach(btn => {
+    btn.addEventListener('click', () => setCurriculumGrade(btn.dataset.parentGrade, { source:'parent', force:true }));
+  });
+
+  advanceGradeBtn?.addEventListener('click', () => {
+    const grade = selectedCurriculumGrade();
+    if (grade && grade < 5 && canAdvanceCurriculumGrade(grade)) {
+      setCurriculumGrade(grade + 1, { source:'child' });
+    }
   });
 
   curriculumSubjectBackBtn?.addEventListener('click', () => {

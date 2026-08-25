@@ -63,3 +63,16 @@ Cada uno de los aprendizajes de 1.º a 5.º tiene ahora una ronda interactiva de
 - No se modificaron bases de datos, Supabase, Mercado Pago, webhooks, autenticación ni endpoints de API.
 
 El progreso nuevo de los juegos se guarda en `localStorage` con una clave independiente, precisamente para no cambiar el esquema actual de Supabase en esta versión.
+
+
+## V23 · Ruta escolar y práctica profunda
+
+- El niño selecciona un grado de 1.º a 5.º y su navegación queda enfocada en ese grado.
+- No puede saltar a otro grado mientras no complete el grado activo.
+- El siguiente grado se habilita cuando domina todos los aprendizajes del grado actual.
+- El adulto puede ajustar el grado manualmente desde el panel de progreso/perfil familiar.
+- Cada aprendizaje tiene una ronda de 20 retos distribuidos en cuatro etapas: Entiendo, Practico, Explico y Demuestro.
+- Un aprendizaje se considera dominado con al menos 80% (16/20) en una ronda completa.
+- Los temas del grado permanecen disponibles para que la familia refuerce lo que el colegio esté trabajando en ese momento; no se bloquean entre sí.
+- Se muestran bloques orientativos del año escolar sin asumir que todos los colegios enseñan los temas en el mismo orden.
+- No se modificaron tablas, Supabase, Mercado Pago, autenticación, webhooks, variables de entorno ni archivos de `/api`.

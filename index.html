@@ -268,7 +268,7 @@
         <div class="curriculum-hero-copy">
           <small>REFUERZO DE PRIMARIA · 1.º A 5.º</small>
           <strong>Lo importante del colegio,<br>organizado para entenderlo.</strong>
-          <p>Selecciona el grado y entra a la materia que quieras reforzar. NOVA explica, practica y acompaña.</p>
+          <p>Tu ruta se concentra en el grado que estás cursando. Practica lo que ves en el colegio con retos progresivos y NOVA a tu lado.</p>
         </div>
         <div class="curriculum-hero-orbit" aria-hidden="true">
           <span>➕</span><span>📖</span><span>🔬</span><span>🌎</span><span>💬</span>
@@ -280,7 +280,7 @@
         <div class="grade-panel-copy">
           <small>TU GRADO</small>
           <strong id="gradePanelTitle">¿En qué grado estás?</strong>
-          <span id="gradePanelHint">Así NOVA te muestra los temas adecuados para ti.</span>
+          <span id="gradePanelHint">Cuando elijas tu grado, esa será tu ruta activa. Para cambiarlo antes de terminarlo debe hacerlo un adulto desde Perfil.</span>
         </div>
         <div id="gradeSelector" class="grade-selector" role="group" aria-label="Seleccionar grado escolar">
           <button type="button" data-grade="1">1.º</button>
@@ -288,6 +288,20 @@
           <button type="button" data-grade="3">3.º</button>
           <button type="button" data-grade="4">4.º</button>
           <button type="button" data-grade="5">5.º</button>
+        </div>
+      </section>
+
+
+      <section id="gradeJourneyCard" class="grade-journey-card" hidden aria-label="Progreso del grado">
+        <div class="grade-journey-copy">
+          <small>🧭 TU RECORRIDO ESCOLAR</small>
+          <strong id="gradeJourneyTitle">Preparando tu grado…</strong>
+          <p id="gradeJourneyText">Completa los aprendizajes clave de tus materias para avanzar al siguiente grado.</p>
+          <div class="grade-journey-progress" aria-hidden="true"><span id="gradeJourneyProgressBar"></span></div>
+        </div>
+        <div class="grade-journey-side">
+          <b id="gradeJourneyPercent">0%</b>
+          <button id="advanceGradeBtn" type="button" hidden>Comenzar siguiente grado →</button>
         </div>
       </section>
 
@@ -373,11 +387,10 @@
         </div>
       </section>
 
-      <div class="curriculum-grade-inline">
-        <span>GRADO</span>
-        <div id="subjectGradeSelector" class="grade-selector compact" role="group" aria-label="Cambiar grado">
-          <button type="button" data-grade="1">1.º</button><button type="button" data-grade="2">2.º</button><button type="button" data-grade="3">3.º</button><button type="button" data-grade="4">4.º</button><button type="button" data-grade="5">5.º</button>
-        </div>
+      <div class="curriculum-grade-inline locked-grade-inline">
+        <span>GRADO ACTIVO</span>
+        <div id="subjectGradeSelector" class="grade-locked-badge" aria-live="polite">3.º de primaria</div>
+        <small>Esta ruta está bloqueada al grado elegido. Un adulto puede ajustarlo desde Perfil.</small>
       </div>
 
       <section class="curriculum-path-section">
@@ -420,9 +433,9 @@
         <div class="topic-game-launch-icon" aria-hidden="true">🎮</div>
         <div class="topic-game-launch-copy">
           <small>APRENDE JUGANDO</small>
-          <h2>Juega 5 retos de este tema</h2>
-          <p>Responde, gana estrellas y aprende con una explicación corta después de cada reto.</p>
-          <div class="topic-game-launch-meta"><span>⚡ 5 retos</span><span>⭐ Hasta 3 estrellas</span><span>💡 Pistas de NOVA</span></div>
+          <h2>Completa 20 retos para dominar el tema</h2>
+          <p>Avanza por cuatro etapas: entender, practicar, explicar y demostrar. Necesitas al menos 80% para superar el aprendizaje.</p>
+          <div class="topic-game-launch-meta"><span>⚡ 20 retos</span><span>🧩 4 etapas</span><span>🎯 Meta: 80%</span><span>💡 Pistas de NOVA</span></div>
         </div>
         <button id="curriculumGameStartBtn" class="topic-game-start-btn" type="button">Jugar ahora →</button>
         <div id="curriculumGameBest" class="topic-game-best" hidden></div>
@@ -450,7 +463,7 @@
       </header>
 
       <div class="curriculum-game-progress" aria-label="Progreso del juego"><span id="curriculumGameProgressBar"></span></div>
-      <div class="curriculum-game-round"><span id="curriculumGameRound">RETO 1 DE 5</span><span id="curriculumGameCombo">⚡ LISTO</span></div>
+      <div class="curriculum-game-round"><span id="curriculumGameRound">RETO 1 DE 20</span><span id="curriculumGameStageLabel" class="curriculum-game-stage-label">ETAPA 1 · ENTIENDO</span><span id="curriculumGameCombo">⚡ LISTO</span></div>
 
       <main class="curriculum-game-stage">
         <div id="curriculumGameEmoji" class="curriculum-game-emoji" aria-hidden="true">🧠</div>
@@ -1176,6 +1189,22 @@
       <section class="parent-curriculum-summary">
         <div><small>RUTA ACADÉMICA ACTUAL</small><strong id="parentCurriculumGrade">Selecciona el grado desde Inicio</strong><p>El contenido se organiza por Matemáticas, Lenguaje, Ciencias, Sociales e Inglés.</p></div>
         <div id="parentCurriculumSubjects" class="parent-curriculum-subjects"></div>
+      </section>
+
+
+      <section class="parent-grade-manager">
+        <div>
+          <small>SOLO ADULTOS · AJUSTE DE GRADO</small>
+          <strong>Grado escolar activo</strong>
+          <p>El niño solo puede navegar por su grado actual. Usa este control si elegiste el grado equivocado o necesitas ajustarlo manualmente.</p>
+        </div>
+        <div id="parentGradeSelector" class="grade-selector parent-grade-selector" role="group" aria-label="Cambiar grado escolar desde el perfil familiar">
+          <button type="button" data-parent-grade="1">1.º</button>
+          <button type="button" data-parent-grade="2">2.º</button>
+          <button type="button" data-parent-grade="3">3.º</button>
+          <button type="button" data-parent-grade="4">4.º</button>
+          <button type="button" data-parent-grade="5">5.º</button>
+        </div>
       </section>
 
       <p class="parent-measured-label">PROGRESO MEDIDO HASTA AHORA · LABORATORIO DE DIVISIÓN</p>
