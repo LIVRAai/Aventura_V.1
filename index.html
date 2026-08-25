@@ -416,11 +416,23 @@
         </div>
       </section>
 
-      <section class="topic-nova-card">
+      <section class="topic-game-launch-card">
+        <div class="topic-game-launch-icon" aria-hidden="true">🎮</div>
+        <div class="topic-game-launch-copy">
+          <small>APRENDE JUGANDO</small>
+          <h2>Juega 5 retos de este tema</h2>
+          <p>Responde, gana estrellas y aprende con una explicación corta después de cada reto.</p>
+          <div class="topic-game-launch-meta"><span>⚡ 5 retos</span><span>⭐ Hasta 3 estrellas</span><span>💡 Pistas de NOVA</span></div>
+        </div>
+        <button id="curriculumGameStartBtn" class="topic-game-start-btn" type="button">Jugar ahora →</button>
+        <div id="curriculumGameBest" class="topic-game-best" hidden></div>
+      </section>
+
+      <section class="topic-nova-card topic-nova-support-card">
         <div class="nova-orb">N</div>
-        <div class="topic-nova-copy"><small>NOVA · TU PROFE DE REFUERZO</small><h2>Practiquemos este tema juntos</h2><p>NOVA empieza con una explicación corta, luego te pregunta y adapta la práctica según tus respuestas.</p></div>
-        <button id="curriculumPracticeBtn" class="topic-primary-btn" type="button">Practicar con NOVA →</button>
-        <button id="curriculumAskBtn" class="topic-secondary-btn" type="button">Tengo una duda sobre este tema</button>
+        <div class="topic-nova-copy"><small>NOVA · TU PROFE DE REFUERZO</small><h2>¿Necesitas que te lo explique?</h2><p>Conversa con NOVA para entender el tema, resolver una duda o practicar paso a paso.</p></div>
+        <button id="curriculumPracticeBtn" class="topic-primary-btn" type="button">Practicar conversando →</button>
+        <button id="curriculumAskBtn" class="topic-secondary-btn" type="button">Tengo una duda</button>
       </section>
 
       <button id="curriculumDivisionLabBtn" class="division-lab-card" type="button" hidden>
@@ -428,6 +440,42 @@
       </button>
     </div>
   </section>
+
+  <div id="curriculumGameModal" class="curriculum-game-modal" hidden role="dialog" aria-modal="true" aria-labelledby="curriculumGameTitle">
+    <div class="curriculum-game-shell">
+      <header class="curriculum-game-head">
+        <button id="curriculumGameCloseBtn" class="curriculum-game-close" type="button" aria-label="Cerrar juego">← Tema</button>
+        <div class="curriculum-game-context"><small id="curriculumGameKicker">MATEMÁTICAS · 3.º</small><strong id="curriculumGameTitle">Reto</strong></div>
+        <div class="curriculum-game-stars" aria-label="Estrellas de la ronda"><span id="curriculumGameScore">0</span><b>★</b></div>
+      </header>
+
+      <div class="curriculum-game-progress" aria-label="Progreso del juego"><span id="curriculumGameProgressBar"></span></div>
+      <div class="curriculum-game-round"><span id="curriculumGameRound">RETO 1 DE 5</span><span id="curriculumGameCombo">⚡ LISTO</span></div>
+
+      <main class="curriculum-game-stage">
+        <div id="curriculumGameEmoji" class="curriculum-game-emoji" aria-hidden="true">🧠</div>
+        <p id="curriculumGamePrompt" class="curriculum-game-prompt">Pregunta</p>
+        <div id="curriculumGameOptions" class="curriculum-game-options"></div>
+
+        <button id="curriculumGameHintBtn" class="curriculum-game-hint-btn" type="button">💡 Pista de NOVA</button>
+        <div id="curriculumGameHint" class="curriculum-game-hint" hidden></div>
+        <div id="curriculumGameFeedback" class="curriculum-game-feedback" hidden></div>
+        <button id="curriculumGameNextBtn" class="curriculum-game-next" type="button" hidden>Siguiente reto →</button>
+      </main>
+
+      <section id="curriculumGameFinish" class="curriculum-game-finish" hidden>
+        <div id="curriculumGameFinishStars" class="curriculum-game-finish-stars">⭐⭐⭐</div>
+        <p class="eyebrow">RONDA COMPLETADA</p>
+        <h2 id="curriculumGameFinishTitle">¡Gran trabajo!</h2>
+        <p id="curriculumGameFinishText"></p>
+        <div class="curriculum-game-finish-actions">
+          <button id="curriculumGameReplayBtn" class="topic-game-start-btn" type="button">Jugar otra vez</button>
+          <button id="curriculumGameNovaBtn" class="topic-secondary-btn" type="button">Preguntarle a NOVA</button>
+          <button id="curriculumGameDoneBtn" class="curriculum-game-done" type="button">Volver al tema</button>
+        </div>
+      </section>
+    </div>
+  </div>
 
   <section id="novaTutorHub" class="learning-hub nova-tutor-hub" hidden aria-label="Pregúntale a NOVA">
     <div class="hub-shell nova-tutor-shell">

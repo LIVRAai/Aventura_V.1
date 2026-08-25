@@ -49,3 +49,17 @@ Para cambiar el precio:
 3. la nueva tarifa aparecerá automáticamente en la experiencia de compra.
 
 Las suscripciones ya creadas mantienen su monto contractual actual.
+
+
+## V22 · Aprender jugando
+
+Cada uno de los aprendizajes de 1.º a 5.º tiene ahora una ronda interactiva de 5 retos.
+
+- 5 materias: Matemáticas, Lenguaje, Ciencias, Sociales e Inglés.
+- 5 retos por tema, con opciones, pistas, explicación inmediata y puntuación.
+- Hasta 3 estrellas según el resultado y mejor marca guardada localmente por perfil infantil.
+- Los temas siguen ofreciendo conversación directa con NOVA para explicación y refuerzo.
+- El Laboratorio de división anterior se conserva como entrenamiento intensivo dentro de los temas de división.
+- No se modificaron bases de datos, Supabase, Mercado Pago, webhooks, autenticación ni endpoints de API.
+
+El progreso nuevo de los juegos se guarda en `localStorage` con una clave independiente, precisamente para no cambiar el esquema actual de Supabase en esta versión.

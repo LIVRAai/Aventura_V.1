@@ -141,6 +141,30 @@
   const curriculumTopicRealWorld = $('#curriculumTopicRealWorld');
   const curriculumTopicSkill = $('#curriculumTopicSkill');
   const curriculumPracticeBtn = $('#curriculumPracticeBtn');
+  const curriculumGameStartBtn = $('#curriculumGameStartBtn');
+  const curriculumGameBest = $('#curriculumGameBest');
+  const curriculumGameModal = $('#curriculumGameModal');
+  const curriculumGameCloseBtn = $('#curriculumGameCloseBtn');
+  const curriculumGameKicker = $('#curriculumGameKicker');
+  const curriculumGameTitle = $('#curriculumGameTitle');
+  const curriculumGameScore = $('#curriculumGameScore');
+  const curriculumGameProgressBar = $('#curriculumGameProgressBar');
+  const curriculumGameRound = $('#curriculumGameRound');
+  const curriculumGameCombo = $('#curriculumGameCombo');
+  const curriculumGameEmoji = $('#curriculumGameEmoji');
+  const curriculumGamePrompt = $('#curriculumGamePrompt');
+  const curriculumGameOptions = $('#curriculumGameOptions');
+  const curriculumGameHintBtn = $('#curriculumGameHintBtn');
+  const curriculumGameHint = $('#curriculumGameHint');
+  const curriculumGameFeedback = $('#curriculumGameFeedback');
+  const curriculumGameNextBtn = $('#curriculumGameNextBtn');
+  const curriculumGameFinish = $('#curriculumGameFinish');
+  const curriculumGameFinishStars = $('#curriculumGameFinishStars');
+  const curriculumGameFinishTitle = $('#curriculumGameFinishTitle');
+  const curriculumGameFinishText = $('#curriculumGameFinishText');
+  const curriculumGameReplayBtn = $('#curriculumGameReplayBtn');
+  const curriculumGameNovaBtn = $('#curriculumGameNovaBtn');
+  const curriculumGameDoneBtn = $('#curriculumGameDoneBtn');
   const curriculumAskBtn = $('#curriculumAskBtn');
   const curriculumDivisionLabBtn = $('#curriculumDivisionLabBtn');
   const novaNewConversationBtn = $('#novaNewConversationBtn');
@@ -319,6 +343,7 @@
 
   const CURRICULUM_GRADE_KEY = 'novaCurriculumGradeV1';
   const CURRICULUM_ACTIVITY_KEY = 'novaCurriculumActivityV1';
+  const CURRICULUM_GAME_PROGRESS_KEY = 'novaCurriculumGameProgressV1';
   const CURRICULUM_SUBJECTS = {
     math: { name:'Matemáticas', icon:'➗', description:'Números, operaciones, geometría, datos y solución de problemas.', competency:'Pensamiento lógico, razonamiento numérico y solución de problemas.' },
     language: { name:'Lenguaje', icon:'📖', description:'Lectura, escritura, comprensión, expresión y argumentación.', competency:'Comprensión lectora, comunicación clara y capacidad de argumentar.' },
@@ -329,6 +354,7 @@
   const CURRICULUM = {"1":{"math":[{"id":"math-1-1","title":"Números hasta 100","goal":"Leer, escribir, comparar y ordenar números; reconocer unidades y decenas.","realWorld":"Contar objetos, saber cuánto hay y comparar cantidades.","skill":"Pensamiento numérico","legacyDivision":false},{"id":"math-1-2","title":"Sumar y restar","goal":"Comprender la suma como juntar y la resta como quitar, comparar o encontrar lo que falta.","realWorld":"Resolver situaciones sencillas con objetos, puntos, dinero y cantidades.","skill":"Razonamiento lógico","legacyDivision":false},{"id":"math-1-3","title":"Patrones y secuencias","goal":"Reconocer qué se repite, qué cambia y cuál elemento continúa.","realWorld":"Anticipar, ordenar y descubrir reglas.","skill":"Pensamiento lógico","legacyDivision":false},{"id":"math-1-4","title":"Figuras y ubicación","goal":"Reconocer figuras básicas y usar palabras como arriba, abajo, dentro, fuera, izquierda y derecha.","realWorld":"Orientarse y describir posiciones y formas del entorno.","skill":"Orientación espacial","legacyDivision":false},{"id":"math-1-5","title":"Medir y comparar","goal":"Comparar longitud, peso, capacidad y duración con unidades cotidianas.","realWorld":"Decidir qué es más largo, pesado, lleno o duradero.","skill":"Resolución práctica","legacyDivision":false},{"id":"math-1-6","title":"Problemas de la vida diaria","goal":"Elegir si conviene sumar o restar a partir de una situación corta.","realWorld":"Usar los números para tomar decisiones sencillas.","skill":"Solución de problemas","legacyDivision":false}],"language":[{"id":"language-1-1","title":"Letras, sonidos y palabras","goal":"Relacionar sonidos con letras, formar palabras y reconocer sílabas frecuentes.","realWorld":"Leer nombres, avisos y palabras de uso cotidiano.","skill":"Comunicación","legacyDivision":false},{"id":"language-1-2","title":"Leer oraciones cortas","goal":"Leer frases sencillas y comprender quién hace qué.","realWorld":"Seguir instrucciones y comprender mensajes breves.","skill":"Comprensión lectora","legacyDivision":false},{"id":"language-1-3","title":"Ordenar una historia","goal":"Identificar qué pasó primero, después y al final.","realWorld":"Contar experiencias de forma clara y ordenada.","skill":"Organización de ideas","legacyDivision":false},{"id":"language-1-4","title":"Escribir oraciones","goal":"Construir oraciones con sentido, mayúscula inicial y punto final.","realWorld":"Expresar por escrito ideas sencillas.","skill":"Expresión escrita","legacyDivision":false},{"id":"language-1-5","title":"Comprender cuentos","goal":"Reconocer personajes, lugares, acciones y hechos explícitos.","realWorld":"Entender relatos y conversar sobre lo leído.","skill":"Comprensión y conversación","legacyDivision":false},{"id":"language-1-6","title":"Hablar y escuchar","goal":"Explicar una idea, escuchar turnos y hacer preguntas relacionadas.","realWorld":"Participar en conversaciones con claridad y respeto.","skill":"Comunicación social","legacyDivision":false}],"science":[{"id":"science-1-1","title":"Mi cuerpo y los sentidos","goal":"Reconocer partes del cuerpo y cómo los sentidos ayudan a conocer el entorno.","realWorld":"Cuidarse y describir lo que observa, escucha, toca, huele o saborea.","skill":"Observación","legacyDivision":false},{"id":"science-1-2","title":"Seres vivos y no vivos","goal":"Distinguir seres vivos de objetos y reconocer necesidades básicas de los seres vivos.","realWorld":"Comprender y cuidar plantas, animales y personas.","skill":"Clasificación","legacyDivision":false},{"id":"science-1-3","title":"Plantas y animales","goal":"Reconocer características, necesidades y hábitats cercanos.","realWorld":"Observar semejanzas y diferencias en la naturaleza.","skill":"Pensamiento científico","legacyDivision":false},{"id":"science-1-4","title":"Materiales que me rodean","goal":"Comparar objetos por textura, dureza, forma y uso.","realWorld":"Elegir materiales según lo que se necesita construir o usar.","skill":"Exploración","legacyDivision":false},{"id":"science-1-5","title":"Día, noche y clima","goal":"Observar cambios entre el día y la noche y reconocer condiciones del tiempo.","realWorld":"Relacionar rutinas con el ambiente y prepararse para el clima.","skill":"Observación del entorno","legacyDivision":false},{"id":"science-1-6","title":"Cuidar nuestro entorno","goal":"Reconocer acciones para cuidar agua, animales, plantas y espacios comunes.","realWorld":"Tomar decisiones responsables con el ambiente.","skill":"Responsabilidad","legacyDivision":false}],"social":[{"id":"social-1-1","title":"Mi familia y quienes me cuidan","goal":"Reconocer roles, vínculos y formas diversas de familia y cuidado.","realWorld":"Valorar a las personas con quienes convive.","skill":"Identidad y empatía","legacyDivision":false},{"id":"social-1-2","title":"Mi colegio","goal":"Reconocer espacios, personas, normas y responsabilidades del entorno escolar.","realWorld":"Participar mejor en la vida del colegio.","skill":"Convivencia","legacyDivision":false},{"id":"social-1-3","title":"Normas y acuerdos","goal":"Comprender por qué existen reglas y cómo ayudan a convivir.","realWorld":"Resolver situaciones cotidianas respetando acuerdos.","skill":"Ciudadanía","legacyDivision":false},{"id":"social-1-4","title":"Mi casa y mi barrio","goal":"Describir lugares cercanos y reconocer puntos importantes del entorno.","realWorld":"Ubicarse y comprender la comunidad donde vive.","skill":"Pertenencia","legacyDivision":false},{"id":"social-1-5","title":"Antes, ahora y después","goal":"Ordenar hechos personales y familiares en el tiempo.","realWorld":"Comprender cambios y construir memoria.","skill":"Pensamiento temporal","legacyDivision":false},{"id":"social-1-6","title":"Somos diferentes","goal":"Reconocer gustos, costumbres y características diferentes entre personas.","realWorld":"Relacionarse con respeto y valorar la diversidad.","skill":"Respeto y diversidad","legacyDivision":false}],"english":[{"id":"english-1-1","title":"Hello!","goal":"Usar saludos, despedidas y expresiones básicas de cortesía.","realWorld":"Iniciar y cerrar interacciones sencillas.","skill":"Comunicación básica","legacyDivision":false},{"id":"english-1-2","title":"Numbers and colors","goal":"Reconocer y usar números básicos y colores frecuentes.","realWorld":"Describir objetos y cantidades sencillas.","skill":"Vocabulario funcional","legacyDivision":false},{"id":"english-1-3","title":"My family","goal":"Nombrar miembros de la familia y usar expresiones muy simples sobre ellos.","realWorld":"Hablar de personas cercanas.","skill":"Expresión personal","legacyDivision":false},{"id":"english-1-4","title":"My classroom","goal":"Reconocer objetos del salón y seguir instrucciones básicas.","realWorld":"Comprender rutinas frecuentes de clase.","skill":"Comprensión oral","legacyDivision":false},{"id":"english-1-5","title":"My body","goal":"Nombrar partes principales del cuerpo y acciones sencillas.","realWorld":"Comprender canciones, juegos e instrucciones.","skill":"Vocabulario corporal","legacyDivision":false},{"id":"english-1-6","title":"I like / I don’t like","goal":"Expresar gustos y preferencias con estructuras sencillas.","realWorld":"Comunicar lo que le gusta y escuchar preferencias de otros.","skill":"Interacción social","legacyDivision":false}]},"2":{"math":[{"id":"math-2-1","title":"Números hasta 1.000","goal":"Leer, escribir, descomponer, comparar y ordenar números de tres cifras.","realWorld":"Comprender cantidades mayores y usarlas en situaciones reales.","skill":"Pensamiento numérico","legacyDivision":false},{"id":"math-2-2","title":"Suma y resta con reagrupación","goal":"Resolver sumas y restas comprendiendo unidades, decenas y centenas.","realWorld":"Calcular cambios, totales y diferencias.","skill":"Precisión y razonamiento","legacyDivision":false},{"id":"math-2-3","title":"Primeras multiplicaciones","goal":"Comprender la multiplicación como grupos iguales y suma repetida.","realWorld":"Calcular colecciones organizadas en grupos.","skill":"Pensamiento multiplicativo","legacyDivision":false},{"id":"math-2-4","title":"Repartos y grupos iguales","goal":"Introducir la división como repartir o formar grupos del mismo tamaño.","realWorld":"Compartir cantidades de manera justa y contar grupos.","skill":"Razonamiento lógico","legacyDivision":false},{"id":"math-2-5","title":"Hora, dinero y medidas","goal":"Leer horas sencillas, reconocer monedas y comparar medidas.","realWorld":"Organizar rutinas y resolver compras o mediciones básicas.","skill":"Autonomía cotidiana","legacyDivision":false},{"id":"math-2-6","title":"Figuras, datos y problemas","goal":"Reconocer formas, leer pictogramas/tablas sencillas y elegir operaciones.","realWorld":"Interpretar información y resolver situaciones.","skill":"Solución de problemas","legacyDivision":false}],"language":[{"id":"language-2-1","title":"Leer con fluidez y sentido","goal":"Leer textos breves respetando pausas y comprender información explícita.","realWorld":"Entender instrucciones, cuentos y mensajes cotidianos.","skill":"Comprensión lectora","legacyDivision":false},{"id":"language-2-2","title":"Idea principal","goal":"Identificar de qué trata principalmente un texto corto.","realWorld":"Resumir lo más importante sin perderse en detalles.","skill":"Síntesis","legacyDivision":false},{"id":"language-2-3","title":"Narrar y describir","goal":"Diferenciar textos que cuentan hechos de textos que describen personas, lugares u objetos.","realWorld":"Explicar experiencias y describir con precisión.","skill":"Comunicación","legacyDivision":false},{"id":"language-2-4","title":"Sustantivos, verbos y adjetivos","goal":"Reconocer palabras que nombran, indican acciones y describen.","realWorld":"Construir oraciones más claras y completas.","skill":"Lenguaje y expresión","legacyDivision":false},{"id":"language-2-5","title":"Ortografía básica","goal":"Practicar mayúsculas, punto, separación de palabras y combinaciones frecuentes.","realWorld":"Escribir mensajes comprensibles.","skill":"Precisión escrita","legacyDivision":false},{"id":"language-2-6","title":"Escribir textos cortos","goal":"Planear y escribir pequeños relatos, descripciones o mensajes con inicio y cierre.","realWorld":"Comunicar ideas por escrito.","skill":"Organización de ideas","legacyDivision":false}],"science":[{"id":"science-2-1","title":"Ciclos de vida","goal":"Reconocer cambios en plantas, animales y seres humanos a lo largo del tiempo.","realWorld":"Comprender crecimiento y transformación de los seres vivos.","skill":"Pensamiento temporal","legacyDivision":false},{"id":"science-2-2","title":"Hábitats y necesidades","goal":"Relacionar seres vivos con alimento, agua, refugio y condiciones del lugar donde viven.","realWorld":"Comprender por qué los ambientes deben cuidarse.","skill":"Relación causa-efecto","legacyDivision":false},{"id":"science-2-3","title":"Cuidado del cuerpo","goal":"Reconocer hábitos de higiene, alimentación, descanso y actividad física.","realWorld":"Tomar decisiones cotidianas de autocuidado.","skill":"Autonomía","legacyDivision":false},{"id":"science-2-4","title":"Sólidos, líquidos y cambios","goal":"Observar propiedades de materiales y cambios sencillos por temperatura o mezcla.","realWorld":"Explicar fenómenos cotidianos con evidencia.","skill":"Experimentación","legacyDivision":false},{"id":"science-2-5","title":"Luz, sonido y movimiento","goal":"Reconocer fuentes de luz y sonido y describir movimientos y fuerzas sencillas.","realWorld":"Entender situaciones del entorno físico.","skill":"Curiosidad científica","legacyDivision":false},{"id":"science-2-6","title":"El tiempo atmosférico","goal":"Observar lluvia, viento, temperatura y nubosidad y registrar cambios.","realWorld":"Leer el entorno y hacer predicciones sencillas.","skill":"Registro de información","legacyDivision":false}],"social":[{"id":"social-2-1","title":"Mi comunidad","goal":"Reconocer personas, oficios, servicios e instituciones cercanas.","realWorld":"Comprender cómo las personas colaboran para que una comunidad funcione.","skill":"Participación","legacyDivision":false},{"id":"social-2-2","title":"Derechos y responsabilidades","goal":"Reconocer derechos básicos y responsabilidades en casa y colegio.","realWorld":"Convivir con mayor autonomía y respeto.","skill":"Ciudadanía","legacyDivision":false},{"id":"social-2-3","title":"Mapas y símbolos","goal":"Usar croquis, puntos de referencia, símbolos y direcciones básicas.","realWorld":"Ubicarse y comunicar rutas sencillas.","skill":"Orientación espacial","legacyDivision":false},{"id":"social-2-4","title":"Campo y ciudad","goal":"Comparar características, actividades y formas de vida de espacios rurales y urbanos.","realWorld":"Comprender diversidad de territorios y trabajos.","skill":"Pensamiento comparativo","legacyDivision":false},{"id":"social-2-5","title":"Tradiciones y cultura","goal":"Reconocer celebraciones, costumbres y expresiones culturales de distintas comunidades.","realWorld":"Valorar la diversidad cultural.","skill":"Identidad y respeto","legacyDivision":false},{"id":"social-2-6","title":"Cambios en el tiempo","goal":"Comparar objetos, lugares y costumbres de antes y de ahora.","realWorld":"Comprender que las sociedades cambian.","skill":"Pensamiento histórico","legacyDivision":false}],"english":[{"id":"english-2-1","title":"About me","goal":"Decir nombre, edad y datos personales muy básicos con frases sencillas.","realWorld":"Presentarse en situaciones básicas.","skill":"Comunicación","legacyDivision":false},{"id":"english-2-2","title":"Daily routines","goal":"Comprender y nombrar acciones frecuentes del día.","realWorld":"Hablar de hábitos y seguir secuencias.","skill":"Autonomía","legacyDivision":false},{"id":"english-2-3","title":"My home","goal":"Nombrar espacios y objetos comunes de la casa.","realWorld":"Describir dónde están objetos de forma sencilla.","skill":"Vocabulario funcional","legacyDivision":false},{"id":"english-2-4","title":"Food and drinks","goal":"Reconocer alimentos frecuentes y expresar gustos básicos.","realWorld":"Participar en intercambios sencillos sobre comida.","skill":"Comunicación cotidiana","legacyDivision":false},{"id":"english-2-5","title":"Can / can’t","goal":"Expresar habilidades sencillas y comprender lo que otros pueden hacer.","realWorld":"Hablar de capacidades y pedir ayuda.","skill":"Interacción","legacyDivision":false},{"id":"english-2-6","title":"Simple questions","goal":"Comprender y responder preguntas básicas con what, who, where y how old.","realWorld":"Sostener intercambios muy breves.","skill":"Comprensión e interacción","legacyDivision":false}]},"3":{"math":[{"id":"math-3-1","title":"Valor posicional y números grandes","goal":"Leer, escribir, comparar y descomponer números de varias cifras.","realWorld":"Comprender precios, distancias, cantidades y datos más grandes.","skill":"Pensamiento numérico","legacyDivision":false},{"id":"math-3-2","title":"Multiplicación","goal":"Consolidar tablas, estrategias y multiplicaciones por una cifra.","realWorld":"Calcular grupos, arreglos, costos y cantidades repetidas.","skill":"Agilidad y razonamiento","legacyDivision":false},{"id":"math-3-3","title":"División y reparto","goal":"Comprender la división, relacionarla con multiplicación y resolver divisiones básicas.","realWorld":"Repartir, formar grupos y resolver problemas de partes iguales.","skill":"Solución de problemas","legacyDivision":true},{"id":"math-3-4","title":"Fracciones básicas","goal":"Reconocer mitad, tercio, cuarto y otras partes iguales de una unidad o colección.","realWorld":"Interpretar repartos, recetas y porciones.","skill":"Pensamiento proporcional","legacyDivision":false},{"id":"math-3-5","title":"Medición, perímetro y tiempo","goal":"Medir longitudes y calcular perímetros sencillos; usar unidades de tiempo.","realWorld":"Planear espacios, recorridos y horarios.","skill":"Aplicación matemática","legacyDivision":false},{"id":"math-3-6","title":"Datos y problemas","goal":"Leer tablas y gráficos sencillos y resolver problemas de uno o dos pasos.","realWorld":"Interpretar información y tomar decisiones con datos.","skill":"Pensamiento crítico","legacyDivision":false}],"language":[{"id":"language-3-1","title":"Comprensión e inferencias sencillas","goal":"Identificar ideas principales, detalles y deducir información no dicha de forma directa.","realWorld":"Comprender mejor cuentos, instrucciones y textos informativos.","skill":"Lectura comprensiva","legacyDivision":false},{"id":"language-3-2","title":"Párrafos y secuencias","goal":"Organizar oraciones alrededor de una idea y conectar inicio, desarrollo y cierre.","realWorld":"Escribir explicaciones y relatos más claros.","skill":"Organización de ideas","legacyDivision":false},{"id":"language-3-3","title":"Tipos de texto","goal":"Reconocer narraciones, descripciones, instrucciones e información.","realWorld":"Elegir cómo leer y cómo escribir según el propósito.","skill":"Flexibilidad comunicativa","legacyDivision":false},{"id":"language-3-4","title":"Gramática en contexto","goal":"Usar sustantivos, verbos, adjetivos, pronombres y concordancia básica.","realWorld":"Expresarse con mayor precisión.","skill":"Comunicación","legacyDivision":false},{"id":"language-3-5","title":"Ortografía y puntuación","goal":"Usar mayúsculas, puntos, comas y reglas frecuentes de escritura.","realWorld":"Producir textos fáciles de entender.","skill":"Precisión escrita","legacyDivision":false},{"id":"language-3-6","title":"Explicar y argumentar","goal":"Expresar una opinión sencilla y sostenerla con una razón o ejemplo.","realWorld":"Participar en conversaciones y defender ideas con respeto.","skill":"Argumentación","legacyDivision":false}],"science":[{"id":"science-3-1","title":"Seres vivos y sus funciones","goal":"Reconocer funciones básicas de nutrición, relación y reproducción en seres vivos.","realWorld":"Comprender cómo organismos responden y sobreviven.","skill":"Pensamiento científico","legacyDivision":false},{"id":"science-3-2","title":"Ecosistemas","goal":"Relacionar organismos, alimento, hábitat y condiciones del ambiente.","realWorld":"Comprender consecuencias de cambios ambientales.","skill":"Pensamiento sistémico","legacyDivision":false},{"id":"science-3-3","title":"Materia y sus cambios","goal":"Comparar materiales, estados y cambios físicos observables.","realWorld":"Explicar transformaciones cotidianas.","skill":"Observación y explicación","legacyDivision":false},{"id":"science-3-4","title":"Luz, sonido y energía","goal":"Explorar cómo se producen y perciben luz y sonido y reconocer usos de la energía.","realWorld":"Comprender tecnologías y fenómenos del entorno.","skill":"Curiosidad científica","legacyDivision":false},{"id":"science-3-5","title":"Tierra y sistema solar","goal":"Reconocer movimientos y características básicas de la Tierra, el Sol y la Luna.","realWorld":"Interpretar día, noche y algunos ciclos naturales.","skill":"Pensamiento espacial","legacyDivision":false},{"id":"science-3-6","title":"Investigar como científico","goal":"Hacer preguntas, observar, registrar datos y comparar resultados.","realWorld":"Resolver dudas usando evidencia y no solo suposiciones.","skill":"Pensamiento crítico","legacyDivision":false}],"social":[{"id":"social-3-1","title":"Colombia y su territorio","goal":"Ubicar Colombia y reconocer elementos básicos de su territorio.","realWorld":"Comprender dónde vive y cómo se organiza el espacio nacional.","skill":"Identidad territorial","legacyDivision":false},{"id":"social-3-2","title":"Regiones y paisajes","goal":"Comparar paisajes, climas, recursos y formas de vida de distintas regiones.","realWorld":"Entender la diversidad geográfica del país.","skill":"Pensamiento comparativo","legacyDivision":false},{"id":"social-3-3","title":"Municipio y departamento","goal":"Reconocer niveles cercanos de organización territorial y autoridades básicas.","realWorld":"Comprender cómo se organiza la comunidad.","skill":"Ciudadanía","legacyDivision":false},{"id":"social-3-4","title":"Diversidad cultural","goal":"Reconocer aportes de pueblos indígenas, afrocolombianos y otras comunidades.","realWorld":"Valorar identidades y combatir prejuicios.","skill":"Respeto y diversidad","legacyDivision":false},{"id":"social-3-5","title":"Pasado y presente","goal":"Usar fuentes sencillas para comparar formas de vida de diferentes épocas.","realWorld":"Comprender cambios sociales y culturales.","skill":"Pensamiento histórico","legacyDivision":false},{"id":"social-3-6","title":"Convivencia y participación","goal":"Resolver desacuerdos, respetar normas y participar en decisiones sencillas.","realWorld":"Construir relaciones y ciudadanía democrática.","skill":"Competencia ciudadana","legacyDivision":false}],"english":[{"id":"english-3-1","title":"Present simple","goal":"Usar frases sencillas para hablar de rutinas, gustos y hechos habituales.","realWorld":"Hablar de la vida diaria.","skill":"Comunicación funcional","legacyDivision":false},{"id":"english-3-2","title":"Questions and answers","goal":"Formar y responder preguntas sencillas sobre personas, lugares y rutinas.","realWorld":"Sostener conversaciones cortas.","skill":"Interacción","legacyDivision":false},{"id":"english-3-3","title":"Descriptions","goal":"Describir personas, animales y lugares con vocabulario frecuente.","realWorld":"Compartir información con mayor detalle.","skill":"Expresión oral","legacyDivision":false},{"id":"english-3-4","title":"School and community","goal":"Usar vocabulario de colegio, lugares y actividades del entorno.","realWorld":"Comprender instrucciones y situaciones conocidas.","skill":"Vocabulario contextual","legacyDivision":false},{"id":"english-3-5","title":"Reading short texts","goal":"Comprender idea general y datos explícitos en textos breves.","realWorld":"Leer mensajes, diálogos y descripciones.","skill":"Comprensión lectora","legacyDivision":false},{"id":"english-3-6","title":"Writing simple paragraphs","goal":"Escribir varias oraciones conectadas sobre un tema familiar.","realWorld":"Comunicar ideas breves por escrito.","skill":"Producción escrita","legacyDivision":false}]},"4":{"math":[{"id":"math-4-1","title":"Operaciones con números naturales","goal":"Resolver sumas, restas y multiplicaciones de varias cifras usando estrategias y algoritmos.","realWorld":"Calcular costos, diferencias y cantidades en problemas de varios pasos.","skill":"Razonamiento numérico","legacyDivision":false},{"id":"math-4-2","title":"División paso a paso","goal":"Resolver divisiones con una o más cifras y comprender cociente y residuo.","realWorld":"Distribuir cantidades y resolver problemas más complejos.","skill":"Solución de problemas","legacyDivision":true},{"id":"math-4-3","title":"Fracciones equivalentes","goal":"Representar, comparar y encontrar fracciones equivalentes.","realWorld":"Interpretar porciones y distintas formas de representar la misma cantidad.","skill":"Pensamiento proporcional","legacyDivision":false},{"id":"math-4-4","title":"Decimales","goal":"Leer, comparar y usar décimas y centésimas en contextos sencillos.","realWorld":"Trabajar con dinero, medidas y cantidades no enteras.","skill":"Precisión numérica","legacyDivision":false},{"id":"math-4-5","title":"Área, perímetro y geometría","goal":"Calcular perímetros y áreas de figuras comunes y describir ángulos y propiedades.","realWorld":"Analizar espacios, diseños y medidas.","skill":"Pensamiento espacial","legacyDivision":false},{"id":"math-4-6","title":"Datos, probabilidad y problemas","goal":"Interpretar tablas y gráficos, comparar datos y estimar posibilidades sencillas.","realWorld":"Tomar decisiones con información cuantitativa.","skill":"Pensamiento crítico","legacyDivision":false}],"language":[{"id":"language-4-1","title":"Lectura inferencial","goal":"Relacionar pistas del texto para deducir causas, intenciones y consecuencias.","realWorld":"Comprender mensajes que no dicen todo de forma explícita.","skill":"Pensamiento crítico","legacyDivision":false},{"id":"language-4-2","title":"Resumen e idea central","goal":"Distinguir información principal de detalles y producir resúmenes claros.","realWorld":"Estudiar mejor y comunicar lo esencial.","skill":"Síntesis","legacyDivision":false},{"id":"language-4-3","title":"Textos narrativos e informativos","goal":"Analizar estructura, propósito y recursos de diferentes tipos de texto.","realWorld":"Adaptar la lectura a lo que se necesita comprender.","skill":"Comprensión textual","legacyDivision":false},{"id":"language-4-4","title":"Oraciones y conectores","goal":"Construir oraciones y párrafos usando conectores de causa, secuencia, contraste y consecuencia.","realWorld":"Explicar ideas de forma lógica.","skill":"Comunicación estructurada","legacyDivision":false},{"id":"language-4-5","title":"Ortografía y revisión","goal":"Aplicar reglas frecuentes y revisar un texto antes de entregarlo.","realWorld":"Escribir con mayor claridad y autonomía.","skill":"Autocorrección","legacyDivision":false},{"id":"language-4-6","title":"Opinión con razones","goal":"Formular una postura y respaldarla con razones, ejemplos o información del texto.","realWorld":"Debatir y participar respetuosamente.","skill":"Argumentación","legacyDivision":false}],"science":[{"id":"science-4-1","title":"Células y organización de los seres vivos","goal":"Reconocer la célula como unidad básica y relacionarla con tejidos, órganos y sistemas.","realWorld":"Comprender cómo se organiza la vida.","skill":"Pensamiento sistémico","legacyDivision":false},{"id":"science-4-2","title":"Cadenas alimentarias y ecosistemas","goal":"Analizar productores, consumidores, descomponedores y relaciones en ecosistemas.","realWorld":"Comprender impactos cuando cambia una parte del ambiente.","skill":"Relación causa-efecto","legacyDivision":false},{"id":"science-4-3","title":"Mezclas y materiales","goal":"Distinguir sustancias, mezclas y métodos sencillos de separación.","realWorld":"Explicar procesos cotidianos como filtrar o decantar.","skill":"Experimentación","legacyDivision":false},{"id":"science-4-4","title":"Fuerza y energía","goal":"Relacionar fuerzas con cambios de movimiento y reconocer formas y transformaciones de energía.","realWorld":"Comprender máquinas y fenómenos cotidianos.","skill":"Razonamiento científico","legacyDivision":false},{"id":"science-4-5","title":"Tierra, agua y atmósfera","goal":"Reconocer componentes y cambios básicos de los sistemas terrestres.","realWorld":"Comprender fenómenos ambientales y cuidado de recursos.","skill":"Pensamiento ambiental","legacyDivision":false},{"id":"science-4-6","title":"Diseñar una investigación","goal":"Plantear preguntas, variables simples, registros y conclusiones basadas en resultados.","realWorld":"Aprender a comprobar ideas con evidencia.","skill":"Pensamiento crítico","legacyDivision":false}],"social":[{"id":"social-4-1","title":"Regiones naturales de Colombia","goal":"Comparar características geográficas, culturales y económicas de las regiones.","realWorld":"Comprender la diversidad territorial del país.","skill":"Pensamiento geográfico","legacyDivision":false},{"id":"social-4-2","title":"Mapas y escalas básicas","goal":"Interpretar convenciones, coordenadas sencillas, orientación y distancias aproximadas.","realWorld":"Leer información espacial con autonomía.","skill":"Orientación y análisis","legacyDivision":false},{"id":"social-4-3","title":"Pueblos y procesos históricos","goal":"Reconocer sociedades prehispánicas, encuentro de culturas y cambios de la época colonial.","realWorld":"Comprender que la historia tiene múltiples actores y perspectivas.","skill":"Pensamiento histórico","legacyDivision":false},{"id":"social-4-4","title":"Independencia y cambios políticos","goal":"Reconocer causas y consecuencias básicas de procesos de independencia y organización republicana.","realWorld":"Relacionar hechos y cambios políticos.","skill":"Causa y consecuencia","legacyDivision":false},{"id":"social-4-5","title":"Economía y territorio","goal":"Distinguir actividades económicas y su relación con recursos y regiones.","realWorld":"Comprender cómo se producen bienes y servicios.","skill":"Pensamiento económico","legacyDivision":false},{"id":"social-4-6","title":"Democracia y convivencia","goal":"Reconocer formas de participación, autoridades y estrategias pacíficas para resolver conflictos.","realWorld":"Participar de manera informada y respetuosa.","skill":"Ciudadanía","legacyDivision":false}],"english":[{"id":"english-4-1","title":"Present simple and frequency","goal":"Hablar de rutinas usando expresiones de frecuencia y vocabulario cotidiano.","realWorld":"Describir hábitos propios y de otros.","skill":"Comunicación","legacyDivision":false},{"id":"english-4-2","title":"Present continuous","goal":"Describir acciones que ocurren en este momento.","realWorld":"Hablar de situaciones visibles o actuales.","skill":"Expresión oral","legacyDivision":false},{"id":"english-4-3","title":"Comparatives","goal":"Comparar personas, animales, objetos y lugares con estructuras sencillas.","realWorld":"Explicar semejanzas y diferencias.","skill":"Pensamiento comparativo","legacyDivision":false},{"id":"english-4-4","title":"Directions and places","goal":"Dar y seguir indicaciones básicas y nombrar lugares de la comunidad.","realWorld":"Orientarse y pedir ayuda en contextos sencillos.","skill":"Comunicación funcional","legacyDivision":false},{"id":"english-4-5","title":"Reading for details","goal":"Identificar idea general y detalles específicos en textos cortos.","realWorld":"Comprender información práctica.","skill":"Comprensión lectora","legacyDivision":false},{"id":"english-4-6","title":"Short messages and descriptions","goal":"Escribir mensajes, descripciones y pequeños textos con vocabulario conocido.","realWorld":"Comunicar información por escrito.","skill":"Producción escrita","legacyDivision":false}]},"5":{"math":[{"id":"math-5-1","title":"Operaciones y problemas multietapa","goal":"Combinar operaciones con números naturales y justificar el procedimiento elegido.","realWorld":"Resolver situaciones con varios datos y pasos.","skill":"Planificación y razonamiento","legacyDivision":false},{"id":"math-5-2","title":"Fracciones y operaciones","goal":"Comparar fracciones y resolver sumas o restas sencillas con fracciones compatibles.","realWorld":"Trabajar con repartos, recetas y medidas.","skill":"Pensamiento proporcional","legacyDivision":false},{"id":"math-5-3","title":"Decimales, porcentajes y dinero","goal":"Relacionar decimales con fracciones y porcentajes básicos en contextos cotidianos.","realWorld":"Interpretar descuentos, cantidades y dinero.","skill":"Competencia financiera básica","legacyDivision":false},{"id":"math-5-4","title":"Divisibilidad y razonamiento multiplicativo","goal":"Usar múltiplos, divisores, divisiones y relaciones entre operaciones para resolver problemas.","realWorld":"Detectar patrones numéricos y organizar cantidades.","skill":"Razonamiento lógico","legacyDivision":true},{"id":"math-5-5","title":"Área, volumen y geometría","goal":"Calcular áreas y explorar volumen, ángulos, simetría y propiedades de figuras.","realWorld":"Analizar objetos, espacios y diseños.","skill":"Pensamiento espacial","legacyDivision":false},{"id":"math-5-6","title":"Estadística y decisiones","goal":"Leer, producir y comparar tablas/gráficos; usar promedio simple e interpretar datos.","realWorld":"Tomar decisiones sustentadas en información.","skill":"Pensamiento crítico","legacyDivision":false}],"language":[{"id":"language-5-1","title":"Lectura crítica inicial","goal":"Distinguir hechos, opiniones, propósitos y puntos de vista en textos apropiados para la edad.","realWorld":"Evaluar mejor la información que recibe.","skill":"Pensamiento crítico","legacyDivision":false},{"id":"language-5-2","title":"Inferir y relacionar información","goal":"Conectar diferentes partes de un texto y usar conocimientos previos para construir significado.","realWorld":"Comprender textos más complejos.","skill":"Comprensión profunda","legacyDivision":false},{"id":"language-5-3","title":"Planear y escribir textos","goal":"Definir propósito, organizar ideas, redactar, revisar y mejorar un texto.","realWorld":"Comunicarse con mayor autonomía.","skill":"Producción escrita","legacyDivision":false},{"id":"language-5-4","title":"Argumentar con evidencia","goal":"Presentar una idea y apoyarla con razones, ejemplos o información verificable.","realWorld":"Defender puntos de vista sin agredir.","skill":"Argumentación","legacyDivision":false},{"id":"language-5-5","title":"Gramática y estilo","goal":"Usar tiempos verbales, pronombres, conectores y puntuación para mejorar claridad.","realWorld":"Expresarse con precisión.","skill":"Comunicación","legacyDivision":false},{"id":"language-5-6","title":"Medios e información","goal":"Analizar mensajes de medios, publicidad y contenidos digitales sencillos.","realWorld":"Reconocer intención, fuente y posibles sesgos.","skill":"Alfabetización mediática","legacyDivision":false}],"science":[{"id":"science-5-1","title":"Células y sistemas del cuerpo","goal":"Relacionar células, tejidos, órganos y sistemas y comprender funciones básicas del cuerpo.","realWorld":"Entender cómo se coordinan procesos del organismo.","skill":"Pensamiento sistémico","legacyDivision":false},{"id":"science-5-2","title":"Ecosistemas y equilibrio","goal":"Analizar redes alimentarias, adaptaciones y efectos de cambios ambientales.","realWorld":"Comprender consecuencias ecológicas y tomar decisiones responsables.","skill":"Pensamiento ambiental","legacyDivision":false},{"id":"science-5-3","title":"Materia, mezclas y cambios","goal":"Comparar propiedades, cambios físicos y químicos sencillos y métodos de separación.","realWorld":"Explicar transformaciones de materiales.","skill":"Experimentación","legacyDivision":false},{"id":"science-5-4","title":"Energía, electricidad y máquinas","goal":"Explorar circuitos simples, transformaciones de energía y máquinas sencillas.","realWorld":"Comprender tecnologías del entorno.","skill":"Razonamiento científico","legacyDivision":false},{"id":"science-5-5","title":"Tierra, sistema solar y universo","goal":"Relacionar movimientos de la Tierra y la Luna con fenómenos observables.","realWorld":"Interpretar ciclos y modelos básicos del sistema solar.","skill":"Pensamiento espacial","legacyDivision":false},{"id":"science-5-6","title":"Método científico y evidencia","goal":"Formular preguntas, hipótesis, procedimientos, datos y conclusiones.","realWorld":"Evaluar afirmaciones usando evidencia.","skill":"Pensamiento crítico","legacyDivision":false}],"social":[{"id":"social-5-1","title":"Colombia: territorio y población","goal":"Relacionar relieve, clima, regiones, población y actividades humanas.","realWorld":"Comprender cómo territorio y sociedad se influyen.","skill":"Pensamiento geográfico","legacyDivision":false},{"id":"social-5-2","title":"Colombia republicana","goal":"Reconocer procesos y cambios fundamentales de la vida republicana en un nivel introductorio.","realWorld":"Comprender cómo decisiones del pasado afectan el presente.","skill":"Pensamiento histórico","legacyDivision":false},{"id":"social-5-3","title":"Constitución, derechos y democracia","goal":"Comprender principios básicos de derechos, deberes, participación y organización del Estado.","realWorld":"Ejercer ciudadanía informada desde la escuela.","skill":"Ciudadanía","legacyDivision":false},{"id":"social-5-4","title":"Economía y consumo responsable","goal":"Reconocer producción, intercambio, trabajo, ahorro y decisiones de consumo.","realWorld":"Tomar decisiones económicas básicas con responsabilidad.","skill":"Competencia económica","legacyDivision":false},{"id":"social-5-5","title":"Diversidad, paz y resolución de conflictos","goal":"Analizar diferencias, prejuicios, acuerdos y formas pacíficas de manejar conflictos.","realWorld":"Convivir en contextos diversos.","skill":"Competencia social","legacyDivision":false},{"id":"social-5-6","title":"Información y ciudadanía digital","goal":"Distinguir fuentes, reconocer información confiable y comportarse responsablemente en entornos digitales.","realWorld":"Participar de forma segura y crítica en sociedad.","skill":"Ciudadanía digital","legacyDivision":false}],"english":[{"id":"english-5-1","title":"Present and past simple","goal":"Usar estructuras frecuentes para hablar de rutinas y acontecimientos pasados sencillos.","realWorld":"Contar experiencias y describir hábitos.","skill":"Comunicación","legacyDivision":false},{"id":"english-5-2","title":"Future intentions","goal":"Usar expresiones básicas para planes e intenciones futuras.","realWorld":"Hablar de metas y planes.","skill":"Expresión personal","legacyDivision":false},{"id":"english-5-3","title":"Comparing and describing","goal":"Comparar y describir personas, lugares y objetos con mayor variedad de vocabulario.","realWorld":"Comunicar diferencias y preferencias.","skill":"Comunicación precisa","legacyDivision":false},{"id":"english-5-4","title":"Reading short informational texts","goal":"Comprender idea general, secuencia y detalles en textos apropiados para primaria.","realWorld":"Acceder a información sencilla en inglés.","skill":"Comprensión lectora","legacyDivision":false},{"id":"english-5-5","title":"Writing connected texts","goal":"Escribir párrafos breves conectando ideas con and, but, because, then y otras expresiones conocidas.","realWorld":"Explicar y narrar por escrito.","skill":"Producción escrita","legacyDivision":false},{"id":"english-5-6","title":"Everyday conversation","goal":"Participar en intercambios sobre escuela, gustos, rutinas, lugares, planes y necesidades.","realWorld":"Desenvolverse en conversaciones sencillas.","skill":"Competencia comunicativa","legacyDivision":false}]}};
   let curriculumCurrentSubject = 'math';
   let curriculumCurrentTopicIndex = 0;
+  let curriculumGameState = null;
 
   let commercialAccessGranted = false;
   let supabaseClient = null;
@@ -465,7 +491,7 @@
         : document.querySelector(`[data-subject-bar="${subjectKey}"]`);
 
       if (status) status.textContent = grade
-        ? `${topics.length} aprendizajes clave${visited ? ` · ${visited} explorado${visited === 1 ? '' : 's'}` : ''}`
+        ? `${topics.length} temas para jugar${visited ? ` · ${visited} iniciado${visited === 1 ? '' : 's'}` : ''}`
         : 'Selecciona tu grado';
       if (bar) bar.style.width = grade && topics.length ? `${Math.round((visited / topics.length) * 100)}%` : '0%';
     });
@@ -518,6 +544,7 @@
       const activity = curriculumActivity();
       topics.forEach((topic, index) => {
         const started = Boolean(activity.started?.[`${grade}:${subjectKey}:${topic.id}`]);
+        const gameResult = curriculumGameProgress()[curriculumGameTopicKey(grade, subjectKey, topic.id)];
         const btn = document.createElement('button');
         btn.type = 'button';
         btn.className = `curriculum-topic-card${started ? ' started' : ''}`;
@@ -525,7 +552,7 @@
         btn.innerHTML = `
           <span class="curriculum-topic-icon">${curriculumTopicIconFor(subjectKey,index)}</span>
           <span class="curriculum-topic-copy">
-            <small>${String(index + 1).padStart(2,'0')} · ${started ? 'EXPLORADO' : 'APRENDIZAJE CLAVE'}</small>
+            <small>${String(index + 1).padStart(2,'0')} · ${gameResult?.plays ? `${'★'.repeat(gameResult.bestStars || 0)}${'☆'.repeat(3-(gameResult.bestStars || 0))} · ${gameResult.bestScore || 0}/5` : (started ? 'EN PRÁCTICA' : '5 RETOS PARA JUGAR')}</small>
             <strong>${topic.title}</strong>
             <em>${topic.goal}</em>
             <b>${topic.skill}</b>
@@ -590,6 +617,7 @@
     if (curriculumTopicRealWorld) curriculumTopicRealWorld.textContent = topic.realWorld;
     if (curriculumTopicSkill) curriculumTopicSkill.textContent = topic.skill;
     if (curriculumDivisionLabBtn) curriculumDivisionLabBtn.hidden = !topic.legacyDivision;
+    updateCurriculumGameBest();
     resetViewScroll(curriculumTopicHub);
   }
 
@@ -615,6 +643,712 @@
     } else if (novaGeneralInput) {
       novaGeneralInput.placeholder = `Pregunta sobre ${topic.title}…`;
     }
+  }
+
+
+  function curriculumGameStorageKey() {
+    const profile = familyProfile();
+    const childId = activeChild?.id || profile?.childId || profile?.childName || 'child';
+    return `${CURRICULUM_GAME_PROGRESS_KEY}:${childId}`;
+  }
+
+  function curriculumGameProgress() {
+    try {
+      const parsed = JSON.parse(localStorage.getItem(curriculumGameStorageKey()) || '{}');
+      return parsed && typeof parsed === 'object' ? parsed : {};
+    } catch {
+      return {};
+    }
+  }
+
+  function saveCurriculumGameResult(topicKey, score, total = 5) {
+    const progress = curriculumGameProgress();
+    const previous = progress[topicKey] || {};
+    const stars = score >= total ? 3 : score >= Math.ceil(total * .8) ? 2 : score >= Math.ceil(total * .6) ? 1 : 0;
+    progress[topicKey] = {
+      bestScore: Math.max(Number(previous.bestScore || 0), score),
+      bestStars: Math.max(Number(previous.bestStars || 0), stars),
+      plays: Number(previous.plays || 0) + 1,
+      total,
+      lastPlayedAt: new Date().toISOString()
+    };
+    try { localStorage.setItem(curriculumGameStorageKey(), JSON.stringify(progress)); } catch {}
+    return progress[topicKey];
+  }
+
+  function curriculumGameTopicKey(grade, subjectKey, topicId) {
+    return `${grade}:${subjectKey}:${topicId}`;
+  }
+
+  function gameChoice(question, answer, wrong = [], explanation = '', hint = '', emoji = '🧠') {
+    const options = [String(answer), ...wrong.map(String)]
+      .filter((value, index, arr) => value && arr.indexOf(value) === index)
+      .slice(0, 4);
+    return { question, answer: String(answer), options, explanation, hint, emoji };
+  }
+
+  function shuffled(values = []) {
+    return [...values].sort(() => Math.random() - .5);
+  }
+
+  function numericWrongs(answer, spread = 4) {
+    const n = Number(answer);
+    const candidates = [n + 1, n - 1, n + spread, Math.max(0, n - spread), n + 10, Math.max(0, n - 10)];
+    return [...new Set(candidates.filter(v => v !== n))].slice(0, 3).map(String);
+  }
+
+  function mathExercisePack(grade, topic) {
+    const id = topic.id;
+    const g = Number(grade);
+    const q = [];
+    const add = (question, answer, wrong, explanation, hint, emoji='🔢') => q.push(gameChoice(question, answer, wrong, explanation, hint, emoji));
+
+    if (id === 'math-1-1') {
+      add('¿Cuál número es mayor?', '72', ['27','62','52'], '72 tiene 7 decenas; los demás tienen menos.', 'Mira primero las decenas.');
+      add('¿Cuántas decenas tiene 46?', '4', ['6','46','10'], '46 está formado por 4 decenas y 6 unidades.', 'La cifra de la izquierda indica las decenas.');
+      add('¿Qué número viene después de 59?', '60', ['58','69','50'], 'Después de 59 comienza una nueva decena: 60.', 'Cuenta uno más.');
+      add('¿Cuál orden va de menor a mayor?', '18, 31, 45', ['45, 31, 18','31, 18, 45','18, 45, 31'], '18 es el menor, luego 31 y finalmente 45.', 'Compara primero las decenas.');
+      add('8 decenas y 3 unidades forman…', '83', ['38','803','11'], '8 decenas son 80 y 3 unidades completan 83.', '80 + 3.');
+    } else if (id === 'math-1-2') {
+      add('Tienes 7 fichas y ganas 5. ¿Cuántas tienes?', '12', ['2','11','13'], 'Juntar cantidades significa sumar: 7 + 5 = 12.', 'Cuenta 5 más desde 7.','➕');
+      add('15 − 6 = …', '9', ['8','10','21'], 'Si a 15 le quitamos 6 quedan 9.', 'Retrocede 6 pasos desde 15.','➖');
+      add('¿Qué operación sirve para juntar 8 globos y 4 globos?', 'Sumar', ['Restar','Dividir','Comparar'], 'Cuando juntamos dos cantidades usamos la suma.', 'Juntar = hacer un total.','➕');
+      add('Había 13 pájaros y 3 se fueron. ¿Cuántos quedan?', '10', ['16','9','11'], 'Como se fueron, restamos: 13 − 3 = 10.', 'Si algo se va, la cantidad disminuye.','➖');
+      add('9 + 9 = …', '18', ['17','19','0'], '9 + 9 es el doble de 9: 18.', 'Piensa en dos grupos de 9.','➕');
+    } else if (id === 'math-1-3') {
+      add('Completa: 2, 4, 6, 8, …', '10', ['9','11','12'], 'La secuencia aumenta de 2 en 2.', 'Mira cuánto cambia entre dos números.','🧩');
+      add('Completa: 🔵 🔴 🔵 🔴 …', '🔵', ['🔴','🟢','🟡'], 'El patrón alterna azul, rojo, azul, rojo.', 'Busca lo que se repite.','🧩');
+      add('Completa: 5, 10, 15, …', '20', ['16','25','30'], 'Cada número aumenta 5.', 'Suma lo mismo otra vez.','🧩');
+      add('¿Cuál sigue? ▲ ▲ ● ▲ ▲ ● …', '▲', ['●','■','◆'], 'Se repite el grupo ▲ ▲ ●.', 'Identifica el grupo completo que se repite.','🧩');
+      add('Completa: 20, 18, 16, …', '14', ['15','12','19'], 'La secuencia baja de 2 en 2.', 'También hay patrones que disminuyen.','🧩');
+    } else if (id === 'math-1-4') {
+      add('¿Qué figura tiene 3 lados?', 'Triángulo', ['Cuadrado','Círculo','Rectángulo'], 'Un triángulo tiene tres lados.', 'Tri significa tres.','📐');
+      add('¿Qué figura no tiene lados rectos?', 'Círculo', ['Triángulo','Cuadrado','Rectángulo'], 'El círculo es una curva cerrada.', 'Piensa en una rueda.','📐');
+      add('Si el libro está sobre la mesa, está…', 'Arriba de la mesa', ['Debajo de la mesa','Dentro de la mesa','Lejos de la mesa'], '“Sobre” indica una posición arriba.', 'Sobre = encima.','🧭');
+      add('¿Cuál tiene 4 lados iguales?', 'Cuadrado', ['Triángulo','Círculo','Óvalo'], 'El cuadrado tiene cuatro lados de la misma longitud.', 'Cuenta sus lados.','📐');
+      add('Tu mano izquierda está al lado…', 'Izquierdo de tu cuerpo', ['Derecho','Arriba','Dentro'], 'Izquierda y derecha sirven para ubicarnos.', 'Piensa en los dos lados de tu cuerpo.','🧭');
+    } else if (id === 'math-1-5') {
+      add('¿Qué usarías para medir el largo de una mesa?', 'Una regla o cinta', ['Una balanza','Un reloj','Un vaso'], 'La longitud se mide con regla o cinta.', 'Busca una herramienta para medir largo.','📏');
+      add('¿Qué pesa más normalmente?', 'Una sandía', ['Una uva','Una hoja','Un grano de arroz'], 'Una sandía tiene mucha más masa que esos objetos.', 'Compara objetos reales.','⚖️');
+      add('¿Qué recipiente suele tener mayor capacidad?', 'Una jarra', ['Una cuchara','Una tapa','Un dedal'], 'Una jarra puede contener mucho más líquido.', 'Capacidad = cuánto cabe.','🥛');
+      add('¿Qué dura más?', 'Una hora', ['Un minuto','Un segundo','Medio minuto'], 'Una hora contiene 60 minutos.', 'Compara las unidades de tiempo.','⏰');
+      add('Si dos lápices miden igual, tienen…', 'La misma longitud', ['El mismo peso siempre','Distinto tamaño','Distinta duración'], 'La longitud describe qué tan largo es algo.', 'Igual de largos = misma longitud.','📏');
+    } else if (id === 'math-1-6') {
+      add('Ana tiene 8 dulces y recibe 3 más. ¿Qué haces?', '8 + 3', ['8 − 3','3 − 8','8 ÷ 3'], 'Recibir más aumenta la cantidad, por eso sumamos.', 'Busca palabras como “más” o “recibe”.','🧠');
+      add('Había 12 carros y se fueron 5. ¿Qué haces?', '12 − 5', ['12 + 5','5 + 12','12 × 5'], 'Si algunos se van, la cantidad disminuye.', 'Se fueron = quitar.','🧠');
+      add('Luis tiene 6 canicas y Marta 9. ¿Cuántas tienen entre los dos?', '15', ['3','54','9'], '“Entre los dos” pide un total: 6 + 9 = 15.', 'Junta las dos cantidades.','➕');
+      add('Tenías 10 monedas y gastaste 4. ¿Cuántas quedan?', '6', ['14','5','40'], 'Gastar reduce la cantidad: 10 − 4 = 6.', 'Quita 4 de 10.','➖');
+      add('¿Qué pregunta suele pedir una resta?', '¿Cuántos quedan?', ['¿Cuántos hay en total?','¿Cuántos juntamos?','¿Cuántos recibimos?'], '“Cuántos quedan” suele implicar quitar una cantidad.', 'Piensa si la cantidad aumenta o disminuye.','🧠');
+    } else if (id === 'math-2-1') {
+      add('¿Cuántas centenas tiene 684?', '6', ['8','4','68'], '684 tiene 6 centenas, 8 decenas y 4 unidades.', 'Mira la primera cifra de un número de tres dígitos.');
+      add('500 + 70 + 2 = …', '572', ['527','752','507'], 'La descomposición forma 572.', 'Centenas + decenas + unidades.');
+      add('¿Cuál es mayor?', '809', ['790','798','780'], '809 tiene 8 centenas y los otros 7.', 'Compara primero centenas.');
+      add('¿Qué número está entre 399 y 401?', '400', ['398','410','391'], '400 está justo después de 399 y antes de 401.', 'Cuenta uno más desde 399.');
+      add('Ordena de menor a mayor.', '205, 250, 502', ['502, 250, 205','250, 205, 502','205, 502, 250'], '205 < 250 < 502.', 'Compara centenas y luego decenas.');
+    } else if (id === 'math-2-2') {
+      for (const [a,b,op] of [[47,28,'+'],[63,27,'-'],[156,87,'+'],[204,79,'-'],[328,145,'+']]) {
+        const ans = op === '+' ? a+b : a-b;
+        add(`${a} ${op} ${b} = …`, String(ans), numericWrongs(ans,10), `El resultado correcto es ${ans}.`, op==='+'?'Suma primero las unidades.':'Resta por valor posicional.', op==='+'?'➕':'➖');
+      }
+    } else if (id === 'math-2-3') {
+      for (const [a,b] of [[3,4],[5,2],[4,6],[2,8],[5,5]]) {
+        const ans=a*b; add(`${a} grupos de ${b} tienen…`,String(ans),numericWrongs(ans, b),`${a} × ${b} = ${ans}.`,'Puedes sumar el mismo número varias veces.','✖️');
+      }
+    } else if (id === 'math-2-4') {
+      for (const [total,groups] of [[12,3],[10,2],[15,5],[18,3],[20,4]]) {
+        const ans=total/groups; add(`Reparte ${total} objetos en ${groups} grupos iguales. ¿Cuántos van en cada grupo?`,String(ans),numericWrongs(ans,2),`${total} ÷ ${groups} = ${ans}.`,'Haz grupos iguales hasta usar todos los objetos.','➗');
+      }
+    } else if (id === 'math-2-5') {
+      add('Si son las 3:00 y pasa una hora, serán…','4:00',['3:30','2:00','5:30'],'Una hora después de las 3:00 son las 4:00.','Avanza una hora.','⏰');
+      add('Dos monedas de $500 suman…','$1.000',['$500','$1.500','$100'],'500 + 500 = 1.000.','Junta el valor de ambas monedas.','💰');
+      add('¿Qué unidad sirve para medir una puerta?','Centímetros o metros',['Litros','Kilogramos','Minutos'],'La altura es una longitud.','Piensa en qué tan alta es.','📏');
+      add('¿Qué pesa más: 1 kg o 500 g?','1 kg',['500 g','Pesan igual','No se puede comparar'],'1 kg equivale a 1.000 g.','Convierte 1 kg a gramos.','⚖️');
+      add('Media hora tiene…','30 minutos',['15 minutos','60 minutos','20 minutos'],'Una hora tiene 60 minutos; la mitad son 30.','Busca la mitad de 60.','⏰');
+    } else if (id === 'math-2-6') {
+      add('Un pictograma muestra 4 ⭐ y cada ⭐ vale 2 votos. ¿Cuántos votos hay?','8',['4','6','10'],'4 símbolos × 2 votos = 8.','Cada símbolo representa 2.','📊');
+      add('¿Qué figura tiene 4 lados, dos largos y dos cortos?','Rectángulo',['Triángulo','Círculo','Pentágono'],'Un rectángulo tiene cuatro lados y ángulos rectos.','Piensa en la forma de una puerta.','📐');
+      add('Hay 24 libros y llegan 10 más. ¿Cuántos hay?','34',['14','240','25'],'24 + 10 = 34.','“Llegan más” indica suma.','➕');
+      add('Una tabla dice lunes 5, martes 8, miércoles 6. ¿Qué día tuvo más?','Martes',['Lunes','Miércoles','Todos igual'],'8 es el valor mayor.','Compara los tres números.','📊');
+      add('¿Qué operación usarías si tienes 30 y gastas 12?','Resta',['Suma','Multiplicación','Ninguna'],'Gastar reduce una cantidad.','La cantidad final será menor.','🧠');
+    } else if (id === 'math-3-1') {
+      add('En 4.582, el 5 representa…','500',['5','50','5.000'],'El 5 está en la posición de centenas.','Ubica unidades, decenas, centenas y millares.');
+      add('3.000 + 400 + 20 + 7 = …','3.427',['3.247','3.407','3.4270'],'La suma de valores posicionales forma 3.427.','Une millares, centenas, decenas y unidades.');
+      add('¿Cuál es mayor?','7.105',['6.999','7.015','7.051'],'7.105 tiene 7 millares y 1 centena.','Compara cifra por cifra desde la izquierda.');
+      add('Redondea 347 a la centena más cercana.','300',['400','350','340'],'47 es menor que 50, por eso queda más cerca de 300.','Mira las decenas.');
+      add('El número anterior a 10.000 es…','9.999',['9.990','10.001','9.000'],'Uno menos que 10.000 es 9.999.','Resta 1.');
+    } else if (id === 'math-3-2') {
+      for (const [a,b] of [[7,6],[8,4],[9,5],[12,3],[23,4]]) {
+        const ans=a*b; add(`${a} × ${b} = …`,String(ans),numericWrongs(ans,b),`${a} × ${b} = ${ans}.`,'Usa grupos iguales o descompón el número.','✖️');
+      }
+    } else if (id === 'math-3-3') {
+      for (const [a,b] of [[24,4],[35,5],[42,6],[56,7],[63,9]]) {
+        const ans=a/b; add(`${a} ÷ ${b} = …`,String(ans),numericWrongs(ans,2),`${a} repartido en ${b} grupos da ${ans} por grupo.`,'Busca qué número multiplicado por el divisor da el total.','➗');
+      }
+    } else if (id === 'math-3-4') {
+      add('Una pizza tiene 8 porciones y comes 2. ¿Qué fracción comiste?','2/8',['8/2','6/8','2/6'],'El numerador cuenta las partes tomadas y el denominador todas las partes.','Partes comidas / partes totales.','🍕');
+      add('¿Cuál representa la mitad?','1/2',['1/3','2/3','3/4'],'Una mitad es una de dos partes iguales.','Mitad significa dividir en 2.','🥧');
+      add('¿Cuál es mayor?','3/4',['1/4','2/4','1/8'],'Con el mismo denominador, mayor numerador significa mayor fracción.','Compara cuántas partes de 4 se toman.','🥧');
+      add('4/4 equivale a…','1 entero',['1/4','0','4 enteros'],'Tomar las 4 partes de 4 completa el entero.','Todas las partes forman el todo.','🥧');
+      add('En 2/5, el 5 indica…','Las partes iguales del total',['Las partes tomadas','El resultado de sumar','Dos enteros'],'El denominador muestra en cuántas partes iguales se divide el todo.','Mira el número de abajo.','🥧');
+    } else if (id === 'math-3-5') {
+      add('Un rectángulo mide 5 cm por 3 cm. Su perímetro es…','16 cm',['8 cm','15 cm','10 cm'],'Perímetro = 5 + 3 + 5 + 3 = 16 cm.','Suma todos los lados.','📐');
+      add('¿Cuántos minutos hay en 2 horas?','120',['60','90','200'],'Cada hora tiene 60 minutos: 2 × 60 = 120.','Dos grupos de 60.','⏰');
+      add('¿Qué unidad usarías para medir una carretera?','Kilómetros',['Milímetros','Litros','Gramos'],'Las distancias largas suelen medirse en kilómetros.','Piensa en una distancia entre lugares.','📏');
+      add('Un cuadrado tiene lado 4 cm. Su perímetro es…','16 cm',['8 cm','12 cm','20 cm'],'4 + 4 + 4 + 4 = 16 cm.','Tiene cuatro lados iguales.','📐');
+      add('De 2:30 a 3:15 pasan…','45 minutos',['30','60','15'],'De 2:30 a 3:00 son 30 min y de 3:00 a 3:15 son 15 min.', 'Suma dos tramos de tiempo.','⏰');
+    } else if (id === 'math-3-6') {
+      add('Datos: 4, 7, 7, 9. ¿Qué número aparece más?','7',['4','9','Todos igual'],'7 aparece dos veces; los demás una.', 'Cuenta repeticiones.','📊');
+      add('Una gráfica muestra 12 gatos y 8 perros. ¿Cuántos animales hay?','20',['4','96','12'],'12 + 8 = 20.', 'El total se obtiene sumando categorías.','📊');
+      add('Tienes $50.000 y compras algo de $18.000. ¿Cuánto queda?','$32.000',['$68.000','$22.000','$38.000'],'50.000 − 18.000 = 32.000.','El dinero disminuye al comprar.','💰');
+      add('Hay 6 cajas con 4 lápices cada una. ¿Cuántos lápices?','24',['10','20','28'],'6 × 4 = 24.','Son grupos iguales.','✖️');
+      add('¿Qué dato ayuda a decidir cuál fruta prefieren más?','La cantidad de votos por fruta',['El color de la tabla','El tamaño del papel','El nombre del colegio'],'Para comparar preferencias necesitamos frecuencias o cantidades.','Busca el dato que permite comparar.','📊');
+    } else if (id === 'math-4-1') {
+      for (const [question,answer] of [['3.482 + 2.719',6201],['8.000 − 3.475',4525],['326 × 4',1304],['125 × 8',1000],['9.450 − 2.980',6470]]) add(`${question} = …`,String(answer),numericWrongs(answer,100),`El resultado es ${answer.toLocaleString('es-CO')}.`,'Trabaja por valor posicional y revisa el cálculo.','🧮');
+    } else if (id === 'math-4-2') {
+      for (const [a,b] of [[144,12],[156,6],[225,9],[384,8],[728,7]]) { const ans=a/b; add(`${a} ÷ ${b} = …`,String(ans),numericWrongs(ans,5),`${a} ÷ ${b} = ${ans}.`,'DIVIDO → MULTIPLICO → RESTO → BAJO → REPITO.','➗'); }
+    } else if (id === 'math-4-3') {
+      add('¿Cuál fracción equivale a 1/2?','2/4',['2/3','3/4','1/4'],'Multiplicar numerador y denominador por 2 da 2/4.','Haz el mismo cambio arriba y abajo.','🥧');
+      add('3/6 simplificada es…','1/2',['1/3','2/3','3/3'],'Dividimos 3 y 6 entre 3: 1/2.','Busca un divisor común.','🥧');
+      add('¿Cuál equivale a 2/3?','4/6',['3/6','4/5','2/6'],'2/3 × 2/2 = 4/6.','Multiplica ambos números por el mismo valor.','🥧');
+      add('1/4 y 2/8 son…','Equivalentes',['Opuestas','Una suma','Incomparables'],'Ambas representan la misma parte del entero.','Simplifica 2/8.','🥧');
+      add('Para crear una fracción equivalente debes…','Multiplicar o dividir numerador y denominador por el mismo número',['Sumar solo arriba','Cambiar solo abajo','Invertir siempre'],'La proporción se conserva si hacemos la misma operación en ambos.','Mismo cambio arriba y abajo.','🥧');
+    } else if (id === 'math-4-4') {
+      add('0,5 equivale a…','5 décimas',['5 centésimas','50 enteros','1 décima'],'La primera cifra después de la coma son décimas.','Mira la posición decimal.','🔟');
+      add('¿Cuál es mayor?','0,8',['0,5','0,08','0,18'],'8 décimas es mayor que 5 décimas y 8 centésimas.','Compara primero las décimas.','🔟');
+      add('2,35 + 1,20 = …','3,55',['3,45','2,55','4,55'],'Alineamos la coma y sumamos cada posición decimal.','Coma debajo de coma.','➕');
+      add('4,0 − 1,75 = …','2,25',['3,25','2,75','1,25'],'4,00 − 1,75 = 2,25.','Escribe 4,00 para alinear.','➖');
+      add('$3,50 + $2,25 = …','$5,75',['$5,25','$6,75','$1,25'],'3,50 + 2,25 = 5,75.','Suma unidades y centavos.','💰');
+    } else if (id === 'math-4-5') {
+      add('Rectángulo 8 cm × 3 cm. Área = …','24 cm²',['22 cm²','11 cm²','48 cm²'],'Área = largo × ancho = 8 × 3.', 'Multiplica las dos dimensiones.','📐');
+      add('Cuadrado de lado 6 cm. Perímetro = …','24 cm',['36 cm','12 cm','18 cm'],'Perímetro = 4 × 6 = 24 cm.','Suma sus cuatro lados.','📐');
+      add('¿Qué mide el área?','La superficie interior',['El borde solamente','El peso','El tiempo'],'El área indica cuánto espacio ocupa una superficie.','Piensa en cubrir el piso.','📐');
+      add('Un ángulo recto mide…','90°',['45°','180°','360°'],'Un ángulo recto forma una esquina cuadrada: 90°.', 'Piensa en una esquina de un cuadrado.','📐');
+      add('Triángulo con tres lados iguales se llama…','Equilátero',['Isósceles','Escaleno','Rectángulo'],'Equilátero significa tres lados iguales.','“Equi” recuerda igualdad.','📐');
+    } else if (id === 'math-4-6') {
+      add('Al lanzar una moneda, ¿qué resultados posibles hay?','Cara o sello',['Solo cara','1, 2, 3','Rojo o azul'],'Una moneda tiene dos resultados usuales.', 'Enumera todas las posibilidades.','🎲');
+      add('Datos: 2, 3, 3, 5, 7. La moda es…','3',['2','5','7'],'La moda es el valor que más se repite.', 'Cuenta frecuencias.','📊');
+      add('En una bolsa hay 9 bolas rojas y 1 azul. Es más probable sacar…','Roja',['Azul','Ambas igual','Ninguna'],'Hay muchas más rojas que azules.', 'Más casos favorables = mayor probabilidad.','🎲');
+      add('Una gráfica sube de 10 a 15. El aumento fue…','5',['25','10','15'],'15 − 10 = 5.', 'Compara el valor final con el inicial.','📊');
+      add('Para tomar una decisión con datos conviene…','Comparar la información relevante',['Elegir al azar siempre','Ignorar los números','Mirar solo el color'],'Los datos ayudan cuando los interpretamos y comparamos.','Pregunta qué dato responde la decisión.','📊');
+    } else if (id === 'math-5-1') {
+      add('Una tienda vende 24 cajas con 18 cuadernos cada una. ¿Cuántos cuadernos?','432',['42','288','442'],'24 × 18 = 432.','Identifica grupos iguales.','🧮');
+      add('Tienes 900, gastas 275 y luego recibes 120. ¿Con cuánto terminas?','745',['505','1.295','625'],'900 − 275 + 120 = 745.','Resuelve en el orden de la historia.','🧠');
+      add('48 estudiantes van en buses de 12. ¿Cuántos buses completos?','4',['3','5','576'],'48 ÷ 12 = 4.','Busca cuántos grupos de 12 caben.','➗');
+      add('3 × (20 + 5) = …','75',['65','60','28'],'Primero 20 + 5 = 25 y luego 3 × 25 = 75.','Resuelve primero el paréntesis.','🧮');
+      add('¿Qué conviene hacer primero en un problema multietapa?','Identificar datos, pregunta y operaciones',['Multiplicar todo','Elegir la respuesta más grande','Ignorar unidades'],'Planear evita usar operaciones sin sentido.','Pregunta qué se sabe y qué se busca.','🧠');
+    } else if (id === 'math-5-2') {
+      add('1/4 + 2/4 = …','3/4',['3/8','2/8','1/2'],'Con igual denominador sumamos numeradores.', 'El denominador se conserva.','🥧');
+      add('3/5 − 1/5 = …','2/5',['2/10','4/5','3/4'],'Con igual denominador restamos numeradores.','El 5 se mantiene.','🥧');
+      add('1/2 + 1/4 = …','3/4',['2/6','1/6','2/4'],'1/2 = 2/4; entonces 2/4 + 1/4 = 3/4.','Busca denominador común.','🥧');
+      add('2/3 de 12 es…','8',['6','4','18'],'12 ÷ 3 = 4 y 4 × 2 = 8.','Divide por el denominador y multiplica por el numerador.','🥧');
+      add('¿Cuál es una fracción impropia?','7/4',['3/4','1/2','2/5'],'En una impropia el numerador es mayor que el denominador.','Compara arriba y abajo.','🥧');
+    } else if (id === 'math-5-3') {
+      add('25% de 100 es…','25',['75','4','250'],'25% significa 25 de cada 100.','Porcentaje = de cada 100.','💯');
+      add('0,75 equivale a…','75%',['7,5%','0,75%','750%'],'0,75 × 100 = 75%.','Mueve dos lugares al convertir a porcentaje.','💯');
+      add('Un producto de $40.000 tiene 10% de descuento. El descuento es…','$4.000',['$400','$36.000','$10.000'],'10% de 40.000 = 4.000.','10% es la décima parte.','💰');
+      add('$12,50 + $8,75 = …','$21,25',['$20,25','$21,75','$4,25'],'12,50 + 8,75 = 21,25.','Alinea los decimales.','💰');
+      add('50% equivale a…','1/2',['1/4','3/4','1/5'],'50 de 100 es la mitad.','Piensa en 50/100 y simplifica.','💯');
+    } else if (id === 'math-5-4') {
+      add('¿Cuál es divisible entre 3?','123',['124','125','127'],'1 + 2 + 3 = 6 y 6 es divisible entre 3.','Suma sus cifras.','🔢');
+      add('¿Cuál es primo?','13',['12','15','21'],'13 solo tiene divisores 1 y 13.','Un primo tiene exactamente dos divisores positivos.','🔢');
+      add('MCD de 12 y 18 = …','6',['2','3','12'],'6 es el mayor número que divide a ambos.','Lista divisores comunes.','🔢');
+      add('¿Cuál es múltiplo de 8?','56',['54','58','62'],'8 × 7 = 56.','Piensa en la tabla del 8.','✖️');
+      add('Un número termina en 0. Seguro es divisible entre…','10',['3','7','9'],'Todos los múltiplos de 10 terminan en 0.','Observa la última cifra.','🔢');
+    } else if (id === 'math-5-5') {
+      add('Prisma rectangular 4 × 3 × 2. Volumen = …','24 u³',['18 u³','9 u³','12 u³'],'Volumen = largo × ancho × alto.','Multiplica las tres dimensiones.','📦');
+      add('Rectángulo 10 × 4. Área = …','40 u²',['28 u²','14 u²','80 u²'],'Área = 10 × 4 = 40.','Multiplica largo por ancho.','📐');
+      add('¿Qué unidad corresponde al volumen?','cm³',['cm','cm²','kg'],'El volumen usa unidades cúbicas.','Tiene tres dimensiones.','📦');
+      add('Un cubo tiene…','6 caras cuadradas',['4 caras','8 caras triangulares','2 caras'],'Un cubo está formado por seis cuadrados.','Piensa en un dado.','📦');
+      add('Perímetro de un cuadrado de lado 9 = …','36',['81','18','27'],'4 × 9 = 36.','Suma los cuatro lados.','📐');
+    } else if (id === 'math-5-6') {
+      add('Datos: 2, 4, 4, 5, 10. La media es…','5',['4','10','25'],'La suma es 25 y 25 ÷ 5 = 5.','Suma todos y divide por la cantidad de datos.','📊');
+      add('Datos ordenados 1, 3, 7, 8, 12. La mediana es…','7',['3','8','12'],'La mediana es el valor central.','Busca el dato de la mitad.','📊');
+      add('La moda de 4, 4, 4, 6, 7 es…','4',['6','7','5'],'4 es el valor que más se repite.','Cuenta apariciones.','📊');
+      add('Para comparar dos grupos de tamaños distintos conviene mirar…','Proporciones o medidas comparables',['Solo el número mayor','El color de la gráfica','El primer dato'],'Una comparación justa usa medidas que tengan sentido en ambos grupos.','Pregunta si los tamaños son equivalentes.','📊');
+      add('Una encuesta a 5 amigos representa mejor…','A esos 5 amigos',['A toda Colombia','A todos los niños del mundo','A toda la ciudad necesariamente'],'Una muestra pequeña no permite generalizar a poblaciones enormes.','Piensa a quiénes se preguntó realmente.','📊');
+    }
+
+    return q;
+  }
+
+  function languageExercisePack(grade, topic) {
+    const q=[]; const t=topic.title.toLowerCase();
+    const add=(question,answer,wrong,explanation,hint,emoji='📖')=>q.push(gameChoice(question,answer,wrong,explanation,hint,emoji));
+    if (/letras|sonidos/.test(t)) {
+      add('¿Con qué sonido empieza “mesa”?','M',['S','A','P'],'“Mesa” empieza con el sonido /m/.','Pronuncia lentamente: mmmesa.','🔤');
+      add('¿Cuál palabra empieza igual que “sol”?','Sapo',['Mesa','Luna','Pato'],'Sol y sapo empiezan con S.','Escucha el primer sonido.','🔤');
+      add('¿Cuántas sílabas tiene “casa”?','2',['1','3','4'],'Ca-sa tiene dos golpes de voz.','Da una palmada por cada parte.','👏');
+      add('Completa: _ato para formar “gato”.','G',['M','S','L'],'La letra G completa la palabra gato.','Di la palabra y escucha el inicio.','🔤');
+      add('¿Cuál es una palabra?','Luna',['LN','123','...'],'“Luna” tiene letras ordenadas que expresan una idea.','Busca algo que puedas leer y entender.','🔤');
+    } else if (/oraciones cortas|fluidez/.test(t)) {
+      add('Lee: “Sara riega la planta.” ¿Quién riega?','Sara',['La planta','Nadie','El agua'],'La oración dice que Sara realiza la acción.','Busca quién hace la acción.');
+      add('“El perro corre rápido.” ¿Qué hace el perro?','Corre',['Duerme','Come','Lee'],'El verbo de la oración es “corre”.','Busca la acción.');
+      add('¿Dónde conviene hacer una pausa?','Al encontrar un punto',['En cada letra','Nunca','En mitad de una palabra'],'Los signos ayudan a leer con sentido.','Mira la puntuación.');
+      add('“Mamá cocina sopa.” ¿Qué cocina?','Sopa',['Mamá','Casa','Mesa'],'La respuesta aparece explícitamente en la oración.','Busca qué recibe la acción.');
+      add('Leer con sentido significa…','Entender lo que dice el texto',['Leer lo más rápido posible','Saltarse palabras','Memorizar letras sueltas'],'La fluidez sirve para comprender, no solo para correr.','Pregúntate qué entendiste.');
+    } else if (/idea principal|resumen|idea central/.test(t)) {
+      const text='Las abejas visitan flores para recoger néctar. Al moverse entre flores también transportan polen y ayudan a muchas plantas a reproducirse.';
+      add(`${text} ¿Cuál es la idea principal?`,'Las abejas ayudan a las plantas mientras buscan néctar',['Todas las flores son amarillas','El polen es una bebida','Las abejas viven en el agua'],'La idea principal reúne lo más importante de todo el texto.','Busca una opción que abarque las dos oraciones.','📝');
+      add('Un buen resumen debe…','Conservar las ideas más importantes',['Copiar cada palabra','Agregar datos inventados','Ser más largo que el texto'],'Resumir es reducir sin perder lo esencial.','Pregunta: ¿qué no puede faltar?','📝');
+      add('¿Qué detalle NO sería esencial en un resumen sobre cómo sembrar una planta?','El color de la camiseta de quien siembra',['Preparar la tierra','Sembrar la semilla','Regar con cuidado'],'Un resumen elimina detalles que no cambian la explicación.','Busca el dato que no afecta el proceso.','📝');
+      add('La idea central de un párrafo es…','Lo que principalmente quiere comunicar',['La palabra más larga','La primera letra','Un dato cualquiera'],'La idea central organiza los detalles.','Pregunta: ¿de qué trata principalmente?','📝');
+      add('Si dos frases repiten la misma idea, al resumir conviene…','Unirlas en una sola idea clara',['Copiarlas dos veces','Borrarlas todas','Cambiar el tema'],'Un resumen evita repeticiones innecesarias.','Reduce sin perder significado.','📝');
+    } else if (/ordenar una historia|secuencias|párrafos y secuencias/.test(t)) {
+      add('Primero Ana sembró una semilla. Luego la regó. Finalmente…','La planta empezó a crecer',['Volvió atrás en el tiempo','Compró la semilla antes de sembrarla','La semilla se convirtió en lápiz'],'Una secuencia mantiene un orden lógico de acciones.','Piensa qué puede pasar después.','🧩');
+      add('¿Qué palabra suele indicar el inicio?','Primero',['Finalmente','Después','Por último'],'“Primero” marca el comienzo de una secuencia.','Busca la palabra de inicio.','🧩');
+      add('¿Qué conector indica que algo ocurre al final?','Finalmente',['Mientras','Porque','Antes'],'“Finalmente” cierra la secuencia.','Piensa en el último paso.','🧩');
+      add('En un párrafo, las oraciones deben…','Relacionarse con una misma idea',['Hablar de temas sin relación','Estar siempre en desorden','No usar puntos'],'La unidad del párrafo ayuda a comprenderlo.','Busca una idea que las conecte.','🧩');
+      add('Orden lógico: despertar → vestirse → …','Ir al colegio',['Dormirse de nuevo siempre','Almorzar ayer','Nacer'],'Las acciones siguen una secuencia cotidiana.','Piensa qué suele ocurrir después.','🧩');
+    } else if (/sustantivos|gramática|oraciones y conectores|gramática y estilo/.test(t)) {
+      add('En “La niña canta”, ¿cuál es el verbo?','canta',['niña','la','ninguna'],'El verbo expresa la acción: canta.','Busca qué hace alguien.','✍️');
+      add('¿Cuál es un sustantivo?','montaña',['rápido','correr','azulmente'],'Un sustantivo nombra seres, objetos, lugares o ideas.','Busca una palabra que nombre algo.','✍️');
+      add('En “perro grande”, “grande” es…','Adjetivo',['Verbo','Sustantivo','Artículo'],'Un adjetivo describe al sustantivo.','Pregunta: ¿cómo es el perro?','✍️');
+      add('Completa: “Estudié, ___ quería aprender.”','porque',['pero','aunque','sin'],'“Porque” introduce una causa o razón.','Busca un conector de causa.','🔗');
+      add('¿Cuál oración es más clara?','Laura terminó la tarea y después la revisó.',['Laura tarea después terminó la revisó.','Terminó Laura y tarea después.','La tarea Laura revisar terminada.'],'El orden y los conectores ayudan a expresar ideas con claridad.','Busca sujeto, acción y secuencia.','✍️');
+    } else if (/narrar|tipos de texto|narrativos e informativos|planear y escribir|escribir oraciones|escribir textos cortos/.test(t)) {
+      add('¿Qué texto cuenta personajes y acontecimientos?','Narrativo',['Lista de compras','Tabla numérica','Etiqueta de precio'],'Un texto narrativo relata hechos o historias.','Busca una historia.','📚');
+      add('¿Qué texto busca explicar datos sobre los volcanes?','Informativo',['Narrativo ficticio necesariamente','Poema de amor necesariamente','Diálogo sin tema'],'Un texto informativo presenta información sobre un tema.','Pregunta si quiere contar una historia o informar.','📚');
+      add('Antes de escribir un texto conviene…','Definir propósito e ideas principales',['Escribir al azar','Evitar releer','Cambiar de tema cada línea'],'Planear ayuda a organizar las ideas.','Pregunta: ¿para qué y para quién escribo?','📝');
+      add('Una narración suele tener…','Inicio, desarrollo y cierre',['Solo título','Solo números','Palabras sin relación'],'La estructura ayuda a seguir los acontecimientos.','Piensa en cómo empieza y termina una historia.','📚');
+      add('Para describir un lugar conviene usar…','Detalles y adjetivos pertinentes',['Solo operaciones matemáticas','Palabras al azar','Ningún detalle'],'Describir es mostrar cómo es algo mediante palabras.','Piensa en color, tamaño, forma o ambiente.','✍️');
+    } else if (/ortografía|puntuación|revisión/.test(t)) {
+      add('¿Cuál oración está bien escrita?','Marta vive en Bogotá.',['marta vive en bogotá','Marta vive en bogotá','marta vive en Bogotá'],'Los nombres propios empiezan con mayúscula y la oración cierra con punto.','Revisa inicio, nombres propios y final.','✏️');
+      add('¿Qué signo usamos al terminar una pregunta?','?',['.','!',','],'Las preguntas cierran con signo de interrogación.','Piensa en ¿...?.','✏️');
+      add('¿Cuál palabra está separada correctamente?','la casa',['lacasa','l acasa','la-casa siempre'],'Las palabras se separan con espacios.','Identifica dos palabras diferentes.','✏️');
+      add('Revisar un texto sirve para…','Encontrar y mejorar errores o ideas poco claras',['Hacerlo más confuso','Borrar todo','Evitar leerlo'],'La revisión mejora claridad y corrección.','Lee como si fueras otra persona.','✏️');
+      add('La coma puede ayudar a…','Separar elementos de una enumeración',['Terminar todas las preguntas','Reemplazar todas las letras','Unir palabras sin espacio'],'Ejemplo: pan, leche, fruta y arroz.','Piensa en una lista.','✏️');
+    } else if (/comprender cuentos|inferenc|lectura crítica|relacionar información|reading/.test(t)) {
+      const text='Tomás salió con paraguas aunque todavía no llovía. El cielo estaba muy oscuro y soplaba viento.';
+      add(`${text} ¿Qué podemos inferir?`,'Tomás cree que puede llover',['Tomás va a nadar','Es medianoche seguro','El paraguas está roto'],'La inferencia combina pistas del texto con conocimiento previo.','Observa cielo oscuro + paraguas.','🔎');
+      add('Una inferencia es…','Una conclusión basada en pistas',['Copiar una frase exacta','Inventar sin evidencia','Contar letras'],'Inferir es leer entre líneas usando evidencia.','Busca pistas, no adivinanzas.','🔎');
+      add('Para lectura crítica conviene preguntar…','¿Qué afirma y qué evidencia presenta?',['¿Cuántas letras tiene? solamente','¿Me gusta el color?','¿Puedo ignorar la fuente?'],'Leer críticamente implica evaluar afirmaciones y soporte.','Distingue opinión, dato y evidencia.','🔎');
+      add('Dos textos sobre el mismo tema pueden…','Aportar información diferente o perspectivas distintas',['Ser siempre idénticos','No poder compararse','Tener exactamente las mismas palabras'],'Relacionar fuentes amplía la comprensión.','Compara qué aporta cada uno.','🔎');
+      add('Si un texto afirma algo sorprendente, lo mejor es…','Buscar evidencia y una fuente confiable',['Creerlo de inmediato','Compartirlo sin leer','Cambiar las palabras'],'La lectura crítica verifica antes de aceptar o difundir.','Pregunta de dónde sale la información.','🔎');
+    } else if (/hablar|explicar|argumentar|opinión|evidencia|medios/.test(t)) {
+      add('Una opinión bien sustentada incluye…','Una razón relacionada con la idea',['Solo “porque sí”','Un insulto','Un dato sin relación'],'Las razones permiten explicar por qué pensamos algo.','Usa “porque” y una razón pertinente.','💬');
+      add('¿Cuál es una forma respetuosa de disentir?','“Entiendo tu idea, pero pienso distinto porque…”',['“Cállate”','“Eso es tonto”','Irse sin escuchar siempre'],'Argumentar también implica escuchar y responder con respeto.','Separa la persona de la idea.','💬');
+      add('La evidencia sirve para…','Apoyar una afirmación',['Decorar el texto','Evitar explicar','Cambiar de tema'],'Una afirmación es más sólida cuando tiene datos, ejemplos o fuentes.','Pregunta: ¿cómo lo sé?','🔎');
+      add('Antes de compartir una noticia conviene…','Revisar fuente, fecha y evidencia',['Compartir solo por el título','Ignorar quién la publicó','Cambiar el contenido'],'Verificar reduce la desinformación.','No te quedes solo con el titular.','📰');
+      add('Escuchar bien significa…','Prestar atención y responder a lo que la otra persona dijo',['Interrumpir siempre','Pensar solo en responder','Ignorar preguntas'],'La conversación necesita turnos y comprensión.','Resume lo que entendiste antes de responder.','👂');
+    }
+    return q;
+  }
+
+  function scienceExercisePack(grade, topic) {
+    const q=[]; const t=topic.title.toLowerCase();
+    const add=(question,answer,wrong,explanation,hint,emoji='🔬')=>q.push(gameChoice(question,answer,wrong,explanation,hint,emoji));
+    if (/cuerpo|sentidos/.test(t)) {
+      add('¿Qué sentido usamos principalmente para escuchar?','Oído',['Vista','Olfato','Gusto'],'El oído detecta sonidos.','Piensa en tus orejas.','👂');
+      add('¿Qué órgano usamos principalmente para ver?','Ojos',['Nariz','Lengua','Manos'],'Los ojos reciben información visual.','Está en tu cara y detecta luz.','👀');
+      add('Una función del esqueleto es…','Dar soporte y proteger órganos',['Producir luz','Digestionar todo','Bombear aire'],'Los huesos sostienen el cuerpo y protegen estructuras.','Piensa en el cráneo y las costillas.','🦴');
+      add('Para cuidar el cuerpo conviene…','Dormir, alimentarse y moverse adecuadamente',['No beber agua','Dormir muy poco','Evitar higiene'],'Los hábitos saludables ayudan a los sistemas del cuerpo.','Piensa en necesidades básicas.','❤️');
+      add('Los sentidos nos ayudan a…','Obtener información del entorno',['Cambiar el clima','Crear planetas','Detener el tiempo'],'Los sentidos captan estímulos del ambiente.','Ver, oír, tocar, oler y saborear.','🧠');
+    } else if (/seres vivos|plantas|animales|ciclos de vida|hábitat|ecosistemas|cadenas alimentarias/.test(t)) {
+      add('¿Cuál es un ser vivo?','Un árbol',['Una piedra','Una cuchara','Una nube de plástico'],'Los seres vivos nacen, crecen, realizan funciones y cambian.','Busca algo que crece y necesita recursos.','🌱');
+      add('Un hábitat es…','El lugar donde vive un organismo',['Una operación matemática','Una parte del reloj','Un color'],'El hábitat ofrece condiciones y recursos para vivir.','Piensa en “hogar natural”.','🏞️');
+      add('En una cadena alimentaria, las plantas suelen ser…','Productores',['Consumidores superiores','Objetos inertes','Depredadores siempre'],'Las plantas producen su alimento mediante fotosíntesis.','Empieza por quién capta energía solar.','🌿');
+      add('Si desaparece una especie de un ecosistema…','Puede afectar a otras especies',['Nunca cambia nada','Todas se vuelven plantas','El agua desaparece automáticamente'],'Los organismos están conectados por relaciones ecológicas.','Piensa en cadenas y redes alimentarias.','🕸️');
+      add('¿Qué necesitan los seres vivos?','Recursos como agua, energía y condiciones adecuadas',['Solo juguetes','Solo metal','Nada del ambiente'],'Las necesidades varían, pero todos dependen del ambiente.','Piensa en agua, alimento, luz o refugio.','🌎');
+    } else if (/material|sólidos|líquidos|materia|mezclas/.test(t)) {
+      add('¿Cuál conserva forma propia normalmente?','Un sólido',['Un líquido','Un gas','El sonido'],'Los sólidos mantienen forma y volumen en condiciones comunes.','Piensa en una piedra.','🧊');
+      add('Un líquido…','Toma la forma del recipiente',['Siempre tiene forma fija','No ocupa espacio','Es siempre invisible'],'Los líquidos conservan volumen pero cambian de forma.','Piensa en agua dentro de distintos vasos.','💧');
+      add('Derretir hielo es un cambio de…','Estado físico',['Especie viva','Planeta','Idioma'],'El agua pasa de sólido a líquido.','La sustancia sigue siendo agua.','🧪');
+      add('Arena mezclada con piedras puede separarse por…','Tamaño, usando un tamiz',['Evaporar metal','Apagar la luz','Imantar siempre'],'El tamizado separa partículas de tamaños distintos.','Piensa en una rejilla.','🧪');
+      add('Una mezcla es…','La combinación de dos o más sustancias',['Un único átomo siempre','Un ser vivo','Una unidad de tiempo'],'En una mezcla se juntan materiales sin necesariamente formar una sustancia nueva.','Piensa en agua con sal o ensalada.','🧪');
+    } else if (/luz|sonido|movimiento|fuerza|energía|electricidad|máquinas/.test(t)) {
+      add('¿Qué puede cambiar el movimiento de un objeto?','Una fuerza',['Un color','Una palabra','Una fecha'],'Empujar o halar puede acelerar, frenar o cambiar dirección.','Piensa en empujar una pelota.','⚡');
+      add('El sonido se produce por…','Vibraciones',['Sombras','Colores','Números'],'Una fuente que vibra puede producir ondas sonoras.','Toca tu garganta al hablar.','🔊');
+      add('Para que un bombillo en un circuito simple encienda debe haber…','Un camino cerrado para la corriente',['Un cable cortado','Solo plástico','Ninguna fuente de energía'],'La corriente necesita un circuito cerrado.','Piensa en una ruta completa.','💡');
+      add('Una máquina simple ayuda a…','Realizar trabajo cambiando la fuerza o su dirección',['Crear energía de la nada','Detener el tiempo','Cambiar materia en vida'],'Palancas y poleas facilitan ciertas tareas.','Piensa en levantar o mover objetos.','⚙️');
+      add('La energía puede…','Transformarse de una forma a otra',['Desaparecer siempre sin efecto','Ser solo electricidad','Existir solo en baterías'],'En sistemas cotidianos la energía cambia de forma.','Bombillo: eléctrica → luz y calor.','⚡');
+    } else if (/día|noche|clima|tiempo atmosférico|tierra|solar|universo|atmósfera|agua/.test(t)) {
+      add('El día y la noche ocurren principalmente por…','La rotación de la Tierra',['La lluvia','La Luna apagándose','Las nubes'],'La Tierra gira sobre su eje.','Piensa en qué parte queda frente al Sol.','🌍');
+      add('El tiempo atmosférico describe…','Condiciones como lluvia, viento y temperatura en un momento y lugar',['La edad de una persona','El tamaño de un libro','Una operación'],'El tiempo cambia y se observa diariamente.','Mira el cielo y la temperatura de hoy.','🌦️');
+      add('La Tierra tarda aproximadamente un año en…','Dar una vuelta alrededor del Sol',['Girar una vez sobre su eje','Cambiar de planeta','Dar una vuelta a la Luna'],'La traslación alrededor del Sol define el año.','Rotación ≈ día; traslación ≈ año.','☀️');
+      add('La atmósfera es…','La capa de gases que rodea la Tierra',['El núcleo de metal','Todo el océano','Una montaña'],'La atmósfera contiene aire y participa en el clima.','Está alrededor del planeta.','🌎');
+      add('El agua puede encontrarse en la naturaleza como…','Sólido, líquido y gas',['Solo líquido','Solo sólido','Solo gas'],'El ciclo del agua muestra cambios entre estados.','Hielo, agua y vapor.','💧');
+    } else if (/células|sistemas del cuerpo|organización/.test(t)) {
+      add('La célula es…','Una unidad básica de los seres vivos',['Un planeta','Una roca siempre','Una unidad de dinero'],'Los organismos están formados por una o más células.','Piensa en la unidad más pequeña con funciones vitales.','🧬');
+      add('Un tejido está formado por…','Células organizadas con funciones relacionadas',['Planetas','Solo huesos','Ecosistemas'],'Las células se organizan en tejidos, órganos y sistemas.','Célula → tejido → órgano.','🧬');
+      add('El sistema circulatorio ayuda a…','Transportar sustancias por el cuerpo',['Producir luz','Escuchar sonidos','Masticar exclusivamente'],'La sangre transporta oxígeno, nutrientes y otras sustancias.','Piensa en corazón y vasos sanguíneos.','❤️');
+      add('Los órganos trabajan…','Coordinados dentro de sistemas',['Siempre aislados','Solo de noche','Sin células'],'Un sistema reúne órganos que colaboran en funciones.','Piensa en el sistema digestivo.','🫀');
+      add('El intercambio de oxígeno ocurre principalmente en…','El sistema respiratorio',['El sistema solar','La piel únicamente','Los huesos'],'Los pulmones participan en el intercambio de gases.','Piensa en respirar.','🫁');
+    } else if (/investigar|diseñar una investigación|método científico|evidencia/.test(t)) {
+      add('Una hipótesis es…','Una explicación o predicción que puede ponerse a prueba',['Un resultado inventado','Una verdad que no se revisa','Una lista de compras'],'La hipótesis guía una investigación y debe contrastarse con evidencia.','Debe poder probarse.','🔎');
+      add('¿Qué conviene cambiar en un experimento justo?','La variable que quieres investigar, manteniendo otras condiciones controladas',['Todo al mismo tiempo','Los resultados después','Nada nunca'],'Controlar variables permite interpretar mejor el efecto observado.','Cambia una cosa principal a la vez.','🧪');
+      add('Los datos sirven para…','Analizar qué ocurrió y evaluar la hipótesis',['Decorar el informe','Elegir cualquier conclusión','Ocultar resultados'],'La evidencia conecta observaciones con conclusiones.','Pregunta qué muestran las mediciones.','📊');
+      add('Si los datos contradicen tu idea inicial debes…','Revisar la explicación a la luz de la evidencia',['Cambiar los datos','Ignorarlos','Afirmar lo mismo sin revisar'],'La ciencia ajusta explicaciones cuando aparece nueva evidencia.','Los datos mandan sobre la preferencia personal.','🔬');
+      add('Una conclusión científica debe…','Relacionarse con la pregunta y los datos obtenidos',['Agregar resultados no observados','Cambiar el experimento retroactivamente','Ser una opinión sin soporte'],'La conclusión responde usando la evidencia disponible.','Vuelve a la pregunta inicial.','🔎');
+    } else if (/cuidar|equilibrio/.test(t)) {
+      add('¿Qué acción ayuda a cuidar el agua?','Cerrar la llave cuando no se usa',['Dejarla abierta','Botar aceite al desagüe','Ensuciar ríos'],'Usar solo el agua necesaria reduce desperdicio.','Piensa en ahorrar y no contaminar.','💧');
+      add('La biodiversidad es importante porque…','Los seres vivos cumplen funciones y mantienen relaciones en los ecosistemas',['Todos los seres vivos son iguales','Solo importan los animales grandes','No afecta a las personas'],'La diversidad contribuye al funcionamiento y resiliencia de ecosistemas.','Piensa en muchas especies conectadas.','🌿');
+      add('Una decisión ambiental responsable considera…','Sus efectos sobre recursos y seres vivos',['Solo comodidad inmediata','Ignorar residuos','Usar más de lo necesario'],'Cuidar el entorno implica pensar en consecuencias.','Pregunta qué pasa después.','🌎');
+      add('Reciclar funciona mejor después de…','Reducir y reutilizar cuando sea posible',['Comprar más basura','Mezclar todos los residuos siempre','Botar todo'],'La jerarquía prioriza evitar residuos antes de procesarlos.','Reducir → reutilizar → reciclar.','♻️');
+      add('Un ecosistema equilibrado depende de…','Relaciones entre organismos y condiciones del ambiente',['Una sola especie','Cero cambios','Solo lluvia'],'Los ecosistemas son redes de componentes vivos y no vivos.','Piensa en una red, no en un elemento aislado.','🌱');
+    }
+    return q;
+  }
+
+  function socialExercisePack(grade, topic) {
+    const q=[]; const t=topic.title.toLowerCase();
+    const add=(question,answer,wrong,explanation,hint,emoji='🌎')=>q.push(gameChoice(question,answer,wrong,explanation,hint,emoji));
+    if (/familia|colegio|comunidad|barrio/.test(t)) {
+      add('Una comunidad está formada por…','Personas que comparten un entorno y relaciones',['Solo edificios','Solo carreteras','Una sola persona siempre'],'Una comunidad incluye personas, lugares, actividades y vínculos.','Piensa en quienes viven y participan cerca.','🏘️');
+      add('¿Qué ayuda a convivir en el colegio?','Respetar acuerdos y responsabilidades',['Ignorar a todos','Dañar espacios comunes','Interrumpir siempre'],'Las normas y responsabilidades protegen la convivencia.','Piensa en lo que permite aprender juntos.','🏫');
+      add('Un espacio público del barrio puede ser…','Un parque',['Un cajón privado','Una almohada','Un cuaderno personal'],'Los espacios públicos son compartidos por la comunidad.','Piensa en lugares de uso común.','🏘️');
+      add('Cuidar a alguien significa…','Atender sus necesidades y respetar su bienestar',['Decidir todo por él','Ignorar sus necesidades','Burlarse'],'El cuidado implica responsabilidad y respeto.','Piensa en acciones que protegen.','🤝');
+      add('Participar en la comunidad puede ser…','Colaborar en una actividad para mejorar un espacio común',['Romper señales','Botar basura','Evitar todos los acuerdos'],'Participar es aportar a asuntos que afectan a todos.','Busca una acción colectiva.','🤝');
+    } else if (/normas|derechos|responsabilidades|democracia|constitución/.test(t)) {
+      add('Un derecho es…','Una garantía que protege la dignidad y el bienestar de las personas',['Un premio opcional siempre','Una orden sin límite','Una preferencia de una sola persona'],'Los derechos reconocen protecciones fundamentales.','Piensa en algo que debe ser respetado.','⚖️');
+      add('Una responsabilidad es…','Un deber o compromiso relacionado con nuestras acciones',['Hacer siempre lo que quiero','Ignorar consecuencias','Un color'],'Los derechos conviven con responsabilidades.','Piensa en lo que te corresponde cumplir.','🤝');
+      add('La democracia busca que las personas puedan…','Participar en decisiones colectivas mediante reglas y derechos',['Obedecer a una sola persona sin límites','Evitar todas las opiniones','Eliminar acuerdos'],'La participación y las reglas comunes son centrales en democracia.','Piensa en elegir, deliberar y respetar normas.','🗳️');
+      add('Una regla justa debería…','Aplicarse de manera razonable y proteger la convivencia',['Favorecer siempre al más fuerte','Cambiar sin explicación cada minuto','Humillar a alguien'],'Las normas deben servir al bienestar común y respetar derechos.','Pregunta para qué existe la regla.','⚖️');
+      add('Si dos estudiantes no están de acuerdo, una opción democrática es…','Escucharse, proponer soluciones y llegar a acuerdos',['Golpearse','Imponer por miedo','No dejar hablar al otro'],'Resolver diferencias requiere participación y respeto.','Busca diálogo y acuerdos.','🤝');
+    } else if (/mapas|territorio|regiones|paisajes|campo y ciudad|municipio|departamento/.test(t)) {
+      add('Un mapa sirve para…','Representar un territorio y ubicar lugares',['Medir el peso','Cocinar','Escuchar música'],'Los mapas representan espacios mediante símbolos y convenciones.','Piensa en ubicación.','🗺️');
+      add('La leyenda de un mapa explica…','Qué significan sus símbolos y colores',['La edad del lector','El clima de todo el planeta siempre','El precio del papel'],'La leyenda permite interpretar la representación.','Busca el “diccionario” del mapa.','🗺️');
+      add('El relieve incluye…','Montañas, valles, llanuras y otras formas del terreno',['Solo edificios','Solo fronteras políticas','Solo nombres'],'El relieve describe formas de la superficie terrestre.','Piensa en alturas y formas del terreno.','⛰️');
+      add('Un municipio es…','Una entidad territorial local con población y administración',['Un continente','Un océano','Una familia'],'Los municipios organizan parte del territorio y gobierno local.','Piensa en alcaldía y territorio local.','🏛️');
+      add('Campo y ciudad se relacionan porque…','Intercambian productos, servicios, trabajo y población',['Nunca tienen contacto','Son exactamente iguales','Uno no necesita del otro'],'Los territorios están conectados por flujos y actividades.','Piensa en alimentos, servicios y transporte.','🚚');
+    } else if (/antes|cambios en el tiempo|pasado|históric|independencia|republicana/.test(t)) {
+      add('Una fuente histórica puede ser…','Una carta, fotografía, objeto o testimonio del pasado',['Solo una predicción futura','Una respuesta inventada','Un número sin contexto'],'Las fuentes aportan evidencia para estudiar el pasado.','Piensa en rastros o testimonios.','🕰️');
+      add('Ordenar acontecimientos por fecha ayuda a construir…','Una cronología',['Un mapa físico','Una receta','Una ecuación'],'La cronología organiza hechos en el tiempo.','Antes → durante → después.','🕰️');
+      add('Estudiar historia implica…','Interpretar cambios, continuidades, causas y consecuencias',['Memorizar fechas sin contexto solamente','Inventar hechos','Ignorar fuentes'],'La historia busca comprender procesos humanos en el tiempo.','Pregunta qué cambió y por qué.','📜');
+      add('La Independencia de Colombia fue…','Un proceso histórico con cambios políticos y conflictos',['Un solo evento sin antecedentes','Una fiesta deportiva','Un fenómeno natural'],'Los procesos históricos tienen actores, causas y consecuencias.','No la pienses como un instante aislado.','🏛️');
+      add('Una consecuencia es…','Algo que ocurre como resultado de hechos o decisiones anteriores',['Lo mismo que una causa','Un dato sin relación','Algo que siempre pasa antes'],'Causa y consecuencia ayudan a explicar procesos.','Pregunta: ¿qué ocurrió después por esto?','🧠');
+    } else if (/diversidad|cultura|tradiciones|paz|conflictos|convivencia/.test(t)) {
+      add('La diversidad cultural significa…','Que existen distintas costumbres, saberes, identidades y formas de vida',['Que todos deben ser iguales','Que una cultura vale más','Que nadie puede compartir tradiciones'],'La diversidad reconoce diferencias y riqueza cultural.','Piensa en distintas maneras de vivir y expresarse.','🌈');
+      add('Una forma pacífica de resolver un conflicto es…','Dialogar y buscar acuerdos',['Amenazar','Golpear','Difundir rumores'],'El diálogo permite expresar necesidades y construir soluciones.','Busca una solución sin violencia.','🤝');
+      add('Un prejuicio es…','Una idea previa sobre alguien sin conocer suficiente evidencia',['Una medida exacta','Una ley científica','Un mapa'],'Los prejuicios pueden producir trato injusto.','Pregunta si se está juzgando sin conocer.','🧠');
+      add('Respetar diferencias implica…','Reconocer derechos y dignidad aunque no pensemos igual',['Obligar a todos a pensar igual','Excluir','Burlarse'],'La convivencia democrática admite diferencias.','Se puede discrepar con respeto.','🤝');
+      add('Una tradición puede…','Transmitirse y cambiar con el tiempo',['Ser idéntica para siempre necesariamente','Existir sin personas','Ser solo una ley'],'Las culturas conservan y transforman prácticas.','Piensa en generaciones.','🎭');
+    } else if (/economía|consumo|producción/.test(t)) {
+      add('Ahorrar significa…','Reservar parte de los recursos para usarlos después',['Gastar todo de inmediato','Pedir siempre prestado','Perder dinero'],'El ahorro permite prepararse para metas o imprevistos.','No usar todo hoy.','💰');
+      add('Antes de comprar conviene…','Comparar necesidad, precio y alternativas',['Comprar siempre lo más caro','Ignorar el presupuesto','Comprar por impulso'],'El consumo responsable considera recursos y consecuencias.','Pregunta: ¿lo necesito y puedo pagarlo?','🛒');
+      add('La producción es…','El proceso de crear bienes o prestar servicios',['Solo comprar','Solo ahorrar','Solo votar'],'La economía incluye producción, intercambio y consumo.','Piensa en cómo llega un producto al mercado.','🏭');
+      add('Un presupuesto ayuda a…','Planear ingresos y gastos',['Eliminar todos los precios','Gastar sin límite','Adivinar el futuro'],'Organizar recursos mejora decisiones económicas.','Anota lo que entra y sale.','📒');
+      add('Consumo responsable también considera…','Impactos sociales y ambientales de las decisiones',['Solo el empaque bonito','Comprar más siempre','Ignorar residuos'],'Las decisiones de consumo tienen efectos más allá del precio.','Piensa en origen, uso y residuos.','🌱');
+    } else if (/información|digital/.test(t)) {
+      add('Antes de compartir una publicación conviene…','Verificar fuente, fecha y evidencia',['Compartir solo por el título','Ignorar quién la creó','Repetirla sin leer'],'Verificar ayuda a evitar desinformación.','Busca quién, cuándo y con qué evidencia.','📱');
+      add('Una contraseña segura debe…','Ser difícil de adivinar y mantenerse privada',['Ser “1234”','Compartirse con desconocidos','Usar solo el nombre propio'],'La seguridad digital protege cuentas e información.','Evita datos obvios.','🔐');
+      add('Si una fuente afirma algo, una buena pregunta es…','¿Qué evidencia presenta y quién la publica?',['¿Tiene muchos emojis?','¿Me gusta el color?','¿Está en mayúsculas?'],'La confiabilidad depende de evidencia, autoría y contexto.','Evalúa la fuente, no solo la apariencia.','🔎');
+      add('Ciudadanía digital responsable incluye…','Tratar a otros con respeto y proteger la privacidad',['Difundir datos privados','Acosar','Suplantar identidades'],'Las normas de convivencia también aplican en línea.','Piensa antes de publicar.','🌐');
+      add('Si recibes un mensaje que pide una contraseña…','No la compartas y busca ayuda de un adulto responsable',['Envíala de inmediato','Publícala','Úsala como comentario'],'Las contraseñas son información privada.','Una contraseña no se comparte por mensaje.','🔐');
+    } else if (/somos diferentes|identidad/.test(t)) {
+      add('La identidad incluye…','Características, historias, vínculos y formas de reconocernos',['Solo la estatura','Solo una nota escolar','Nada de nuestra historia'],'La identidad se construye con múltiples dimensiones.','Piensa en quién eres y qué te conecta con otros.','🪪');
+      add('Dos personas pueden…','Tener gustos distintos y merecer el mismo respeto',['Tener que pensar igual','Perder derechos por ser diferentes','No poder convivir'],'La igualdad en dignidad no exige ser idénticos.','Diferencia no significa inferioridad.','🤝');
+      add('Conocer otras costumbres ayuda a…','Comprender mejor la diversidad',['Eliminar diferencias','Burlarse','Decidir que una sola es válida'],'El conocimiento favorece respeto y convivencia.','Pregunta antes de juzgar.','🌈');
+      add('La empatía implica…','Intentar comprender lo que otra persona puede sentir o necesitar',['Adivinar y decidir por ella','Ignorarla','Estar de acuerdo siempre'],'Empatía no es pensar igual, sino considerar la perspectiva ajena.','Escucha y pregunta.','💛');
+      add('Una convivencia respetuosa permite…','Ser diferente sin ser excluido',['Excluir a quien piensa distinto','Usar apodos ofensivos','Imponer gustos'],'El respeto protege la dignidad de todos.','Piensa en cómo quieres ser tratado.','🤝');
+    }
+    return q;
+  }
+
+  function englishExercisePack(grade, topic) {
+    const q=[]; const t=topic.title.toLowerCase();
+    const add=(question,answer,wrong,explanation,hint,emoji='💬')=>q.push(gameChoice(question,answer,wrong,explanation,hint,emoji));
+    if (/hello/.test(t)) {
+      add('How do you say “Hola”?','Hello',['Goodbye','Please','Thanks'],'“Hello” is a greeting.','It starts a conversation.','👋');
+      add('How do you say “Adiós”?','Goodbye',['Hello','Blue','Family'],'“Goodbye” is used when leaving.','It closes a conversation.','👋');
+      add('Choose the polite word to ask for something.','Please',['Red','Run','Book'],'“Please” makes a request polite.','Think: por favor.','🙂');
+      add('Someone says “Thank you”. You can answer…','You’re welcome',['Good night yesterday','Blue','Ten'],'“You’re welcome” is a common response to thanks.','Think: con gusto.','🙂');
+      add('“Good morning” is used…','In the morning',['Only at midnight','To count','To name a color'],'It is a greeting for the morning.','Morning = mañana.','☀️');
+    } else if (/numbers and colors/.test(t)) {
+      add('What number is “eight”?','8',['18','3','80'],'Eight = 8.','Count after seven.','🔢');
+      add('What color is “blue”?','Azul',['Rojo','Verde','Amarillo'],'Blue means azul.','Think of the sky.','🎨');
+      add('“Three red balls” means…','Tres pelotas rojas',['Tres pelotas azules','Dos pelotas rojas','Trece pelotas rojas'],'Three = tres; red = rojo/roja.','Translate number + color.','🎨');
+      add('Which word means “amarillo”?','Yellow',['Green','Black','White'],'Yellow = amarillo.','Think of the sun.','🎨');
+      add('Ten = …','10',['2','20','100'],'Ten means diez.','It comes after nine.','🔢');
+    } else if (/family/.test(t)) {
+      add('“Mother” means…','Madre',['Hermano','Padre','Prima'],'Mother = madre.','Think: mom.','👨‍👩‍👧');
+      add('“Brother” means…','Hermano',['Hermana','Abuela','Tía'],'Brother = hermano.','A male sibling.','👨‍👩‍👧');
+      add('Complete: “This is ___ dad.”','my',['I','am','can'],'“My” expresses possession: mi.','Think: mi papá.','👨‍👩‍👧');
+      add('“Grandmother” means…','Abuela',['Madre','Hija','Prima'],'Grandmother = abuela.','The mother of your mother or father.','👵');
+      add('Choose a family word.','sister',['pencil','window','school'],'Sister is a family member.','Think: hermana.','👧');
+    } else if (/classroom|school and community/.test(t)) {
+      add('“Pencil” means…','Lápiz',['Mesa','Puerta','Libro'],'Pencil = lápiz.','You use it to write.','✏️');
+      add('Teacher says “Open your book.” What do you do?','Abrir el libro',['Cerrar la puerta','Correr','Guardar el libro'],'Open your book = abre tu libro.','Open = abrir.','📘');
+      add('“Chair” means…','Silla',['Ventana','Cuaderno','Colegio'],'Chair = silla.','You sit on it.','🪑');
+      add('“Library” is a place with…','Books',['Cars','Planes only','Swimming pools only'],'A library has books and reading resources.','Think: biblioteca.','📚');
+      add('Complete: “I study at ___.”','school',['banana','blue','run'],'School is the place where students learn.','Think: colegio/escuela.','🏫');
+    } else if (/body/.test(t)) {
+      add('“Hand” means…','Mano',['Pie','Ojo','Cabeza'],'Hand = mano.','You have fingers on it.','✋');
+      add('“Eyes” means…','Ojos',['Orejas','Rodillas','Brazos'],'Eyes = ojos.','You see with them.','👀');
+      add('Touch your “head”. What do you touch?','Cabeza',['Pie','Nariz only','Codo'],'Head = cabeza.','It is above your neck.','🙂');
+      add('“Foot” means…','Pie',['Mano','Boca','Espalda'],'Foot = pie.','It is at the end of your leg.','🦶');
+      add('We hear with our…','ears',['eyes','hands','feet'],'Ears are used for hearing.','Think: orejas.','👂');
+    } else if (/like/.test(t)) {
+      add('“I like apples” means…','Me gustan las manzanas',['No me gustan las manzanas','Tengo manzanas','Vendo manzanas'],'I like = me gusta/me gustan.','Like expresses preference.','🍎');
+      add('Choose the negative sentence.','I don’t like milk',['I like milk','Milk is white','I have milk'],'Don’t makes the preference negative.','Don’t = no.','🥛');
+      add('Complete: “I ___ soccer.”','like',['am','is','can’t always'],'Like expresses what you enjoy.','Think: me gusta el fútbol.','⚽');
+      add('Ask about preference:','Do you like pizza?',['You pizza like.','Pizza is do.','Like you?'],'“Do you like…?” asks about likes.','Start with Do you like…?','🍕');
+      add('“She likes music” talks about…','Her preference',['Her age','Her address','The weather'],'Likes expresses what she enjoys.','What does she enjoy?','🎵');
+    } else if (/about me/.test(t)) {
+      add('Complete: “My name ___ Leo.”','is',['am','are','do'],'With “my name” we use “is”.','My name is…','🙂');
+      add('“I am nine years old” tells…','Age',['Color','Address','Food'],'Years old expresses age.','How old?','🎂');
+      add('How do you ask someone’s name?','What is your name?',['How blue are you?','Where food?','Can name?'],'This is the standard question for a name.','What is your…?','💬');
+      add('Complete: “I ___ from Colombia.”','am',['is','are','do'],'With I we use am.','I am.','🌎');
+      add('“I like drawing” tells…','A preference',['A date','A price','A direction'],'Like tells what someone enjoys.','What do I enjoy?','🎨');
+    } else if (/daily routines|present simple|frequency/.test(t)) {
+      add('Complete: “I ___ breakfast at 7.”','eat',['eats','eating','ate yesterday'], 'With I in present simple, use the base verb.', 'I eat.','⏰');
+      add('Complete: “She ___ to school every day.”','goes',['go','going','gone'],'With he/she/it, present simple often adds -s/-es.','She → verb with s/es.','🏫');
+      add('Which word means “siempre”?','always',['never','sometimes','yesterday'],'Always = siempre.','Frequency word.','🔁');
+      add('“He usually reads at night.” How often?','Usually',['Never','Right now','Yesterday'],'Usually indicates frequency.','It means normalmente.','📖');
+      add('Choose a routine sentence.','I brush my teeth every morning.',['I am a blue chair.','Yesterday is tomorrow.','Three pencils fly.'],'A routine is a repeated activity.','Look for every morning/day.','🪥');
+    } else if (/home/.test(t)) {
+      add('“Kitchen” means…','Cocina',['Baño','Habitación','Jardín'],'Kitchen = cocina.','You prepare food there.','🏠');
+      add('“Bedroom” means…','Habitación/dormitorio',['Cocina','Garaje','Escuela'],'Bedroom is where you sleep.','Bed + room.','🛏️');
+      add('Complete: “The sofa is ___ the living room.”','in',['eat','blue','can'],'In means dentro de.','The sofa is inside the room.','🛋️');
+      add('“Bathroom” means…','Baño',['Sala','Techo','Puerta'],'Bathroom = baño.','Room for washing/toilet.','🚿');
+      add('Where do you usually cook?','Kitchen',['Bedroom','Bathroom','Garage'],'Cooking usually happens in the kitchen.','Think: cocina.','🍳');
+    } else if (/food/.test(t)) {
+      add('“Water” means…','Agua',['Pan','Leche','Jugo'],'Water = agua.','You drink it.','💧');
+      add('Which is a fruit?','apple',['bread','rice','cheese'],'Apple is a fruit.','Think: manzana.','🍎');
+      add('“I am hungry” means…','Tengo hambre',['Tengo sed','Estoy cansado','Tengo frío'],'Hungry = con hambre.','You want food.','🍽️');
+      add('Which word means “leche”?','milk',['juice','water','bread'],'Milk = leche.','A white drink.','🥛');
+      add('Complete: “I would like ___ apple.”','an',['a','is','are'],'Use “an” before a vowel sound like apple.','Apple starts with a vowel sound.','🍎');
+    } else if (/can \/ can’t/.test(t)) {
+      add('“I can swim” means…','Puedo nadar',['No puedo nadar','Estoy nadando ahora','Nadé ayer'],'Can expresses ability.','Can = poder.','🏊');
+      add('Choose the negative ability.','She can’t fly',['She can fly','She flies every day','She is flying'],'Can’t = cannot.','Look for not able.','🪽');
+      add('Complete: “___ you ride a bike?”','Can',['Are','Is','Do always'],'Can starts a question about ability.','Can you…?','🚲');
+      add('After “can” use…','The base verb',['Verb + s always','Verb + ing always','Past tense always'],'Modal can is followed by base form.','Can play, can run.','💬');
+      add('A bird can usually…','fly',['read a book','drive a car','write an email'],'Fly is a typical bird ability.','Think of wings.','🐦');
+    } else if (/simple questions|questions and answers/.test(t)) {
+      add('Question for a place:','Where do you live?',['When is blue?','How many name?','Who color?'],'Where asks about place.','Where = dónde.','❓');
+      add('Question for a person:','Who is your teacher?',['Where is Monday?','What time blue?','How many happy?'],'Who asks about a person.','Who = quién.','❓');
+      add('“What is your favorite food?” asks about…','A preference',['An address','The weather only','A past date'],'Favorite asks which one you prefer.','Favorite = favorito.','❓');
+      add('Answer “How old are you?”','I am ten years old.',['I am in the kitchen.','Blue.','On Monday.'],'The question asks age.','Years old.','🎂');
+      add('Answer “Where is the book?”','It is on the table.',['It is ten years old.','It is hungry.','It is Monday.'],'Where requires a location.','Use a place expression.','📚');
+    } else if (/descriptions|comparing|comparatives/.test(t)) {
+      add('Complete: “The elephant is ___ than the mouse.”','bigger',['biggest always','more small','biger'],'Comparative of big is bigger.','Compare two things.','🐘');
+      add('“She has curly hair” describes…','Appearance',['A time','A price','A direction'],'Curly hair describes how someone looks.','Hair = cabello.','🙂');
+      add('Comparative of “small” is…','smaller',['smallest','more small always','smalled'],'For short adjectives, add -er.','small + er.','📏');
+      add('“The red car is faster than the blue car.” Which is faster?','The red car',['The blue car','Both always','Neither'],'The sentence directly compares speed.','Look before “is faster”.','🚗');
+      add('Choose a description.','The park is quiet and green.',['The park yesterday tomorrow.','Five is running blue.','Where park?'],'Adjectives describe qualities.','Quiet and green describe the park.','🌳');
+    } else if (/present continuous/.test(t)) {
+      add('Complete: “She ___ reading now.”','is',['are','am','do'],'Present continuous: she is + verb-ing.','She → is.','📖');
+      add('“They are playing” means…','Están jugando',['Jugaron ayer','Juegan siempre necesariamente','Jugarán mañana'],'Present continuous describes an action happening now.','are + playing.','⚽');
+      add('Complete: “I am ___.”','studying',['study every day as base only','studies','studied yesterday'],'After am, use verb-ing for present continuous.','am + ing.','📝');
+      add('Which sentence is happening now?','He is eating now.',['He eats every Sunday.','He ate yesterday.','He will eat tomorrow.'],'Is eating + now signals present continuous.','Look for be + -ing.','🍽️');
+      add('Negative: “She ___ sleeping.”','isn’t',['don’t','aren’t with she','not can'],'She isn’t sleeping = ella no está durmiendo.','She → is/isn’t.','😴');
+    } else if (/directions and places/.test(t)) {
+      add('“Turn left” means…','Gira a la izquierda',['Gira a la derecha','Sigue recto','Detente siempre'],'Left = izquierda.','Think of left/right.','⬅️');
+      add('“Go straight” means…','Sigue derecho',['Gira atrás','Sube','Siéntate'],'Go straight gives a direction forward.','Do not turn.','⬆️');
+      add('“The bank is next to the park.” means…','El banco está al lado del parque',['Está debajo del parque','Está muy lejos necesariamente','Está dentro del parque'],'Next to = al lado de.','Two places side by side.','🗺️');
+      add('Ask for directions:','How do I get to the library?',['How old library?','What color Monday?','Can library eat?'],'This asks how to reach a place.','How do I get to…?','🧭');
+      add('“Across from” means…','Enfrente de',['Dentro de','Debajo de','Lejos de siempre'],'Across from indicates opposite sides.','Think: frente a frente.','🗺️');
+    } else if (/reading/.test(t)) {
+      const text='Mia has a small dog named Max. Every afternoon, they walk to the park. Max likes to run after a red ball.';
+      add(`${text} What pet does Mia have?`,'A dog',['A cat','A bird','A fish'],'The text says Mia has a small dog.','Look at the first sentence.','📖');
+      add(`${text} When do they go to the park?`,'Every afternoon',['Every morning','At midnight','Only on Monday'],'The text says every afternoon.','Find the time expression.','📖');
+      add(`${text} What color is the ball?`,'Red',['Blue','Green','Black'],'The last sentence says red ball.','Look near “ball”.','📖');
+      add('To find a detail in a text, first…','Look for key words connected to the question',['Guess without reading','Read only the title always','Ignore names and numbers'],'Keywords help locate explicit information.','Repeat the important word from the question.','🔎');
+      add('The “main idea” is…','What the text is mostly about',['Every single word','Only the last letter','A random detail'],'Main idea captures the central message.','Ask: what is this mostly about?','📖');
+    } else if (/writing|messages/.test(t)) {
+      add('Choose the best short message.','Hi Ana, I will be at the library at 3. See you!',['Library blue three because.','Ana at the is.','Will see book.'],'A clear message has purpose, understandable sentences and useful details.','Who, what, when.','✍️');
+      add('Connect ideas: “I like soccer ___ I play every Saturday.”','and',['because always impossible','yesterday','under'],'And connects related ideas.','and = y.','🔗');
+      add('“I stayed home ___ it was raining.”','because',['and only','but only','then only'],'Because gives the reason.','Why did I stay home?','🔗');
+      add('A paragraph should have…','Connected sentences about a main idea',['Random words','Only one letter','No relation between ideas'],'Connected writing is easier to understand.','Keep one main idea.','✍️');
+      add('Before sending a message, it is useful to…','Read it again and check clarity',['Delete the purpose','Add unrelated words','Remove names and details always'],'Review helps correct mistakes and missing information.','Would the reader understand?','✍️');
+    } else if (/future intentions/.test(t)) {
+      add('Complete: “I am going to ___ tomorrow.”','study',['studied','studies with I','studying after to'], 'Going to + base verb expresses a future plan.', 'going to + verb.','🔮');
+      add('“We are going to visit grandma” is about…','A future plan',['A past event','A color','A price'],'Going to often expresses intentions or plans.','What will happen later?','📅');
+      add('Ask about a plan:','What are you going to do this weekend?',['What did blue?','Where is hungry?','Can weekend color?'],'This asks about future intention.','What are you going to…?','❓');
+      add('Negative plan:','I am not going to travel.',['I not travel going.','I am travel yesterday.','I going not to.'],'Place not after am/is/are.','am not going to.','🔮');
+      add('Choose a future time expression.','next week',['yesterday','last year','two days ago'],'Next week refers to the future.','Next = próximo.','📅');
+    } else if (/present and past simple/.test(t)) {
+      add('Present: “I ___ soccer every Saturday.”','play',['played yesterday','plays with I','playing now'], 'Present simple describes routines.', 'Every Saturday = routine.','⚽');
+      add('Past: “Yesterday I ___ soccer.”','played',['play every day','plays','am playing'], 'Regular past often adds -ed.', 'Yesterday signals past.','⚽');
+      add('Past of “go” is…','went',['goed','goes','going'],'Go is irregular: went.','It does not use -ed.','🚶');
+      add('Which is a past time expression?','last night',['every day','usually','right now'],'Last night refers to completed past time.','Last = pasado/anterior.','🌙');
+      add('“She studies every day” describes…','A routine',['A finished event yesterday','A future plan','A current action necessarily'],'Present simple + every day expresses routine.','Look for frequency.','📚');
+    } else if (/everyday conversation/.test(t)) {
+      add('At a store, ask for a price:','How much is it?',['How old is it?','Where color?','Can it Monday?'],'How much asks about price.','Much = cuánto in price context.','🛍️');
+      add('Someone asks “How are you?” A natural answer is…','I’m fine, thanks.',['Blue.','At five dollars.','On the left.'],'How are you asks how someone is feeling/doing.','Respond about yourself.','🙂');
+      add('Ask for help politely:','Can you help me, please?',['Help me now! only','You help? no please','Why blue?'],'Can you… please? is a polite request.','Use can + please.','🤝');
+      add('At school, “I don’t understand” means…','No entiendo',['No tengo hambre','No puedo correr','No vivo aquí'],'Understand = entender.','Useful phrase when learning.','🏫');
+      add('To keep a conversation going, you can…','Ask a related question',['Change to random words','Never listen','Repeat one word only'],'Related questions show listening and create interaction.','Respond to what the other person said.','💬');
+    }
+    return q;
+  }
+
+  function fallbackCurriculumExercises(grade, subjectKey, topic) {
+    const topics = CURRICULUM[String(grade)]?.[subjectKey] || [];
+    const others = topics.filter(item => item.id !== topic.id);
+    const wrongGoals = others.slice(0,3).map(item => item.goal);
+    const wrongReal = others.slice(-3).map(item => item.realWorld);
+    return [
+      gameChoice(`¿Qué describe mejor lo que vas a aprender en “${topic.title}”?`, topic.goal, wrongGoals, topic.goal, 'Busca la opción que coincide con el propósito del tema.', '🎯'),
+      gameChoice(`¿En cuál situación es más útil “${topic.title}”?`, topic.realWorld, wrongReal, `Este tema te ayuda a: ${topic.realWorld}`, 'Conecta el aprendizaje con una situación de la vida real.', '🌟'),
+      gameChoice('¿Qué habilidad estás fortaleciendo principalmente?', topic.skill, others.slice(0,3).map(item => item.skill), `La habilidad principal de este tema es ${topic.skill}.`, 'Piensa qué tipo de pensamiento necesitas para resolver el tema.', '🧠')
+    ];
+  }
+
+  function buildCurriculumExercisePack(grade, subjectKey, topic) {
+    let pack = [];
+    if (subjectKey === 'math') pack = mathExercisePack(grade, topic);
+    else if (subjectKey === 'language') pack = languageExercisePack(grade, topic);
+    else if (subjectKey === 'science') pack = scienceExercisePack(grade, topic);
+    else if (subjectKey === 'social') pack = socialExercisePack(grade, topic);
+    else if (subjectKey === 'english') pack = englishExercisePack(grade, topic);
+
+    const fallback = fallbackCurriculumExercises(grade, subjectKey, topic);
+    pack = [...pack, ...fallback].filter(Boolean).slice(0,5);
+    while (pack.length < 5) pack.push(fallback[pack.length % fallback.length]);
+    return pack.map(item => ({ ...item, options: shuffled(item.options) }));
+  }
+
+  function curriculumGameStarsFor(score, total=5) {
+    if (score >= total) return 3;
+    if (score >= Math.ceil(total * .8)) return 2;
+    if (score >= Math.ceil(total * .6)) return 1;
+    return 0;
+  }
+
+  function updateCurriculumGameBest() {
+    if (!curriculumGameBest) return;
+    const { grade, subjectKey, topic } = currentCurriculumTopic();
+    if (!grade || !topic) { curriculumGameBest.hidden = true; return; }
+    const saved = curriculumGameProgress()[curriculumGameTopicKey(grade, subjectKey, topic.id)];
+    if (!saved?.plays) { curriculumGameBest.hidden = true; return; }
+    const stars = '★'.repeat(Number(saved.bestStars || 0)) + '☆'.repeat(Math.max(0,3-Number(saved.bestStars||0)));
+    curriculumGameBest.innerHTML = `<span>${stars}</span><small>Tu mejor ronda: ${saved.bestScore || 0}/${saved.total || 5}</small>`;
+    curriculumGameBest.hidden = false;
+  }
+
+  function openCurriculumGame() {
+    const { grade, subjectKey, meta, topic } = currentCurriculumTopic();
+    if (!grade || !meta || !topic || !curriculumGameModal) return;
+    markCurriculumTopicStarted(subjectKey, grade, topic.id);
+    const pack = buildCurriculumExercisePack(grade, subjectKey, topic);
+    curriculumGameState = { grade, subjectKey, meta, topic, pack, index:0, score:0, combo:0, answered:false };
+    curriculumGameModal.hidden = false;
+    document.body.classList.add('curriculum-game-open');
+    if (curriculumGameKicker) curriculumGameKicker.textContent = `${meta.name.toLocaleUpperCase('es-CO')} · ${grade}.º`;
+    if (curriculumGameTitle) curriculumGameTitle.textContent = topic.title;
+    if (curriculumGameFinish) curriculumGameFinish.hidden = true;
+    const stage = curriculumGameModal.querySelector('.curriculum-game-stage');
+    if (stage) stage.hidden = false;
+    renderCurriculumGameQuestion();
+  }
+
+  function closeCurriculumGame() {
+    if (!curriculumGameModal) return;
+    curriculumGameModal.hidden = true;
+    document.body.classList.remove('curriculum-game-open');
+    curriculumGameState = null;
+    updateCurriculumGameBest();
+    renderCurriculumSubject(curriculumCurrentSubject);
+    renderCurriculumHome();
+  }
+
+  function renderCurriculumGameQuestion() {
+    const state = curriculumGameState;
+    if (!state) return;
+    const item = state.pack[state.index];
+    state.answered = false;
+    const total = state.pack.length;
+    if (curriculumGameScore) curriculumGameScore.textContent = String(state.score);
+    if (curriculumGameProgressBar) curriculumGameProgressBar.style.width = `${(state.index / total) * 100}%`;
+    if (curriculumGameRound) curriculumGameRound.textContent = `RETO ${state.index + 1} DE ${total}`;
+    if (curriculumGameCombo) curriculumGameCombo.textContent = state.combo >= 2 ? `🔥 RACHA ×${state.combo}` : '⚡ A POR EL RETO';
+    if (curriculumGameEmoji) curriculumGameEmoji.textContent = item.emoji || curriculumTopicIconFor(state.subjectKey, curriculumCurrentTopicIndex);
+    if (curriculumGamePrompt) curriculumGamePrompt.textContent = item.question;
+    if (curriculumGameHint) { curriculumGameHint.hidden = true; curriculumGameHint.textContent = item.hint || 'Piensa en lo que ya aprendiste y elimina las opciones que no encajan.'; }
+    if (curriculumGameHintBtn) { curriculumGameHintBtn.hidden = false; curriculumGameHintBtn.disabled = false; }
+    if (curriculumGameFeedback) { curriculumGameFeedback.hidden = true; curriculumGameFeedback.className = 'curriculum-game-feedback'; curriculumGameFeedback.textContent = ''; }
+    if (curriculumGameNextBtn) curriculumGameNextBtn.hidden = true;
+    if (curriculumGameOptions) {
+      curriculumGameOptions.innerHTML = '';
+      item.options.forEach((option, optionIndex) => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'curriculum-game-option';
+        btn.innerHTML = `<span>${String.fromCharCode(65 + optionIndex)}</span><strong>${option}</strong>`;
+        btn.addEventListener('click', () => answerCurriculumGame(option, btn));
+        curriculumGameOptions.appendChild(btn);
+      });
+    }
+  }
+
+  function answerCurriculumGame(option, button) {
+    const state = curriculumGameState;
+    if (!state || state.answered) return;
+    state.answered = true;
+    const item = state.pack[state.index];
+    const correct = String(option) === String(item.answer);
+    if (correct) { state.score += 1; state.combo += 1; }
+    else state.combo = 0;
+
+    curriculumGameOptions?.querySelectorAll('.curriculum-game-option').forEach(btn => {
+      btn.disabled = true;
+      const text = btn.querySelector('strong')?.textContent || '';
+      if (text === String(item.answer)) btn.classList.add('correct');
+      else if (btn === button && !correct) btn.classList.add('wrong');
+    });
+    button?.classList.add(correct ? 'chosen-correct' : 'chosen-wrong');
+    if (curriculumGameScore) curriculumGameScore.textContent = String(state.score);
+    if (curriculumGameCombo) curriculumGameCombo.textContent = correct ? (state.combo >= 2 ? `🔥 RACHA ×${state.combo}` : '✨ ¡BIEN!') : '💪 SIGAMOS';
+    if (curriculumGameFeedback) {
+      curriculumGameFeedback.hidden = false;
+      curriculumGameFeedback.className = `curriculum-game-feedback ${correct ? 'success' : 'learn'}`;
+      curriculumGameFeedback.innerHTML = `<strong>${correct ? '¡Correcto! +1 estrella' : 'Todavía no. Mira cómo se piensa:'}</strong><p>${item.explanation || `La respuesta correcta es ${item.answer}.`}</p>`;
+    }
+    if (curriculumGameHintBtn) curriculumGameHintBtn.hidden = true;
+    if (curriculumGameNextBtn) {
+      curriculumGameNextBtn.hidden = false;
+      curriculumGameNextBtn.textContent = state.index >= state.pack.length - 1 ? 'Ver mi resultado →' : 'Siguiente reto →';
+    }
+    playTap();
+  }
+
+  function nextCurriculumGameQuestion() {
+    const state = curriculumGameState;
+    if (!state || !state.answered) return;
+    if (state.index < state.pack.length - 1) {
+      state.index += 1;
+      renderCurriculumGameQuestion();
+      return;
+    }
+    finishCurriculumGame();
+  }
+
+  function finishCurriculumGame() {
+    const state = curriculumGameState;
+    if (!state) return;
+    const total = state.pack.length;
+    const saved = saveCurriculumGameResult(curriculumGameTopicKey(state.grade,state.subjectKey,state.topic.id), state.score, total);
+    const stars = curriculumGameStarsFor(state.score,total);
+    if (curriculumGameProgressBar) curriculumGameProgressBar.style.width = '100%';
+    const stage = curriculumGameModal?.querySelector('.curriculum-game-stage');
+    if (stage) stage.hidden = true;
+    if (curriculumGameFinish) curriculumGameFinish.hidden = false;
+    if (curriculumGameFinishStars) curriculumGameFinishStars.textContent = stars ? '⭐'.repeat(stars) : '✨';
+    if (curriculumGameFinishTitle) curriculumGameFinishTitle.textContent = state.score === total ? '¡Dominaste esta ronda!' : state.score >= 3 ? '¡Vas muy bien!' : '¡Cada intento te hace mejor!';
+    if (curriculumGameFinishText) curriculumGameFinishText.textContent = `Acertaste ${state.score} de ${total}. Tu mejor resultado es ${saved.bestScore}/${total}. ${state.score < total ? 'Puedes jugar otra vez o pedirle a NOVA que te explique lo que costó.' : 'Excelente: ahora intenta explicarlo con tus propias palabras.'}`;
+    renderCurriculumSubject(state.subjectKey);
+    renderCurriculumHome();
+  }
+
+  function replayCurriculumGame() {
+    const state = curriculumGameState;
+    if (!state) return;
+    state.pack = buildCurriculumExercisePack(state.grade,state.subjectKey,state.topic);
+    state.index=0; state.score=0; state.combo=0; state.answered=false;
+    if (curriculumGameFinish) curriculumGameFinish.hidden = true;
+    const stage = curriculumGameModal?.querySelector('.curriculum-game-stage');
+    if (stage) stage.hidden = false;
+    renderCurriculumGameQuestion();
+  }
+
+  function openNovaFromCurriculumGame() {
+    const state = curriculumGameState;
+    if (!state) return;
+    const { grade, meta, topic } = state;
+    closeCurriculumGame();
+    showNovaTutorView();
+    const prompt = `Estoy en ${grade}.º de primaria y estaba jugando ejercicios de ${topic.title} en ${meta.name}. Quiero entender mejor este tema. Explícame una idea clave con un ejemplo corto y luego hazme una sola pregunta para que yo la intente.`;
+    setTimeout(() => askGeneralNova(prompt, `Ayúdame con: ${topic.title}`), 140);
   }
 
   function updatePersonalization() {
@@ -5441,6 +6175,24 @@
     playTap();
     showCurriculumSubject(curriculumCurrentSubject);
   });
+  curriculumGameStartBtn?.addEventListener('click', () => {
+    playTap();
+    openCurriculumGame();
+  });
+  curriculumGameCloseBtn?.addEventListener('click', () => { playTap(); closeCurriculumGame(); });
+  curriculumGameDoneBtn?.addEventListener('click', () => { playTap(); closeCurriculumGame(); });
+  curriculumGameReplayBtn?.addEventListener('click', () => { playTap(); replayCurriculumGame(); });
+  curriculumGameNovaBtn?.addEventListener('click', () => { playTap(); openNovaFromCurriculumGame(); });
+  curriculumGameHintBtn?.addEventListener('click', () => {
+    playTap();
+    if (!curriculumGameHint) return;
+    curriculumGameHint.hidden = !curriculumGameHint.hidden;
+  });
+  curriculumGameNextBtn?.addEventListener('click', () => { playTap(); nextCurriculumGameQuestion(); });
+  curriculumGameModal?.addEventListener('click', (event) => {
+    if (event.target === curriculumGameModal) closeCurriculumGame();
+  });
+
   curriculumPracticeBtn?.addEventListener('click', () => {
     playTap();
     practiceCurrentCurriculumTopic();
