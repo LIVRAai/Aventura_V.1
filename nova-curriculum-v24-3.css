@@ -14,9 +14,62 @@
   box-shadow:none!important;
 }
 .subject-page-head .hierarchy-back:hover,
-.subject-page-head .profile-btn:hover{
+.subject-page-head .profile-btn:hover,
+.subject-page-head .hierarchy-back:active,
+.subject-page-head .profile-btn:active{
   border-color:#c9c3ef!important;
-  background:#fbfaff!important;
+  background:var(--nova-hover-surface)!important;
+  color:var(--nova-ink)!important;
+}
+
+/* Selector de grado: todos los estados se redefinen porque el legacy asumía fondo oscuro. */
+.curriculum-grade-inline .grade-selector button,
+.v24-learning-home .grade-selector button{
+  border:1px solid var(--nova-line)!important;
+  background:#fff!important;
+  color:var(--nova-ink)!important;
+  opacity:1!important;
+  filter:none!important;
+  box-shadow:none!important;
+}
+.curriculum-grade-inline .grade-selector button:hover:not(:disabled):not(.locked),
+.v24-learning-home .grade-selector button:hover:not(:disabled):not(.locked){
+  border-color:#c9c3ef!important;
+  background:var(--nova-hover-surface)!important;
+  color:var(--nova-ink)!important;
+}
+.curriculum-grade-inline .grade-selector button.active,
+.curriculum-grade-inline .grade-selector button[aria-pressed="true"],
+.v24-learning-home .grade-selector button.active,
+.v24-learning-home .grade-selector button[aria-pressed="true"]{
+  border-color:var(--nova-brand-primary)!important;
+  background:var(--nova-brand-soft)!important;
+  color:var(--nova-brand-primary-hover)!important;
+  box-shadow:0 0 0 2px rgba(91,75,255,.08)!important;
+}
+.curriculum-grade-inline .grade-selector button.next-grade,
+.v24-learning-home .grade-selector button.next-grade{
+  border-color:rgba(36,122,77,.28)!important;
+  background:var(--nova-state-success-soft)!important;
+  color:var(--nova-state-success)!important;
+}
+.curriculum-grade-inline .grade-selector button.next-grade:hover:not(:disabled),
+.v24-learning-home .grade-selector button.next-grade:hover:not(:disabled){
+  border-color:rgba(36,122,77,.42)!important;
+  background:#e3f4eb!important;
+  color:var(--nova-state-success)!important;
+}
+.curriculum-grade-inline .grade-selector button.locked,
+.curriculum-grade-inline .grade-selector button:disabled,
+.v24-learning-home .grade-selector button.locked,
+.v24-learning-home .grade-selector button:disabled{
+  border-color:var(--nova-line)!important;
+  background:var(--nova-disabled-background)!important;
+  color:var(--nova-disabled-text)!important;
+  opacity:1!important;
+  filter:none!important;
+  transform:none!important;
+  box-shadow:none!important;
 }
 
 .curriculum-subject-hero{
@@ -47,6 +100,8 @@
 }
 .curriculum-topic-card:hover{
   border-color:#c8c1fa!important;
+  background:#fff!important;
+  color:var(--nova-ink)!important;
   box-shadow:var(--nova-shadow-sm)!important;
 }
 .curriculum-topic-card.started{
@@ -76,7 +131,7 @@
   border-color:#dcd7ff!important;
   background:var(--nova-brand-soft)!important;
 }
-.curriculum-competency-card span{color:var(--nova-brand-primary)!important}
+.curriculum-competency-card span{color:var(--nova-brand-primary-hover)!important}
 .curriculum-competency-card p{color:var(--nova-ink)!important}
 .curriculum-reference-note{color:var(--nova-text-secondary)!important}
 
@@ -105,7 +160,7 @@
   color:var(--nova-ink)!important;
   box-shadow:none!important;
 }
-.topic-nova-copy small{color:var(--nova-brand-primary)!important}
+.topic-nova-copy small{color:var(--nova-brand-primary-hover)!important}
 .topic-nova-copy h2{color:var(--nova-ink)!important}
 .topic-nova-copy p{color:var(--nova-text-secondary)!important}
 .topic-primary-btn{
@@ -113,12 +168,18 @@
   color:#fff!important;
   box-shadow:var(--nova-shadow-brand)!important;
 }
-.topic-primary-btn:hover{background:var(--nova-brand-primary-hover)!important}
+.topic-primary-btn:hover,.topic-primary-btn:active{background:var(--nova-brand-primary-hover)!important;color:#fff!important}
 .topic-secondary-btn{color:var(--nova-brand-primary-hover)!important}
+.topic-secondary-btn:hover,.topic-secondary-btn:active{color:var(--nova-brand-primary-hover)!important;background:var(--nova-brand-soft)!important;text-decoration:none}
 
 .division-lab-card{
   border:1px solid var(--nova-line)!important;
   background:#fff!important;
+  color:var(--nova-ink)!important;
+}
+.division-lab-card:hover,.division-lab-card:active{
+  border-color:#c9c3ef!important;
+  background:var(--nova-hover-surface)!important;
   color:var(--nova-ink)!important;
 }
 .division-lab-card>span{
