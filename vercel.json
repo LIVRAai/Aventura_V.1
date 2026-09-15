@@ -6,6 +6,10 @@
       "dest": "/landing.html"
     },
     {
+      "src": "^/prueba/?$",
+      "dest": "/trial.html"
+    },
+    {
       "src": "^/app/?$",
       "dest": "/index.html"
     },
