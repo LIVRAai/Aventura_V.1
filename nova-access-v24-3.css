@@ -1,0 +1,146 @@
+/* V24.3 · Acceso, registro y checkout dentro del mismo sistema NOVA */
+.access-gate{
+  --premium-ink:var(--nova-ink);
+  --premium-night:var(--nova-background);
+  --premium-panel:var(--nova-surface);
+  --premium-panel-2:var(--nova-surface-muted);
+  --premium-line:var(--nova-line);
+  --premium-white:#fff;
+  --premium-soft:var(--nova-text-secondary);
+  --premium-cyan:var(--nova-brand-primary);
+  --premium-violet:var(--nova-brand-primary);
+  --premium-yellow:var(--nova-subject-social);
+  --premium-green:var(--nova-state-success);
+  --premium-shadow:var(--nova-shadow-lg);
+  --premium-card-shadow:var(--nova-shadow-md);
+  color:var(--nova-ink)!important;
+  background:
+    radial-gradient(circle at 8% 4%,rgba(91,75,255,.12),transparent 27%),
+    radial-gradient(circle at 92% 12%,rgba(45,203,211,.08),transparent 25%),
+    linear-gradient(180deg,#fff 0%,var(--nova-background) 100%)!important;
+}
+
+.access-shell{
+  border:1px solid var(--nova-line)!important;
+  background:rgba(255,255,255,.96)!important;
+  color:var(--nova-ink)!important;
+  box-shadow:var(--nova-shadow-lg)!important;
+  backdrop-filter:blur(24px)!important;
+}
+.access-shell::before{opacity:.16!important;filter:saturate(.7)}
+
+.access-logo{
+  background:var(--nova-brand-primary)!important;
+  color:#fff!important;
+  box-shadow:var(--nova-shadow-brand)!important;
+}
+.access-brand .eyebrow,.premium-step-label{color:var(--nova-brand-primary)!important}
+.access-brand h1{color:var(--nova-ink)!important}
+.access-brand h1 span{color:var(--nova-brand-primary)!important;text-shadow:none!important}
+.access-lead{color:var(--nova-text-secondary)!important}
+.access-lead strong{color:var(--nova-ink)!important}
+
+.auth-tabs{
+  padding:5px!important;
+  background:var(--nova-surface-muted)!important;
+  border:1px solid var(--nova-line)!important;
+  border-radius:var(--nova-radius-md)!important;
+}
+.auth-tab{
+  color:var(--nova-text-secondary)!important;
+  background:transparent!important;
+  border:0!important;
+  border-radius:var(--nova-radius-sm)!important;
+}
+.auth-tab.active,.auth-tab[aria-selected="true"]{
+  background:#fff!important;
+  color:var(--nova-brand-primary-hover)!important;
+  box-shadow:var(--nova-shadow-sm)!important;
+}
+
+.access-form label>span,.mp-field>span{
+  color:var(--nova-ink)!important;
+  font-weight:800!important;
+}
+.child-setup h2,.premium-payment-heading h2{color:var(--nova-ink)!important}
+.child-setup>p,.premium-payment-heading p{color:var(--nova-text-secondary)!important}
+
+.account-chip{
+  background:var(--nova-background)!important;
+  border:1px solid var(--nova-line)!important;
+  color:var(--nova-ink)!important;
+}
+.account-chip small{color:var(--nova-brand-primary)!important}
+.account-chip strong,.account-chip em{color:var(--nova-ink)!important}
+.account-chip>span{background:var(--nova-brand-soft)!important;color:var(--nova-brand-primary-hover)!important}
+
+/* Checkout: misma jerarquía que landing y prueba */
+.premium-plan-intro h2{color:var(--nova-ink)!important}
+.premium-plan-intro h2 span{color:var(--nova-brand-primary)!important}
+.premium-plan-intro p{color:var(--nova-text-secondary)!important}
+.premium-account-chip{background:var(--nova-background)!important;border-color:var(--nova-line)!important}
+.premium-account-chip small{color:var(--nova-brand-primary)!important}
+
+.premium-plan-card{
+  background:linear-gradient(145deg,#fff,var(--nova-background))!important;
+  border:1px solid var(--nova-line)!important;
+  box-shadow:none!important;
+  color:var(--nova-ink)!important;
+}
+.premium-plan-card :where(strong,span){color:var(--nova-ink)}
+.premium-plan-card small{color:var(--nova-text-secondary)!important}
+.premium-benefits li>span{
+  background:var(--nova-brand-soft)!important;
+  color:var(--nova-brand-primary-hover)!important;
+}
+.premium-benefits strong{color:var(--nova-ink)!important}
+.premium-benefits small{color:var(--nova-text-secondary)!important}
+
+.premium-trust-strip{
+  color:var(--nova-text-secondary)!important;
+  border-color:var(--nova-line)!important;
+}
+
+.premium-action-column{
+  background:#fff!important;
+  color:var(--nova-ink)!important;
+  border:1px solid var(--nova-line)!important;
+  box-shadow:var(--nova-shadow-md)!important;
+  border-radius:var(--nova-radius-lg)!important;
+}
+.premium-primary-cta{
+  background:var(--nova-brand-primary)!important;
+  color:#fff!important;
+  box-shadow:var(--nova-shadow-brand)!important;
+}
+.premium-primary-cta:hover:not(:disabled){background:var(--nova-brand-primary-hover)!important}
+
+.premium-payment-panel{color:var(--nova-ink)!important}
+.premium-payment-head{border-color:var(--nova-line)!important}
+.premium-payment-head span{color:var(--nova-state-success)!important}
+.premium-payment-head strong{color:var(--nova-ink)!important}
+.premium-payment-head p{color:var(--nova-text-secondary)!important}
+.premium-payment-foot{background:var(--nova-background)!important;color:var(--nova-text-secondary)!important}
+.premium-signout,.access-text-btn{color:var(--nova-text-secondary)!important}
+
+.account-loading-copy h2{color:var(--nova-ink)!important}
+.account-loading-copy p{color:var(--nova-text-secondary)!important}
+.account-loading-copy .premium-step-label{color:var(--nova-brand-primary)!important}
+.account-loading-core{
+  background:var(--nova-brand-primary)!important;
+  color:#fff!important;
+  box-shadow:var(--nova-shadow-brand)!important;
+}
+.account-loading-dot{background:var(--nova-brand-primary)!important;box-shadow:none!important}
+.account-loading-dot.dot-two{background:var(--nova-subject-english)!important}
+.account-loading-dot.dot-three{background:var(--nova-state-success)!important}
+
+.access-divider{color:var(--nova-text-secondary)!important}
+.access-divider::before,.access-divider::after{background:var(--nova-line)!important}
+.access-owner-btn{color:var(--nova-text-secondary)!important;border-color:var(--nova-line)!important;background:transparent!important}
+.access-note{color:var(--nova-text-secondary)!important}
+
+@media(max-width:720px){
+  .access-shell{border-radius:var(--nova-radius-lg)!important}
+  .premium-action-column{padding:20px!important}
+}
