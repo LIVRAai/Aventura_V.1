@@ -15,7 +15,14 @@ const ALLOWED_EVENTS = new Set([
   'checkout_started',
   'subscription_activated',
   'curriculum_game_started',
-  'curriculum_game_completed'
+  'curriculum_game_completed',
+  'adaptive_profile_updated',
+  'adaptive_recommendation_viewed',
+  'adaptive_recommendation_started',
+  'skill_state_changed',
+  'badge_unlocked',
+  'parent_summary_viewed',
+  'weekly_goal_viewed'
 ]);
 
 function cleanText(value, max = 240) {
