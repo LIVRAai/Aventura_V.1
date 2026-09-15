@@ -9,7 +9,7 @@
 @import url('/nova-legacy-shell-v24-4.css');
 @import url('/nova-legacy-detail-v24-4.css');
 
-/* V24.3.1 · Guardas finales de contraste contra opacidades heredadas. */
+/* V24.4 · Todas las capas de aprendizaje histórico se cargan después del sistema V24.3.1. */
 .nova-general-card .tutor-message span{opacity:1!important}
 .curriculum-grade-inline .grade-selector button span,
 .v24-learning-home .grade-selector button span{opacity:1!important}
