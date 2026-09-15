@@ -1,5 +1,3 @@
-@import url('/nova-ui.css');
-
 :root {
   /* Marca NOVA */
   --nova-brand-primary: #5b4bff;
@@ -16,25 +14,31 @@
   --nova-background: #f8f7ff;
   --nova-surface-muted: #f4f2fb;
 
-  /* Materias */
+  /* Estados interactivos */
+  --nova-focus-ring: #3426cf;
+  --nova-disabled-background: #eeecf4;
+  --nova-disabled-text: #5f5a70;
+  --nova-hover-surface: #f4f2fb;
+
+  /* Materias: las variantes strong garantizan margen de contraste sobre blanco y soft */
   --nova-subject-math: #4f8df7;
-  --nova-subject-math-strong: #2b77c8;
+  --nova-subject-math-strong: #2364ad;
   --nova-subject-math-soft: #edf3ff;
 
   --nova-subject-language: #ff7b72;
-  --nova-subject-language-strong: #b24a44;
+  --nova-subject-language-strong: #a8443e;
   --nova-subject-language-soft: #fff0ef;
 
   --nova-subject-science: #42b883;
-  --nova-subject-science-strong: #297a59;
+  --nova-subject-science-strong: #24714f;
   --nova-subject-science-soft: #ecfaf5;
 
   --nova-subject-social: #f7bd4b;
-  --nova-subject-social-strong: #9b6500;
+  --nova-subject-social-strong: #8b5a00;
   --nova-subject-social-soft: #fff7e7;
 
   --nova-subject-english: #2dcbd3;
-  --nova-subject-english-strong: #007d8a;
+  --nova-subject-english-strong: #006f7a;
   --nova-subject-english-soft: #eafdff;
 
   /* Estados semánticos: independientes de las materias */
@@ -122,9 +126,9 @@
 .dashboard-skill.progress > span { background: var(--nova-state-warning); }
 .dashboard-skill.focus > span { background: var(--nova-brand-primary); }
 
-/* Foco visible y consistente en toda la experiencia */
+/* Foco visible y consistente en toda la experiencia. Se evita un anillo translúcido de bajo contraste. */
 :where(a, button, input, select, textarea, [tabindex]):focus-visible {
-  outline: 3px solid rgba(91, 75, 255, .30);
+  outline: 3px solid var(--nova-focus-ring);
   outline-offset: 3px;
 }
 
