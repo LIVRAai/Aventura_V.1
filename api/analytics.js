@@ -24,7 +24,9 @@ const ALLOWED_EVENTS = new Set([
   'parent_summary_viewed',
   'weekly_goal_viewed',
   'achievement_shared',
-  'weekly_summary_shared'
+  'weekly_summary_shared',
+  'visual_narrative_enabled',
+  'narrative_scene_viewed'
 ]);
 
 function cleanText(value, max = 240) {
@@ -79,13 +81,14 @@ export default async function handler(req, res) {
       user_id: userId,
       source,
       path,
-      properties
+      properties,
+      user_agent: cleanText(req.headers['user-agent'], 300) || null,
+      ip_hash: null
     });
     if (error) throw error;
-
-    return res.status(202).json({ accepted: true });
+    return res.status(202).json({ ok: true });
   } catch (error) {
-    console.error('NOVA analytics error', error?.message || error);
-    return res.status(202).json({ accepted: false });
+    console.error('analytics insert failed', error?.message || error);
+    return res.status(500).json({ error: 'No fue posible registrar el evento.' });
   }
 }
