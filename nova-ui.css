@@ -11,7 +11,7 @@
 :where(button,input,select,textarea){font:inherit}
 :where(button,a,input,select,textarea){-webkit-tap-highlight-color:transparent}
 
-/* Acciones */
+/* Acciones: el color de texto se fija también en hover/active para evitar herencias legacy. */
 :where(.button,.trial-primary,.access-primary,.access-secondary,.demo-next,.profile-btn,.grade-selector button,.curriculum-subject-btn,.trial-option,.auth-tab,.access-owner-btn,.mp-payment-close){
   transition:
     background-color var(--nova-motion) var(--nova-ease),
@@ -22,19 +22,73 @@
     opacity var(--nova-motion-fast) linear;
 }
 
-:where(.button-primary,.trial-primary,.access-primary){
+:is(
+  .button-primary,
+  .trial-primary,
+  .access-primary,
+  .premium-primary-cta,
+  .topic-primary-btn,
+  .topic-game-start-btn,
+  .curriculum-game-next,
+  .nova-general-form button
+){
   min-height:var(--nova-control-lg);
-  border:1px solid transparent;
+  border:1px solid transparent!important;
   border-radius:var(--nova-control-radius);
-  background:var(--nova-brand-primary);
-  color:#fff;
+  background:var(--nova-brand-primary)!important;
+  color:#fff!important;
   font-weight:800;
   box-shadow:var(--nova-shadow-brand);
 }
 
-:where(.button-primary,.trial-primary,.access-primary):not(:disabled):hover{
-  background:var(--nova-brand-primary-hover);
+:is(
+  .button-primary,
+  .trial-primary,
+  .access-primary,
+  .premium-primary-cta,
+  .topic-primary-btn,
+  .topic-game-start-btn,
+  .curriculum-game-next,
+  .nova-general-form button
+):not(:disabled):hover{
+  background:var(--nova-brand-primary-hover)!important;
+  color:#fff!important;
   transform:translateY(-1px);
+}
+
+:is(
+  .button-primary,
+  .trial-primary,
+  .access-primary,
+  .premium-primary-cta,
+  .topic-primary-btn,
+  .topic-game-start-btn,
+  .curriculum-game-next,
+  .nova-general-form button
+):not(:disabled):active{
+  background:var(--nova-brand-primary-hover)!important;
+  color:#fff!important;
+  transform:translateY(1px);
+  box-shadow:0 8px 20px rgba(52,38,207,.18)!important;
+}
+
+:is(
+  .button-primary,
+  .trial-primary,
+  .access-primary,
+  .premium-primary-cta,
+  .topic-primary-btn,
+  .topic-game-start-btn,
+  .curriculum-game-next,
+  .nova-general-form button
+):disabled{
+  background:var(--nova-disabled-background)!important;
+  color:var(--nova-disabled-text)!important;
+  border-color:var(--nova-line)!important;
+  opacity:1!important;
+  transform:none!important;
+  box-shadow:none!important;
+  cursor:not-allowed!important;
 }
 
 :where(.button-secondary,.access-secondary){
@@ -46,16 +100,31 @@
   box-shadow:none;
 }
 
-:where(.button-secondary,.access-secondary):not(:disabled):hover{
-  border-color:#c9c3ef;
-  background:#fbfaff;
-  transform:translateY(-1px);
+:is(.button-secondary,.access-secondary):not(:disabled):hover,
+:is(.button-secondary,.access-secondary):not(:disabled):active{
+  border-color:#c9c3ef!important;
+  background:var(--nova-hover-surface)!important;
+  color:var(--nova-ink)!important;
+}
+
+.button-ghost{
+  background:var(--nova-brand-soft)!important;
+  color:var(--nova-brand-primary-hover)!important;
+  border-color:transparent!important;
+}
+.button-ghost:hover,.button-ghost:active{
+  background:#e5e1ff!important;
+  color:var(--nova-brand-primary-hover)!important;
+}
+
+.auth-tab:hover:not(.active):not([aria-selected="true"]){
+  background:#ebe8f4!important;
+  color:var(--nova-ink)!important;
 }
 
 :where(button,[role="button"]):disabled,
 :where(button,[role="button"])[aria-disabled="true"]{
   cursor:not-allowed!important;
-  opacity:.52!important;
   transform:none!important;
   box-shadow:none!important;
 }
@@ -88,10 +157,10 @@
   textarea
 ):focus{
   border-color:var(--nova-brand-primary)!important;
-  box-shadow:0 0 0 4px rgba(91,75,255,.10)!important;
+  box-shadow:0 0 0 4px rgba(91,75,255,.12)!important;
 }
 
-:where(input,textarea)::placeholder{color:#9893a9;opacity:1}
+:where(input,textarea)::placeholder{color:#777286;opacity:1}
 
 /* Superficies */
 :where(
@@ -177,22 +246,21 @@ body.nova-modal-open{overflow:hidden}
   border-radius:var(--nova-radius-md)!important;
 }
 
-.v24-learning-home .curriculum-subject-btn:focus-visible,
-.v24-learning-home .grade-selector button:focus-visible{
-  outline-color:rgba(91,75,255,.35)!important;
-}
-
-/* Prueba: misma lógica de opción que el resto del producto */
+/* Prueba y retos: nunca cambiar solo el fondo dejando texto heredado */
 .trial-option{
   border-radius:var(--nova-control-radius)!important;
+  color:var(--nova-ink)!important;
 }
 
 .trial-option:not(:disabled):hover{
   border-color:#c8c1fa!important;
   background:#faf9ff!important;
+  color:var(--nova-ink)!important;
   transform:translateY(-1px);
 }
 
+.trial-option.correct{color:var(--nova-state-success)!important}
+.trial-option.wrong{color:var(--nova-state-error)!important}
 .trial-option.correct::before{content:"✓ ";font-weight:900}
 .trial-option.wrong::before{content:"↺ ";font-weight:900}
 
