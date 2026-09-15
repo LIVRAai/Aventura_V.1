@@ -76,3 +76,22 @@ El progreso nuevo de los juegos se guarda en `localStorage` con una clave indepe
 - Los temas del grado permanecen disponibles para que la familia refuerce lo que el colegio esté trabajando en ese momento; no se bloquean entre sí.
 - Se muestran bloques orientativos del año escolar sin asumir que todos los colegios enseñan los temas en el mismo orden.
 - No se modificaron tablas, Supabase, Mercado Pago, autenticación, webhooks, variables de entorno ni archivos de `/api`.
+
+
+## V24.0 · Pack 1 · Experiencia comercial
+
+Este pack separa por primera vez la experiencia de descubrimiento comercial de la aplicación autenticada, sin modificar la lógica productiva existente.
+
+- `/` pasa a ser una landing comercial de Aprende con NOVA.
+- `/app` conserva la aplicación actual completa.
+- La landing comunica la propuesta central: **NOVA no hace la tarea por el niño; le enseña a resolverla**.
+- Se incorpora una demostración interactiva de cuatro momentos: duda, acompañamiento, razonamiento y comprensión.
+- Se presenta una dirección visual más reconocible para NOVA: morado principal, superficies claras, tarjetas suaves, jerarquía tipográfica y un primer prototipo visual del personaje NOVA.
+- Se muestran ejemplos de misión, progreso para familias y materias disponibles sin inventar testimonios ni resultados reales.
+- El diseño es responsive, incluye navegación por teclado y respeta `prefers-reduced-motion`.
+- El paquete cambia su identidad técnica a `aprende-con-nova` y unifica el versionado en `24.0.0`.
+- Este pack no cambia Mercado Pago, Supabase, autenticación, webhooks, tutor, progreso ni las actividades existentes.
+
+### Siguiente pack recomendado
+
+V24.1 debe intervenir la aplicación interna: prueba gratuita de 3 misiones, onboarding diagnóstico, Home centrado en la misión del día, personalización completa del nombre del niño y sincronización del progreso curricular con Supabase.

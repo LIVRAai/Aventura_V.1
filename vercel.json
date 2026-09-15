@@ -1,0 +1,16 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "routes": [
+    {
+      "src": "^/$",
+      "dest": "/landing.html"
+    },
+    {
+      "src": "^/app/?$",
+      "dest": "/index.html"
+    },
+    {
+      "handle": "filesystem"
+    }
+  ]
+}

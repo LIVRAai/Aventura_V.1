@@ -1,9 +1,9 @@
 {
-  "name": "la-expedicion",
-  "version": "14.0.0",
+  "name": "aprende-con-nova",
+  "version": "24.0.0",
   "private": true,
   "type": "module",
-  "description": "La Expedición - navegación jerárquica final, revisión segura para adultos, NOVA, progreso en la nube y plan familiar productivo",
+  "description": "Aprende con NOVA - refuerzo escolar personalizado para primaria, tutor guiado, progreso por habilidades y experiencia familiar",
   "engines": {
     "node": ">=20"
   },
