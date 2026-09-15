@@ -6,7 +6,7 @@
   background:#fff!important;
   color:var(--nova-ink)!important;
 }
-.modal-head .eyebrow{color:var(--nova-brand-primary)!important}
+.modal-head .eyebrow{color:var(--nova-brand-primary-hover)!important}
 .modal-head h2{color:var(--nova-ink)!important}
 .modal-head .icon-btn{
   width:44px!important;
@@ -17,7 +17,7 @@
   color:var(--nova-ink)!important;
   box-shadow:none!important;
 }
-.modal-head .icon-btn:hover{background:var(--nova-background)!important;border-color:#c9c3ef!important}
+.modal-head .icon-btn:hover,.modal-head .icon-btn:active{background:var(--nova-background)!important;border-color:#c9c3ef!important;color:var(--nova-ink)!important}
 
 /* Perfil */
 .settings-modal-card{
@@ -33,9 +33,10 @@
 }
 .settings-row strong{color:var(--nova-ink)!important}
 .settings-row :where(p,small,span:not(.switch-slider)){color:var(--nova-text-secondary)!important}
-.settings-row-action:hover{
+.settings-row-action:hover,.settings-row-action:active{
   background:var(--nova-brand-soft)!important;
   border-color:#d5cfff!important;
+  color:var(--nova-ink)!important;
 }
 .settings-row-arrow{
   background:#fff!important;
@@ -57,6 +58,7 @@
   background:var(--nova-state-error-soft)!important;
 }
 .settings-danger-btn{color:var(--nova-state-error)!important}
+.settings-danger-btn:hover,.settings-danger-btn:active{color:var(--nova-state-error)!important;background:#fbe4e4!important}
 .settings-divider{background:var(--nova-line)!important}
 
 /* Panel familiar */
@@ -76,7 +78,7 @@
   color:var(--nova-brand-primary-hover)!important;
   box-shadow:none!important;
 }
-.parent-topic-summary span{color:var(--nova-brand-primary)!important}
+.parent-topic-summary span{color:var(--nova-brand-primary-hover)!important}
 .parent-topic-summary strong{color:var(--nova-ink)!important}
 .parent-topic-summary p{color:var(--nova-text-secondary)!important}
 .parent-overall-progress{
@@ -104,6 +106,35 @@
 .parent-curriculum-summary p{color:var(--nova-text-secondary)!important}
 .parent-recommendation-card{background:var(--nova-brand-soft)!important;border-color:#dcd7ff!important}
 .parent-recommendation-card :where(span,b){color:var(--nova-brand-primary-hover)!important}
+
+.parent-skill-row + .parent-skill-row{border-color:var(--nova-line)!important}
+.parent-skill-icon{background:var(--nova-background)!important;border:1px solid var(--nova-line)!important}
+
+/* Estados del progreso: los colores pastel legacy no son válidos sobre blanco. */
+.parent-learning-block-head > b.mastered,
+.parent-skill-row.mastered > b{
+  color:var(--nova-state-success)!important;
+  background:var(--nova-state-success-soft)!important;
+  border:1px solid rgba(36,122,77,.18)!important;
+}
+.parent-learning-block-head > b.progress,
+.parent-skill-row.progress > b{
+  color:var(--nova-state-warning)!important;
+  background:var(--nova-state-warning-soft)!important;
+  border:1px solid rgba(138,90,0,.18)!important;
+}
+.parent-learning-block-head > b.reinforce,
+.parent-skill-row.reinforce > b{
+  color:var(--nova-state-info)!important;
+  background:var(--nova-state-info-soft)!important;
+  border:1px solid rgba(49,94,186,.18)!important;
+}
+.parent-learning-block-head > b.not-started,
+.parent-skill-row.not-started > b{
+  color:var(--nova-disabled-text)!important;
+  background:var(--nova-disabled-background)!important;
+  border:1px solid var(--nova-line)!important;
+}
 
 .parent-curriculum-subjects>div{
   background:var(--nova-background)!important;
