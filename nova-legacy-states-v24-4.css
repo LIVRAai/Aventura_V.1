@@ -1,0 +1,169 @@
+/* NOVA V24.4 · Estados semánticos y tutor dentro de módulos heredados */
+
+/* Academia: cada estado conserva significado además del color. */
+#notebookModule .academy-route-card.new{
+  background:#fff!important;
+  border-color:var(--nova-line)!important;
+}
+#notebookModule .academy-route-card.new .academy-route-copy>span{
+  color:var(--nova-text-secondary)!important;
+}
+
+#notebookModule .academy-route-card.progress{
+  background:var(--nova-state-info-soft)!important;
+  border-color:rgba(49,94,186,.20)!important;
+}
+#notebookModule .academy-route-card.progress .academy-route-copy>span,
+#notebookModule .academy-skill.progress b{
+  color:var(--nova-state-info)!important;
+}
+
+#notebookModule .academy-route-card.reinforce .academy-route-copy>span{
+  color:var(--nova-state-warning)!important;
+}
+#notebookModule .academy-route-card.strong .academy-route-copy>span{
+  color:var(--nova-state-success)!important;
+}
+
+#notebookModule .academy-skill.new b{color:var(--nova-disabled-text)!important}
+#notebookModule .academy-skill.progress{
+  background:var(--nova-state-info-soft)!important;
+  border-color:rgba(49,94,186,.16)!important;
+}
+#notebookModule .academy-skill.reinforce{
+  background:var(--nova-state-warning-soft)!important;
+  border-color:rgba(138,90,0,.16)!important;
+}
+#notebookModule .academy-skill.strong{
+  background:var(--nova-state-success-soft)!important;
+  border-color:rgba(36,122,77,.16)!important;
+}
+
+/* Los controles deshabilitados no dependen de opacity. */
+#app :where(button,input):disabled,
+#notebookModule :where(button,input):disabled{
+  opacity:1!important;
+  cursor:not-allowed!important;
+  transform:none!important;
+}
+#app button:disabled,
+#notebookModule button:disabled{
+  background:var(--nova-disabled-background)!important;
+  color:var(--nova-disabled-text)!important;
+  border-color:var(--nova-line)!important;
+  box-shadow:none!important;
+}
+#app input:disabled,
+#notebookModule input:disabled{
+  background:var(--nova-disabled-background)!important;
+  color:var(--nova-disabled-text)!important;
+  border-color:var(--nova-line)!important;
+}
+
+/* Tutor contextual del Atlas: misma voz visual que Pregúntale a NOVA. */
+#app .ai-tutor-card{
+  border:1px solid #dcd7ff!important;
+  background:linear-gradient(145deg,var(--nova-brand-soft),#fff)!important;
+  color:var(--nova-ink)!important;
+  box-shadow:none!important;
+}
+#app .ai-tutor-head :where(h3,strong){color:var(--nova-ink)!important}
+#app .ai-tutor-head :where(p,small){color:var(--nova-text-secondary)!important}
+#app .ai-status{
+  background:var(--nova-state-success-soft)!important;
+  border-color:rgba(36,122,77,.18)!important;
+  color:var(--nova-state-success)!important;
+}
+#app .ai-status.loading{
+  background:var(--nova-state-warning-soft)!important;
+  border-color:rgba(138,90,0,.18)!important;
+  color:var(--nova-state-warning)!important;
+}
+#app .ai-status.error{
+  background:var(--nova-state-error-soft)!important;
+  border-color:rgba(179,58,58,.18)!important;
+  color:var(--nova-state-error)!important;
+}
+
+#app .tutor-message{
+  border:1px solid var(--nova-line)!important;
+  color:var(--nova-ink)!important;
+  box-shadow:none!important;
+}
+#app .tutor-message.nova-message{
+  background:var(--nova-brand-soft)!important;
+  border-color:#dcd7ff!important;
+}
+#app .tutor-message.emi-message{
+  background:var(--nova-subject-math-soft)!important;
+  border-color:#d8e6ff!important;
+}
+#app .tutor-message span{
+  color:var(--nova-brand-primary-hover)!important;
+  opacity:1!important;
+}
+#app .tutor-message p{color:var(--nova-ink)!important}
+
+#app .tutor-quick-actions button{
+  border:1px solid var(--nova-line)!important;
+  background:#fff!important;
+  color:var(--nova-ink)!important;
+}
+#app .tutor-quick-actions button:hover,
+#app .tutor-quick-actions button:active{
+  border-color:#c9c3ef!important;
+  background:var(--nova-hover-surface)!important;
+  color:var(--nova-ink)!important;
+}
+#app .tutor-input-row input,
+#notebookModule .tutor-input-row input{
+  border:1px solid var(--nova-line-strong)!important;
+  background:#fff!important;
+  color:var(--nova-ink)!important;
+  box-shadow:none!important;
+}
+#app .tutor-input-row input:focus,
+#notebookModule .tutor-input-row input:focus{
+  border-color:var(--nova-brand-primary)!important;
+  box-shadow:0 0 0 4px rgba(91,75,255,.10)!important;
+}
+#app .tutor-input-row button,
+#notebookModule .tutor-input-row button{
+  background:var(--nova-brand-primary)!important;
+  color:#fff!important;
+  box-shadow:var(--nova-shadow-brand)!important;
+}
+#app .tutor-input-row button:hover,
+#app .tutor-input-row button:active,
+#notebookModule .tutor-input-row button:hover,
+#notebookModule .tutor-input-row button:active{
+  background:var(--nova-brand-primary-hover)!important;
+  color:#fff!important;
+}
+#app .tutor-note,
+#notebookModule .tutor-note{color:var(--nova-text-secondary)!important}
+
+/* Respuestas y feedback: seleccionado no significa correcto. */
+#app .answer-btn.selected,
+#notebookModule .academy-choice.selected{
+  border-color:var(--nova-brand-primary)!important;
+  background:var(--nova-brand-soft)!important;
+  color:var(--nova-brand-primary-hover)!important;
+}
+
+/* Mantener foco visible aun en reglas legacy que usaban outline:none. */
+#app :where(button,input,[tabindex]):focus-visible,
+#notebookModule :where(button,input,[tabindex]):focus-visible{
+  outline:3px solid var(--nova-focus-ring)!important;
+  outline-offset:3px!important;
+}
+
+/* Evita que motion de la app vieja comunique estado por sí solo. */
+@media(prefers-reduced-motion:reduce){
+  #app *,#notebookModule *{
+    scroll-behavior:auto!important;
+    animation-duration:.001ms!important;
+    animation-iteration-count:1!important;
+    transition-duration:.001ms!important;
+  }
+}
