@@ -14,7 +14,7 @@
         attempts += 1;
         if (document.documentElement.dataset.novaVersion === '24.1' || attempts > 100) {
           window.clearInterval(timer);
-          load('/app-v24-2.js');
+          load('/app-v24-2.js', () => load('/nova-ui.js'));
         }
       }, 100);
     });
