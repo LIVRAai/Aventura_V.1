@@ -9,8 +9,10 @@
   --nova-ink: #17152a;
   --nova-text-secondary: #68657b;
   --nova-line: #e8e6f3;
+  --nova-line-strong: #d9d5e9;
   --nova-surface: #ffffff;
   --nova-background: #f8f7ff;
+  --nova-surface-muted: #f4f2fb;
 
   /* Materias */
   --nova-subject-math: #4f8df7;
@@ -33,7 +35,7 @@
   --nova-subject-english-strong: #007d8a;
   --nova-subject-english-soft: #eafdff;
 
-  /* Estados semánticos: no dependen de los colores de materia */
+  /* Estados semánticos: independientes de las materias */
   --nova-state-success: #247a4d;
   --nova-state-success-soft: #edf8f2;
   --nova-state-warning: #8a5a00;
@@ -42,6 +44,43 @@
   --nova-state-error-soft: #fff0f0;
   --nova-state-info: #315eba;
   --nova-state-info-soft: #eef3ff;
+
+  /* Sistema de forma */
+  --nova-radius-xs: 10px;
+  --nova-radius-sm: 14px;
+  --nova-radius-md: 18px;
+  --nova-radius-lg: 24px;
+  --nova-radius-xl: 30px;
+  --nova-radius-pill: 999px;
+
+  /* Sistema de elevación */
+  --nova-shadow-sm: 0 8px 24px rgba(23, 21, 42, .06);
+  --nova-shadow-md: 0 16px 42px rgba(43, 34, 104, .09);
+  --nova-shadow-lg: 0 26px 72px rgba(55, 43, 135, .12);
+  --nova-shadow-brand: 0 14px 34px rgba(91, 75, 255, .24);
+
+  /* Sistema de espaciado */
+  --nova-space-1: 4px;
+  --nova-space-2: 8px;
+  --nova-space-3: 12px;
+  --nova-space-4: 16px;
+  --nova-space-5: 20px;
+  --nova-space-6: 24px;
+  --nova-space-8: 32px;
+  --nova-space-10: 40px;
+  --nova-space-12: 48px;
+
+  /* Controles */
+  --nova-control-sm: 42px;
+  --nova-control-md: 48px;
+  --nova-control-lg: 54px;
+  --nova-control-radius: 16px;
+
+  /* Movimiento */
+  --nova-ease: cubic-bezier(.2, .8, .2, 1);
+  --nova-motion-fast: 140ms;
+  --nova-motion: 220ms;
+  --nova-motion-slow: 360ms;
 
   /* Compatibilidad V24 landing */
   --nova: var(--nova-brand-primary);
@@ -59,7 +98,7 @@
   --cyan: var(--nova-subject-english);
 }
 
-/* Reglas de contraste y coherencia para V24 */
+/* Reglas de contraste y coherencia para V24+ */
 .button-primary,
 .brand-mark,
 .mini-brand i,
@@ -98,20 +137,21 @@
   color: var(--nova-subject-english-strong);
 }
 
-.dashboard-skill.success > span {
-  background: var(--nova-state-success);
-}
+.dashboard-skill.success > span { background: var(--nova-state-success); }
+.dashboard-skill.progress > span { background: var(--nova-state-warning); }
+.dashboard-skill.focus > span { background: var(--nova-brand-primary); }
 
-.dashboard-skill.progress > span {
-  background: var(--nova-state-warning);
-}
-
-.dashboard-skill.focus > span {
-  background: var(--nova-brand-primary);
-}
-
-/* El foco debe ser visible y consistente en toda la experiencia */
-:where(a, button, input, select, textarea):focus-visible {
+/* Foco visible y consistente en toda la experiencia */
+:where(a, button, input, select, textarea, [tabindex]):focus-visible {
   outline: 3px solid rgba(91, 75, 255, .30);
   outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    scroll-behavior: auto !important;
+    animation-duration: .001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .001ms !important;
+  }
 }
