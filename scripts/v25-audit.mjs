@@ -11,9 +11,10 @@ const cloud = read('app-v25-cloud.js');
 const growth = read('app-v25-growth.js');
 const analytics = read('api/analytics.js');
 const pkg = json('package.json');
+const majorVersion = Number(String(pkg.version || '').split('.')[0]);
 
 const checks = [
-  ['Versión 25.0.0', pkg.version === '25.0.0'],
+  ['Base V25 preservada en versión >=25', majorVersion >= 25],
   ['Runtime Node 24.x', pkg.engines?.node === '24.x'],
   ['Carga app-v25', loader.includes("load('/app-v25.js'")],
   ['Carga growth V25', loader.includes("load('/app-v25-growth.js'")],
