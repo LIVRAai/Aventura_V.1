@@ -1,0 +1,117 @@
+:root {
+  /* Marca NOVA */
+  --nova-brand-primary: #5b4bff;
+  --nova-brand-primary-hover: #3426cf;
+  --nova-brand-soft: #eeecff;
+  --nova-brand-glow: rgba(91, 75, 255, .18);
+
+  /* Neutros */
+  --nova-ink: #17152a;
+  --nova-text-secondary: #68657b;
+  --nova-line: #e8e6f3;
+  --nova-surface: #ffffff;
+  --nova-background: #f8f7ff;
+
+  /* Materias */
+  --nova-subject-math: #4f8df7;
+  --nova-subject-math-strong: #2b77c8;
+  --nova-subject-math-soft: #edf3ff;
+
+  --nova-subject-language: #ff7b72;
+  --nova-subject-language-strong: #b24a44;
+  --nova-subject-language-soft: #fff0ef;
+
+  --nova-subject-science: #42b883;
+  --nova-subject-science-strong: #297a59;
+  --nova-subject-science-soft: #ecfaf5;
+
+  --nova-subject-social: #f7bd4b;
+  --nova-subject-social-strong: #9b6500;
+  --nova-subject-social-soft: #fff7e7;
+
+  --nova-subject-english: #2dcbd3;
+  --nova-subject-english-strong: #007d8a;
+  --nova-subject-english-soft: #eafdff;
+
+  /* Estados semánticos: no dependen de los colores de materia */
+  --nova-state-success: #247a4d;
+  --nova-state-success-soft: #edf8f2;
+  --nova-state-warning: #8a5a00;
+  --nova-state-warning-soft: #fff6e5;
+  --nova-state-error: #b33a3a;
+  --nova-state-error-soft: #fff0f0;
+  --nova-state-info: #315eba;
+  --nova-state-info-soft: #eef3ff;
+
+  /* Compatibilidad V24 landing */
+  --nova: var(--nova-brand-primary);
+  --nova-dark: var(--nova-brand-primary-hover);
+  --nova-soft: var(--nova-brand-soft);
+  --ink: var(--nova-ink);
+  --muted: var(--nova-text-secondary);
+  --line: var(--nova-line);
+  --surface: var(--nova-surface);
+  --bg: var(--nova-background);
+  --blue: var(--nova-subject-math);
+  --coral: var(--nova-subject-language);
+  --green: var(--nova-subject-science);
+  --yellow: var(--nova-subject-social);
+  --cyan: var(--nova-subject-english);
+}
+
+/* Reglas de contraste y coherencia para V24 */
+.button-primary,
+.brand-mark,
+.mini-brand i,
+.nova-avatar,
+.nova-mini-face {
+  background: var(--nova-brand-primary);
+  color: #fff;
+}
+
+.button-primary:hover {
+  background: var(--nova-brand-primary-hover);
+}
+
+.subject.math i {
+  background: var(--nova-subject-math-soft);
+  color: var(--nova-subject-math-strong);
+}
+
+.subject.language i {
+  background: var(--nova-subject-language-soft);
+  color: var(--nova-subject-language-strong);
+}
+
+.subject.science i {
+  background: var(--nova-subject-science-soft);
+  color: var(--nova-subject-science-strong);
+}
+
+.subject.social i {
+  background: var(--nova-subject-social-soft);
+  color: var(--nova-subject-social-strong);
+}
+
+.subject.english i {
+  background: var(--nova-subject-english-soft);
+  color: var(--nova-subject-english-strong);
+}
+
+.dashboard-skill.success > span {
+  background: var(--nova-state-success);
+}
+
+.dashboard-skill.progress > span {
+  background: var(--nova-state-warning);
+}
+
+.dashboard-skill.focus > span {
+  background: var(--nova-brand-primary);
+}
+
+/* El foco debe ser visible y consistente en toda la experiencia */
+:where(a, button, input, select, textarea):focus-visible {
+  outline: 3px solid rgba(91, 75, 255, .30);
+  outline-offset: 3px;
+}
