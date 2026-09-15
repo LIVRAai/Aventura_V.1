@@ -113,7 +113,9 @@
   color:#fff!important;
   box-shadow:var(--nova-shadow-brand)!important;
 }
+.premium-primary-cta small{color:#fff!important;opacity:1!important}
 .premium-primary-cta:hover:not(:disabled),.premium-primary-cta:active:not(:disabled){background:var(--nova-brand-primary-hover)!important;color:#fff!important}
+.premium-primary-cta:hover:not(:disabled) small,.premium-primary-cta:active:not(:disabled) small{color:#fff!important;opacity:1!important}
 
 .premium-payment-panel{color:var(--nova-ink)!important}
 .premium-payment-head{border-color:var(--nova-line)!important}
