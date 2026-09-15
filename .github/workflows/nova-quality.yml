@@ -6,6 +6,7 @@ on:
   push:
     branches:
       - feature/nova-v25-evolucion-integral
+      - feature/nova-v26-visual-narrative
 
 permissions:
   contents: read
@@ -27,6 +28,7 @@ jobs:
           node --check app-v25.js
           node --check app-v25-growth.js
           node --check app-v25-cloud.js
+          node --check app-v26.js
           node --check api/analytics.js
 
       - name: Contrast audit
@@ -37,3 +39,6 @@ jobs:
 
       - name: V25 integral audit
         run: npm run audit:v25
+
+      - name: V26 visual narrative audit
+        run: npm run audit:v26
