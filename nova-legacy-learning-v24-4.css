@@ -1,0 +1,696 @@
+/* NOVA V24.4 · Unificación de experiencias históricas de aprendizaje
+   Migra Atlas Animal, Academia de División y Cuaderno al sistema claro V24.
+   No cambia lógica pedagógica ni persistencia; solo presentación, estados y comportamiento visual. */
+
+/* ========================================================================== */
+/* BASE DE EXPERIENCIA                                                        */
+/* ========================================================================== */
+
+#app,
+#notebookModule{
+  color:var(--nova-ink)!important;
+}
+
+#app.app-shell{
+  width:min(100%,1000px)!important;
+  padding-bottom:72px!important;
+}
+
+#app .topbar,
+#notebookModule .notebook-top{
+  color:var(--nova-ink)!important;
+  background:rgba(248,247,255,.92)!important;
+  border:1px solid var(--nova-line)!important;
+  border-radius:var(--nova-radius-lg)!important;
+  box-shadow:none!important;
+  backdrop-filter:blur(18px)!important;
+}
+
+#app .content-heading .eyebrow,
+#notebookModule .eyebrow{
+  color:var(--nova-brand-primary-hover)!important;
+}
+
+#app .content-heading h1,
+#notebookModule h2,
+#notebookModule h3,
+#notebookModule h4{
+  color:var(--nova-ink)!important;
+}
+
+#app :is(.hierarchy-back,.icon-btn,.notebook-back-btn),
+#notebookModule :is(.hierarchy-back,.icon-btn,.notebook-back-btn){
+  min-height:var(--nova-control-md)!important;
+  border:1px solid var(--nova-line)!important;
+  border-radius:var(--nova-control-radius)!important;
+  background:#fff!important;
+  color:var(--nova-ink)!important;
+  box-shadow:none!important;
+}
+
+#app :is(.hierarchy-back,.icon-btn,.notebook-back-btn):hover,
+#app :is(.hierarchy-back,.icon-btn,.notebook-back-btn):active,
+#notebookModule :is(.hierarchy-back,.icon-btn,.notebook-back-btn):hover,
+#notebookModule :is(.hierarchy-back,.icon-btn,.notebook-back-btn):active{
+  border-color:#c9c3ef!important;
+  background:var(--nova-hover-surface)!important;
+  color:var(--nova-ink)!important;
+}
+
+/* ========================================================================== */
+/* ATLAS ANIMAL · INTRO                                                       */
+/* ========================================================================== */
+
+.intro{
+  background:
+    radial-gradient(circle at 82% 12%,rgba(91,75,255,.16),transparent 31%),
+    radial-gradient(circle at 12% 80%,rgba(45,203,211,.10),transparent 28%),
+    linear-gradient(180deg,#fff 0%,var(--nova-background) 100%)!important;
+  color:var(--nova-ink)!important;
+}
+
+.intro .stars{opacity:.035!important}
+
+.intro-card{
+  color:var(--nova-ink)!important;
+}
+
+.intro .intro-back{
+  border:1px solid var(--nova-line)!important;
+  background:#fff!important;
+  color:var(--nova-ink)!important;
+  box-shadow:var(--nova-shadow-sm)!important;
+}
+.intro .intro-back:hover,.intro .intro-back:active{
+  background:var(--nova-hover-surface)!important;
+  color:var(--nova-ink)!important;
+}
+
+.intro-badge{
+  border:1px solid #dcd7ff!important;
+  background:var(--nova-brand-soft)!important;
+  color:var(--nova-brand-primary-hover)!important;
+  box-shadow:none!important;
+}
+
+.intro-kicker{color:var(--nova-brand-primary-hover)!important}
+.intro h1{color:var(--nova-ink)!important;text-shadow:none!important}
+.intro h1 span{color:var(--nova-brand-primary)!important;text-shadow:none!important}
+.intro-copy{color:var(--nova-text-secondary)!important}
+.intro-copy strong{color:var(--nova-ink)!important}
+
+.intro-atlas .atlas-core{
+  background:var(--nova-brand-primary)!important;
+  color:#fff!important;
+  box-shadow:var(--nova-shadow-brand)!important;
+}
+
+.intro-mission{
+  border:1px solid var(--nova-line)!important;
+  background:#fff!important;
+  color:var(--nova-ink)!important;
+  box-shadow:var(--nova-shadow-md)!important;
+}
+.intro-mission :where(span,small){color:var(--nova-text-secondary)!important}
+.intro-mission strong{color:var(--nova-ink)!important}
+
+.intro .primary-btn{
+  background:var(--nova-brand-primary)!important;
+  color:#fff!important;
+  box-shadow:var(--nova-shadow-brand)!important;
+}
+.intro .primary-btn:hover,.intro .primary-btn:active{
+  background:var(--nova-brand-primary-hover)!important;
+  color:#fff!important;
+}
+
+/* ========================================================================== */
+/* ATLAS ANIMAL · RECORRIDO                                                   */
+/* ========================================================================== */
+
+#app .world-strip{
+  border:1px solid var(--nova-line)!important;
+  background:#fff!important;
+  color:var(--nova-ink)!important;
+  box-shadow:var(--nova-shadow-sm)!important;
+}
+#app .world-icon{
+  background:var(--nova-brand-soft)!important;
+  color:var(--nova-brand-primary-hover)!important;
+}
+#app .world-strip p{color:var(--nova-text-secondary)!important}
+#app .world-strip strong{color:var(--nova-ink)!important}
+#app .world-strip>span{color:var(--nova-brand-primary-hover)!important}
+
+#app .hero-card,
+#app .game-card,
+#app .reward-card,
+#app .final-card{
+  border:1px solid var(--nova-line)!important;
+  background:#fff!important;
+  color:var(--nova-ink)!important;
+  box-shadow:var(--nova-shadow-md)!important;
+  backdrop-filter:none!important;
+}
+
+#app .hero-card{
+  background:linear-gradient(145deg,#fff,var(--nova-background))!important;
+}
+#app .hero-card::after{
+  background:var(--nova-brand-soft)!important;
+  filter:none!important;
+  opacity:.8!important;
+}
+#app .hero-card h2{color:var(--nova-ink)!important}
+#app .hero-card p{color:var(--nova-text-secondary)!important}
+#app .story-line{
+  color:var(--nova-ink)!important;
+  border-left-color:var(--nova-brand-primary)!important;
+}
+#app .pill{
+  background:var(--nova-brand-soft)!important;
+  color:var(--nova-brand-primary-hover)!important;
+}
+
+#app .mission-animal{
+  border:1px solid var(--nova-line)!important;
+  background:#fff!important;
+  color:var(--nova-ink)!important;
+  box-shadow:var(--nova-shadow-sm)!important;
+}
+#app .mission-animal:hover,#app .mission-animal:focus-visible{
+  border-color:#c9c3ef!important;
+  background:var(--nova-hover-surface)!important;
+  color:var(--nova-ink)!important;
+}
+#app .mission-animal .animal-role{color:var(--nova-text-secondary)!important}
+#app .mission-animal .animal-learn{color:var(--nova-brand-primary-hover)!important;opacity:1!important}
+#app .mission-animal small{color:var(--nova-ink)!important}
+
+#app .progress-label{color:var(--nova-text-secondary)!important}
+#app .progress-label strong{color:var(--nova-brand-primary-hover)!important}
+#app .progress-track{background:var(--nova-line)!important}
+#app .progress-bar{
+  background:var(--nova-brand-primary)!important;
+  box-shadow:none!important;
+}
+
+#app .instruction{color:var(--nova-text-secondary)!important}
+#app .bank-wrap{
+  border:1px solid var(--nova-line)!important;
+  background:var(--nova-background)!important;
+}
+#app .bank-label{color:var(--nova-text-secondary)!important}
+#app .creature{
+  border:1px solid var(--nova-line)!important;
+  background:#fff!important;
+  color:var(--nova-ink)!important;
+  box-shadow:var(--nova-shadow-sm)!important;
+}
+#app .creature:hover,#app .creature:focus-visible{
+  border-color:#c9c3ef!important;
+  background:var(--nova-brand-soft)!important;
+}
+
+#app .zone{
+  border-color:var(--nova-line)!important;
+  background:var(--nova-background)!important;
+  color:var(--nova-ink)!important;
+}
+#app .zone :where(span,small){color:var(--nova-text-secondary)!important}
+#app .zone strong{color:var(--nova-ink)!important}
+
+#app .equation{color:var(--nova-ink)!important}
+#app .operator{color:var(--nova-brand-primary-hover)!important}
+#app .question{color:var(--nova-state-warning)!important;text-shadow:none!important}
+
+#app .answer-btn{
+  border:1px solid var(--nova-line)!important;
+  background:#fff!important;
+  color:var(--nova-ink)!important;
+  box-shadow:none!important;
+}
+#app .answer-btn:hover:not(:disabled){
+  border-color:#c9c3ef!important;
+  background:var(--nova-hover-surface)!important;
+  color:var(--nova-ink)!important;
+}
+#app .answer-btn.selected,
+#app .answer-btn:active:not(:disabled){
+  border-color:var(--nova-brand-primary)!important;
+  background:var(--nova-brand-soft)!important;
+  color:var(--nova-brand-primary-hover)!important;
+  transform:translateY(1px)!important;
+  box-shadow:none!important;
+}
+
+#app .actions .primary-btn,
+#app .final-actions .primary-btn{
+  background:var(--nova-brand-primary)!important;
+  color:#fff!important;
+  box-shadow:var(--nova-shadow-brand)!important;
+}
+#app .actions .primary-btn:hover,#app .actions .primary-btn:active,
+#app .final-actions .primary-btn:hover,#app .final-actions .primary-btn:active{
+  background:var(--nova-brand-primary-hover)!important;
+  color:#fff!important;
+  transform:translateY(1px)!important;
+  box-shadow:0 8px 20px rgba(52,38,207,.18)!important;
+}
+#app .secondary-btn{
+  border:1px solid var(--nova-line)!important;
+  background:#fff!important;
+  color:var(--nova-ink)!important;
+  box-shadow:none!important;
+}
+#app .secondary-btn:hover,#app .secondary-btn:active{
+  border-color:#c9c3ef!important;
+  background:var(--nova-hover-surface)!important;
+  color:var(--nova-ink)!important;
+}
+#app .ai-btn{
+  border-color:#dcd7ff!important;
+  background:var(--nova-brand-soft)!important;
+  color:var(--nova-brand-primary-hover)!important;
+}
+#app .ai-btn:hover,#app .ai-btn:active{
+  background:#e5e1ff!important;
+  color:var(--nova-brand-primary-hover)!important;
+}
+
+#app .reward-card{
+  background:var(--nova-state-success-soft)!important;
+  border-color:rgba(36,122,77,.22)!important;
+}
+#app .reward-card h3{color:var(--nova-ink)!important}
+#app .reward-card p{color:var(--nova-text-secondary)!important}
+#app .fact-chip{
+  background:#fff!important;
+  border:1px solid rgba(36,122,77,.16)!important;
+  color:var(--nova-ink)!important;
+}
+#app .fact-chip span{color:var(--nova-state-success)!important}
+#app .fact-chip strong{color:var(--nova-ink)!important}
+
+#app .final-card{
+  background:linear-gradient(145deg,#fff,var(--nova-brand-soft))!important;
+}
+#app .final-card h2{color:var(--nova-ink)!important}
+#app .final-card>p:not(.eyebrow){color:var(--nova-text-secondary)!important}
+#app .final-glow{background:var(--nova-brand-soft)!important;opacity:1!important;filter:blur(70px)!important}
+
+/* Atlas: mapas y bestiario se vuelven superficies claras sin perder estados. */
+#app .map-world,
+.modal-card .map-world,
+.modal-card .guide-animal{
+  border:1px solid var(--nova-line)!important;
+  background:#fff!important;
+  color:var(--nova-ink)!important;
+}
+.modal-card .map-world:not(.done):not(.active),
+.modal-card .guide-animal.locked{
+  opacity:1!important;
+  background:var(--nova-disabled-background)!important;
+  color:var(--nova-disabled-text)!important;
+}
+.modal-card .map-world.active{
+  border-color:#dcd7ff!important;
+  background:var(--nova-brand-soft)!important;
+}
+.modal-card .map-world.done{
+  border-color:rgba(36,122,77,.22)!important;
+  background:var(--nova-state-success-soft)!important;
+}
+.modal-card .map-world small,
+.modal-card .map-world span,
+.modal-card .guide-animal small{color:var(--nova-text-secondary)!important}
+.modal-card .map-world strong,
+.modal-card .guide-animal strong{color:var(--nova-ink)!important}
+
+/* ========================================================================== */
+/* ACADEMIA DE DIVISIÓN                                                       */
+/* ========================================================================== */
+
+#notebookModule{
+  background:var(--nova-background)!important;
+}
+
+#notebookModule .academy-home,
+#notebookModule .academy-practice-view,
+#notebookModule #notebookLessonView{
+  color:var(--nova-ink)!important;
+}
+
+#notebookModule .academy-welcome{
+  border:1px solid #dcd7ff!important;
+  background:linear-gradient(145deg,var(--nova-brand-soft),#fff)!important;
+  color:var(--nova-ink)!important;
+}
+#notebookModule .academy-welcome-orb,
+#notebookModule .nova-orb{
+  background:var(--nova-brand-primary)!important;
+  color:#fff!important;
+  border-color:transparent!important;
+  box-shadow:var(--nova-shadow-brand)!important;
+}
+#notebookModule .academy-welcome h3{color:var(--nova-ink)!important}
+#notebookModule .academy-welcome p:not(.eyebrow){color:var(--nova-text-secondary)!important}
+
+#notebookModule .academy-status-card,
+#notebookModule .academy-skill-report,
+#notebookModule .academy-learning-group,
+#notebookModule .academy-practice-head,
+#notebookModule .academy-challenge{
+  border:1px solid var(--nova-line)!important;
+  background:#fff!important;
+  color:var(--nova-ink)!important;
+  box-shadow:none!important;
+}
+#notebookModule .academy-status-card span,
+#notebookModule .academy-section-head span,
+#notebookModule .academy-practice-head span,
+#notebookModule .academy-learning-group-head small{
+  color:var(--nova-brand-primary-hover)!important;
+}
+#notebookModule .academy-status-card strong,
+#notebookModule .academy-section-head h3,
+#notebookModule .academy-learning-group-head strong,
+#notebookModule .academy-practice-head h3{
+  color:var(--nova-ink)!important;
+}
+#notebookModule .academy-status-card p,
+#notebookModule .academy-section-head small,
+#notebookModule .academy-learning-group-head p,
+#notebookModule .academy-practice-head p{
+  color:var(--nova-text-secondary)!important;
+}
+#notebookModule .academy-status-bar,
+#notebookModule .academy-mini-progress{
+  background:var(--nova-line)!important;
+}
+#notebookModule .academy-status-bar>div,
+#notebookModule .academy-mini-progress>div{
+  background:var(--nova-brand-primary)!important;
+  box-shadow:none!important;
+}
+
+#notebookModule .academy-route-card,
+#notebookModule .academy-skill{
+  border:1px solid var(--nova-line)!important;
+  background:#fff!important;
+  color:var(--nova-ink)!important;
+}
+#notebookModule .academy-route-card:hover,
+#notebookModule .academy-route-card:focus-visible{
+  border-color:#c9c3ef!important;
+  background:var(--nova-hover-surface)!important;
+  color:var(--nova-ink)!important;
+}
+#notebookModule .academy-route-card.reinforce{
+  border-color:rgba(138,90,0,.22)!important;
+  background:var(--nova-state-warning-soft)!important;
+}
+#notebookModule .academy-route-card.strong{
+  border-color:rgba(36,122,77,.22)!important;
+  background:var(--nova-state-success-soft)!important;
+}
+#notebookModule .academy-route-icon,
+#notebookModule .academy-learning-group-icon{
+  background:var(--nova-brand-soft)!important;
+  color:var(--nova-brand-primary-hover)!important;
+}
+#notebookModule .academy-route-copy>span{color:var(--nova-brand-primary-hover)!important}
+#notebookModule .academy-route-copy strong{color:var(--nova-ink)!important}
+#notebookModule .academy-route-copy p,
+#notebookModule .academy-route-copy small,
+#notebookModule .academy-skill small{color:var(--nova-text-secondary)!important}
+#notebookModule .academy-route-card>b{color:var(--nova-brand-primary-hover)!important}
+#notebookModule .academy-skill strong{color:var(--nova-ink)!important}
+#notebookModule .academy-skill b{color:var(--nova-disabled-text)!important}
+#notebookModule .academy-skill.reinforce b{color:var(--nova-state-warning)!important}
+#notebookModule .academy-skill.strong b{color:var(--nova-state-success)!important}
+
+#notebookModule .academy-nova-explain{
+  border:1px solid #dcd7ff!important;
+  background:var(--nova-brand-soft)!important;
+  color:var(--nova-ink)!important;
+}
+#notebookModule .academy-nova-explain span{color:var(--nova-brand-primary-hover)!important}
+#notebookModule .academy-nova-explain p{color:var(--nova-ink)!important}
+
+#notebookModule .academy-choice{
+  border:1px solid var(--nova-line)!important;
+  background:#fff!important;
+  color:var(--nova-ink)!important;
+  box-shadow:none!important;
+}
+#notebookModule .academy-choice:hover,
+#notebookModule .academy-choice:focus-visible{
+  border-color:#c9c3ef!important;
+  background:var(--nova-hover-surface)!important;
+  color:var(--nova-ink)!important;
+}
+#notebookModule .academy-choice.selected{
+  border-color:var(--nova-brand-primary)!important;
+  background:var(--nova-brand-soft)!important;
+  color:var(--nova-brand-primary-hover)!important;
+}
+
+#notebookModule .academy-division-diagram>div,
+#notebookModule .academy-multiple,
+#notebookModule .academy-result-card,
+#notebookModule .academy-story-card{
+  border:1px solid var(--nova-line)!important;
+  background:var(--nova-background)!important;
+  color:var(--nova-ink)!important;
+}
+#notebookModule .academy-division-diagram span,
+#notebookModule .academy-multiple span{color:var(--nova-text-secondary)!important}
+#notebookModule .academy-division-diagram strong,
+#notebookModule .academy-multiple strong{color:var(--nova-ink)!important}
+#notebookModule .academy-multiple.best{
+  border-color:rgba(36,122,77,.22)!important;
+  background:var(--nova-state-success-soft)!important;
+}
+#notebookModule .academy-multiple.too-big{
+  opacity:1!important;
+  border-color:rgba(179,58,58,.22)!important;
+  background:var(--nova-state-error-soft)!important;
+}
+#notebookModule .academy-multiple small{color:var(--nova-state-error)!important}
+#notebookModule .academy-big-question{color:var(--nova-ink)!important}
+#notebookModule .academy-big-question b{color:var(--nova-brand-primary-hover)!important}
+
+#notebookModule .academy-number-answer input{
+  border:1px solid var(--nova-line-strong)!important;
+  background:#fff!important;
+  color:var(--nova-ink)!important;
+  box-shadow:none!important;
+}
+#notebookModule .academy-number-answer input:focus{
+  border-color:var(--nova-brand-primary)!important;
+  box-shadow:0 0 0 4px rgba(91,75,255,.10)!important;
+}
+#notebookModule .academy-number-answer button,
+#notebookModule .academy-check-multi,
+#notebookModule .academy-feedback .primary-btn{
+  background:var(--nova-brand-primary)!important;
+  color:#fff!important;
+  border:1px solid transparent!important;
+  box-shadow:var(--nova-shadow-brand)!important;
+}
+#notebookModule .academy-number-answer button:hover,
+#notebookModule .academy-number-answer button:active,
+#notebookModule .academy-check-multi:hover,
+#notebookModule .academy-check-multi:active,
+#notebookModule .academy-feedback .primary-btn:hover,
+#notebookModule .academy-feedback .primary-btn:active{
+  background:var(--nova-brand-primary-hover)!important;
+  color:#fff!important;
+}
+
+#notebookModule .academy-prime-number{
+  color:var(--nova-brand-primary-hover)!important;
+  background:var(--nova-brand-soft)!important;
+  box-shadow:var(--nova-shadow-sm)!important;
+}
+
+#notebookModule .academy-feedback{
+  border:1px solid rgba(36,122,77,.20)!important;
+  background:var(--nova-state-success-soft)!important;
+  color:var(--nova-ink)!important;
+}
+#notebookModule .academy-feedback.review{
+  border-color:rgba(138,90,0,.18)!important;
+  background:var(--nova-state-warning-soft)!important;
+}
+#notebookModule .academy-feedback>span{color:var(--nova-state-success)!important}
+#notebookModule .academy-feedback.review>span{color:var(--nova-state-warning)!important}
+#notebookModule .academy-feedback>strong{color:var(--nova-ink)!important}
+#notebookModule .academy-feedback>p{color:var(--nova-text-secondary)!important}
+
+/* ========================================================================== */
+/* CUADERNO · PROCEDIMIENTO                                                   */
+/* ========================================================================== */
+
+#notebookModule .notebook-lesson-route-head,
+#notebookModule .notebook-hero,
+#notebookModule .procedure-guide-card,
+#notebookModule .nova-notebook-card,
+#notebookModule .notebook-done-card{
+  border:1px solid var(--nova-line)!important;
+  background:#fff!important;
+  color:var(--nova-ink)!important;
+  box-shadow:var(--nova-shadow-sm)!important;
+}
+
+#notebookModule .notebook-lesson-route-head{
+  background:var(--nova-brand-soft)!important;
+  border-color:#dcd7ff!important;
+}
+#notebookModule .notebook-lesson-route-head span,
+#notebookModule .notebook-kicker{color:var(--nova-brand-primary-hover)!important}
+#notebookModule .notebook-lesson-route-head strong{color:var(--nova-ink)!important}
+#notebookModule .notebook-counter{
+  background:#fff!important;
+  border:1px solid #dcd7ff!important;
+  color:var(--nova-brand-primary-hover)!important;
+}
+
+#notebookModule .notebook-hero{
+  background:linear-gradient(145deg,#fff,var(--nova-background))!important;
+}
+#notebookModule .notebook-animal{
+  background:var(--nova-brand-soft)!important;
+  color:var(--nova-brand-primary-hover)!important;
+}
+#notebookModule .notebook-hero p{color:var(--nova-text-secondary)!important}
+
+#notebookModule .paper-layout-card{
+  border:1px solid var(--nova-line)!important;
+  background:#fff!important;
+  color:var(--nova-ink)!important;
+  box-shadow:var(--nova-shadow-md)!important;
+}
+#notebookModule .paper-layout-head{border-color:var(--nova-line)!important}
+#notebookModule .paper-layout-head span{color:var(--nova-text-secondary)!important}
+#notebookModule .paper-layout-head strong{color:var(--nova-ink)!important}
+#notebookModule .paper-help-btn{
+  border:1px solid var(--nova-line)!important;
+  background:var(--nova-brand-soft)!important;
+  color:var(--nova-brand-primary-hover)!important;
+}
+#notebookModule .paper-help-btn:hover,#notebookModule .paper-help-btn:active{
+  background:#e5e1ff!important;
+  color:var(--nova-brand-primary-hover)!important;
+}
+
+#notebookModule .procedure-step{
+  border-color:var(--nova-line)!important;
+  background:var(--nova-background)!important;
+  color:var(--nova-text-secondary)!important;
+  opacity:1!important;
+}
+#notebookModule .procedure-step.active{
+  border-color:var(--nova-brand-primary)!important;
+  background:var(--nova-brand-soft)!important;
+  color:var(--nova-brand-primary-hover)!important;
+}
+#notebookModule .procedure-step.done{
+  border-color:rgba(36,122,77,.22)!important;
+  background:var(--nova-state-success-soft)!important;
+  color:var(--nova-state-success)!important;
+}
+
+#notebookModule .journal-line{
+  background:var(--nova-background)!important;
+  color:var(--nova-ink)!important;
+}
+
+#notebookModule .nova-notebook-card{
+  border-color:#dcd7ff!important;
+  background:linear-gradient(145deg,var(--nova-brand-soft),#fff)!important;
+}
+#notebookModule .nova-notebook-card :where(strong,p){color:var(--nova-ink)!important}
+#notebookModule .nova-notebook-card :where(small,span){color:var(--nova-text-secondary)!important}
+#notebookModule .notebook-prompt-box{
+  border:1px solid var(--nova-line)!important;
+  background:#fff!important;
+  color:var(--nova-ink)!important;
+}
+#notebookModule .notebook-prompt-box>strong{color:var(--nova-ink)!important}
+
+#notebookModule .notebook-number-form input{
+  border:1px solid var(--nova-line-strong)!important;
+  background:#fff!important;
+  color:var(--nova-ink)!important;
+  box-shadow:none!important;
+}
+#notebookModule .notebook-number-form input:focus{
+  border-color:var(--nova-brand-primary)!important;
+  box-shadow:0 0 0 4px rgba(91,75,255,.10)!important;
+}
+#notebookModule .notebook-number-form button,
+#notebookModule .notebook-confirm-btn,
+#notebookModule .notebook-done-card .primary-btn{
+  background:var(--nova-brand-primary)!important;
+  color:#fff!important;
+  border:1px solid transparent!important;
+  box-shadow:var(--nova-shadow-brand)!important;
+}
+#notebookModule .notebook-number-form button:hover,
+#notebookModule .notebook-number-form button:active,
+#notebookModule .notebook-confirm-btn:hover,
+#notebookModule .notebook-confirm-btn:active,
+#notebookModule .notebook-done-card .primary-btn:hover,
+#notebookModule .notebook-done-card .primary-btn:active{
+  background:var(--nova-brand-primary-hover)!important;
+  color:#fff!important;
+}
+
+#notebookModule .notebook-help-btn{
+  border:1px solid #dcd7ff!important;
+  background:var(--nova-brand-soft)!important;
+  color:var(--nova-brand-primary-hover)!important;
+}
+#notebookModule .notebook-help-btn:hover,#notebookModule .notebook-help-btn:active{
+  background:#e5e1ff!important;
+  color:var(--nova-brand-primary-hover)!important;
+}
+#notebookModule .notebook-chat{border-color:var(--nova-line)!important}
+
+#notebookModule .notebook-done-card{
+  background:var(--nova-state-success-soft)!important;
+  border-color:rgba(36,122,77,.22)!important;
+}
+#notebookModule .notebook-done-card>p:not(.eyebrow){color:var(--nova-text-secondary)!important}
+
+/* Microprocedimiento */
+#notebookModule .notebook-how-card,
+#notebookModule .notebook-discovery{
+  border:1px solid #dcd7ff!important;
+  background:var(--nova-brand-soft)!important;
+  color:var(--nova-ink)!important;
+}
+#notebookModule .notebook-discovery :where(p,strong,span){color:var(--nova-ink)!important}
+
+/* ========================================================================== */
+/* RESPONSIVE Y MOVIMIENTO                                                    */
+/* ========================================================================== */
+
+@media(max-width:700px){
+  #app .topbar,#notebookModule .notebook-top{border-radius:var(--nova-radius-md)!important}
+  #app .hero-card,#app .game-card,#app .reward-card,#app .final-card{border-radius:var(--nova-radius-lg)!important}
+  #notebookModule .academy-route-grid,#notebookModule .academy-skill-grid{grid-template-columns:1fr!important}
+}
+
+@media(max-width:480px){
+  #app.app-shell{padding-inline:14px!important}
+  #notebookModule .academy-choice-grid.multi{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+}
+
+@media(prefers-reduced-motion:reduce){
+  #app .question,
+  #app .mission-animal,
+  #app .final-icon{animation:none!important}
+}

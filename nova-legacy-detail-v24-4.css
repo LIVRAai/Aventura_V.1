@@ -1,0 +1,125 @@
+/* NOVA V24.4 · Subcomponentes históricos que todavía asumían fondo oscuro */
+
+/* Atlas · consola matemática */
+#app .code-console{
+  border:1px solid #dcd7ff!important;
+  background:var(--nova-brand-soft)!important;
+  color:var(--nova-ink)!important;
+  box-shadow:none!important;
+}
+#app .code-console>small{color:var(--nova-text-secondary)!important}
+#app .console-dot{
+  background:var(--nova-brand-primary)!important;
+  box-shadow:none!important;
+}
+#app .zone-count{
+  background:#fff!important;
+  border:1px solid var(--nova-line)!important;
+  color:var(--nova-brand-primary-hover)!important;
+}
+#app .zone-head{color:var(--nova-brand-primary-hover)!important}
+
+/* Atlas · problemas narrativos y reto final */
+#app .story-problem{
+  border:1px solid var(--nova-line)!important;
+  background:var(--nova-background)!important;
+  color:var(--nova-ink)!important;
+}
+#app .story-problem p{color:var(--nova-ink)!important}
+
+#app .boss-card{
+  border:1px solid #dcd7ff!important;
+  background:linear-gradient(145deg,#fff,var(--nova-brand-soft))!important;
+  color:var(--nova-ink)!important;
+}
+#app .boss-card::before{
+  background:var(--nova-brand-soft)!important;
+  opacity:.7!important;
+  filter:blur(65px)!important;
+}
+#app .boss-head small{color:var(--nova-brand-primary-hover)!important}
+#app .boss-head strong{color:var(--nova-ink)!important}
+#app .boss-round{
+  border:1px solid var(--nova-line)!important;
+  background:#fff!important;
+  color:var(--nova-ink)!important;
+}
+#app .boss-round>span{color:var(--nova-text-secondary)!important}
+#app .boss-option{
+  border:1px solid var(--nova-line)!important;
+  background:#fff!important;
+  color:var(--nova-ink)!important;
+}
+#app .boss-option:hover,#app .boss-option:focus-visible{
+  border-color:#c9c3ef!important;
+  background:var(--nova-hover-surface)!important;
+  color:var(--nova-ink)!important;
+}
+#app .boss-option.selected{
+  border-color:var(--nova-brand-primary)!important;
+  background:var(--nova-brand-soft)!important;
+  color:var(--nova-brand-primary-hover)!important;
+}
+
+/* Atlas · feedback de NOVA y siguiente misión */
+#app .nova-feedback-card{
+  border:1px solid #dcd7ff!important;
+  background:linear-gradient(145deg,var(--nova-brand-soft),#fff)!important;
+  color:var(--nova-ink)!important;
+}
+#app .nova-mini-orb{
+  background:var(--nova-brand-primary)!important;
+  color:#fff!important;
+  box-shadow:var(--nova-shadow-brand)!important;
+}
+#app .nova-feedback-head span{color:var(--nova-brand-primary-hover)!important}
+#app .nova-feedback-head strong{color:var(--nova-ink)!important}
+#app .nova-feedback-card>p,
+#app .nova-feedback-card.loading>p{
+  color:var(--nova-ink)!important;
+  opacity:1!important;
+}
+#app .next-teaser{
+  border:1px solid rgba(49,94,186,.16)!important;
+  background:var(--nova-state-info-soft)!important;
+  color:var(--nova-ink)!important;
+}
+#app .next-teaser span{color:var(--nova-state-info)!important}
+#app .reward-next-btn{
+  background:var(--nova-brand-primary)!important;
+  color:#fff!important;
+  box-shadow:var(--nova-shadow-brand)!important;
+}
+#app .reward-next-btn:hover,#app .reward-next-btn:active{
+  background:var(--nova-brand-primary-hover)!important;
+  color:#fff!important;
+  transform:translateY(1px)!important;
+  box-shadow:0 8px 20px rgba(52,38,207,.18)!important;
+}
+
+/* Cuaderno · detalles del procedimiento */
+#notebookModule .procedure-guide-card{
+  border:1px solid var(--nova-line)!important;
+  background:var(--nova-background)!important;
+  color:var(--nova-ink)!important;
+}
+#notebookModule .procedure-step small{color:var(--nova-text-secondary)!important}
+#notebookModule .procedure-step.active small{color:var(--nova-brand-primary-hover)!important}
+#notebookModule .procedure-step.done small{color:var(--nova-state-success)!important}
+#notebookModule .cycle-summary{
+  border:1px solid var(--nova-line)!important;
+  background:var(--nova-background)!important;
+}
+#notebookModule .cycle-summary span{color:var(--nova-text-secondary)!important}
+#notebookModule .cycle-summary strong{color:var(--nova-ink)!important}
+#notebookModule .placement-help{
+  border:1px solid #dcd7ff!important;
+  background:var(--nova-brand-soft)!important;
+  color:var(--nova-ink)!important;
+}
+
+/* Evita que iconos/textos inline históricos vuelvan a asumir blanco. */
+#app :where(.code-console,.boss-card,.nova-feedback-card) :where(h2,h3,h4,strong,b),
+#notebookModule :where(.procedure-guide-card,.cycle-summary,.placement-help) :where(h2,h3,h4,strong,b){
+  color:var(--nova-ink)!important;
+}
