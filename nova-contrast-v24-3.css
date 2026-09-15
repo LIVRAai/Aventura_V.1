@@ -1,0 +1,51 @@
+/* NOVA V24.3.1 · Guardas de contraste transversales.
+   Solo corrige combinaciones de foreground/background; no cambia lógica. */
+
+/* Landing: microtexto sobre superficies claras */
+.demo-step,
+.step-number,
+.dashboard-head small,
+.footer-inner p,
+.trial-start-form>small,
+.result-note{
+  color:var(--nova-text-secondary)!important;
+}
+
+/* Check de confianza: success semántico, no verde vivo de Ciencias. */
+.hero-trust b{
+  background:var(--nova-state-success-soft)!important;
+  color:var(--nova-state-success)!important;
+}
+
+/* Badge semanal: el ámbar antiguo quedaba por debajo de 4.5:1. */
+.dashboard-head>span{
+  background:var(--nova-state-warning-soft)!important;
+  color:var(--nova-state-warning)!important;
+}
+
+/* CTA final: el extremo claro del gradiente anterior dejaba incluso blanco cerca de 4.5:1. */
+.cta-card{
+  background:linear-gradient(135deg,var(--nova-brand-primary-hover),var(--nova-brand-primary))!important;
+}
+.cta-card .eyebrow.light,
+.cta-card p,
+.cta-card .cta-link{
+  color:#fff!important;
+}
+
+/* Botón claro dentro de fondo de marca. */
+.cta-card .button-light{
+  background:#fff!important;
+  color:var(--nova-brand-primary-hover)!important;
+}
+.cta-card .button-light:hover,
+.cta-card .button-light:active{
+  background:var(--nova-brand-soft)!important;
+  color:var(--nova-brand-primary-hover)!important;
+}
+
+/* Placeholder: se mantiene diferenciado sin caer por debajo del texto legible. */
+:where(input,textarea)::placeholder{
+  color:#777286!important;
+  opacity:1!important;
+}

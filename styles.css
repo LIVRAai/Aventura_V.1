@@ -1,2 +1,11 @@
 @import url('/styles-v24.css');
 @import url('/styles-v24-2.css');
+@import url('/nova-access-v24-3.css');
+@import url('/nova-learning-v24-3.css');
+@import url('/nova-curriculum-v24-3.css');
+@import url('/nova-modals-v24-3.css');
+
+/* V24.3.1 · Guardas finales de contraste contra opacidades heredadas. */
+.nova-general-card .tutor-message span{opacity:1!important}
+.curriculum-grade-inline .grade-selector button span,
+.v24-learning-home .grade-selector button span{opacity:1!important}

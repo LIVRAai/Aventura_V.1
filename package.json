@@ -1,9 +1,12 @@
 {
   "name": "aprende-con-nova",
-  "version": "24.2.0",
+  "version": "24.3.1",
   "private": true,
   "type": "module",
   "description": "Aprende con NOVA - refuerzo escolar personalizado para primaria, tutor guiado, progreso por habilidades y experiencia familiar",
+  "scripts": {
+    "audit:contrast": "node scripts/contrast-audit.mjs"
+  },
   "engines": {
     "node": "22.x"
   },

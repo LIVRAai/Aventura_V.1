@@ -1,0 +1,195 @@
+/* V24.3 · Materias y temas: continuidad visual desde Hoy con NOVA */
+.curriculum-subject-hub,.curriculum-topic-hub{
+  background:var(--nova-background)!important;
+  color:var(--nova-ink)!important;
+}
+
+.subject-page-head .hierarchy-back,
+.subject-page-head .profile-btn{
+  min-height:var(--nova-control-md)!important;
+  border:1px solid var(--nova-line)!important;
+  border-radius:var(--nova-control-radius)!important;
+  background:#fff!important;
+  color:var(--nova-ink)!important;
+  box-shadow:none!important;
+}
+.subject-page-head .hierarchy-back:hover,
+.subject-page-head .profile-btn:hover,
+.subject-page-head .hierarchy-back:active,
+.subject-page-head .profile-btn:active{
+  border-color:#c9c3ef!important;
+  background:var(--nova-hover-surface)!important;
+  color:var(--nova-ink)!important;
+}
+
+/* Selector de grado: todos los estados se redefinen porque el legacy asumía fondo oscuro. */
+.curriculum-grade-inline .grade-selector button,
+.v24-learning-home .grade-selector button{
+  border:1px solid var(--nova-line)!important;
+  background:#fff!important;
+  color:var(--nova-ink)!important;
+  opacity:1!important;
+  filter:none!important;
+  box-shadow:none!important;
+}
+.curriculum-grade-inline .grade-selector button:hover:not(:disabled):not(.locked),
+.v24-learning-home .grade-selector button:hover:not(:disabled):not(.locked){
+  border-color:#c9c3ef!important;
+  background:var(--nova-hover-surface)!important;
+  color:var(--nova-ink)!important;
+}
+.curriculum-grade-inline .grade-selector button.active,
+.curriculum-grade-inline .grade-selector button[aria-pressed="true"],
+.v24-learning-home .grade-selector button.active,
+.v24-learning-home .grade-selector button[aria-pressed="true"]{
+  border-color:var(--nova-brand-primary)!important;
+  background:var(--nova-brand-soft)!important;
+  color:var(--nova-brand-primary-hover)!important;
+  box-shadow:0 0 0 2px rgba(91,75,255,.08)!important;
+}
+.curriculum-grade-inline .grade-selector button.next-grade,
+.v24-learning-home .grade-selector button.next-grade{
+  border-color:rgba(36,122,77,.28)!important;
+  background:var(--nova-state-success-soft)!important;
+  color:var(--nova-state-success)!important;
+}
+.curriculum-grade-inline .grade-selector button.next-grade:hover:not(:disabled),
+.v24-learning-home .grade-selector button.next-grade:hover:not(:disabled){
+  border-color:rgba(36,122,77,.42)!important;
+  background:#e3f4eb!important;
+  color:var(--nova-state-success)!important;
+}
+.curriculum-grade-inline .grade-selector button.locked,
+.curriculum-grade-inline .grade-selector button:disabled,
+.v24-learning-home .grade-selector button.locked,
+.v24-learning-home .grade-selector button:disabled{
+  border-color:var(--nova-line)!important;
+  background:var(--nova-disabled-background)!important;
+  color:var(--nova-disabled-text)!important;
+  opacity:1!important;
+  filter:none!important;
+  transform:none!important;
+  box-shadow:none!important;
+}
+
+.curriculum-subject-hero{
+  border:1px solid var(--nova-line)!important;
+  background:linear-gradient(145deg,#fff,var(--nova-background))!important;
+  color:var(--nova-ink)!important;
+  box-shadow:var(--nova-shadow-sm)!important;
+}
+.curriculum-subject-icon{
+  border-color:#dcd7ff!important;
+  background:var(--nova-brand-soft)!important;
+  color:var(--nova-brand-primary-hover)!important;
+}
+.curriculum-subject-hero h1{color:var(--nova-ink)!important}
+.curriculum-subject-hero p:last-child{color:var(--nova-text-secondary)!important}
+
+.curriculum-grade-inline{
+  border:1px solid var(--nova-line)!important;
+  background:#fff!important;
+}
+.curriculum-grade-inline>span{color:var(--nova-text-secondary)!important}
+
+.curriculum-topic-card{
+  border:1px solid var(--nova-line)!important;
+  background:#fff!important;
+  color:var(--nova-ink)!important;
+  box-shadow:none!important;
+}
+.curriculum-topic-card:hover{
+  border-color:#c8c1fa!important;
+  background:#fff!important;
+  color:var(--nova-ink)!important;
+  box-shadow:var(--nova-shadow-sm)!important;
+}
+.curriculum-topic-card.started{
+  border-color:rgba(36,122,77,.24)!important;
+  background:linear-gradient(145deg,#fff,var(--nova-state-success-soft))!important;
+}
+.curriculum-topic-card.mastered{
+  border-color:rgba(36,122,77,.34)!important;
+  background:var(--nova-state-success-soft)!important;
+}
+.curriculum-topic-icon{
+  background:var(--nova-brand-soft)!important;
+  color:var(--nova-brand-primary-hover)!important;
+}
+.curriculum-topic-copy small{color:var(--nova-brand-primary)!important}
+.curriculum-topic-card.started .curriculum-topic-copy small,
+.curriculum-topic-card.mastered .curriculum-topic-copy small{color:var(--nova-state-success)!important}
+.curriculum-topic-copy strong{color:var(--nova-ink)!important}
+.curriculum-topic-copy em{color:var(--nova-text-secondary)!important}
+.curriculum-topic-copy b{
+  background:var(--nova-brand-soft)!important;
+  color:var(--nova-brand-primary-hover)!important;
+}
+.curriculum-topic-arrow{color:var(--nova-text-secondary)!important}
+
+.curriculum-competency-card{
+  border-color:#dcd7ff!important;
+  background:var(--nova-brand-soft)!important;
+}
+.curriculum-competency-card span{color:var(--nova-brand-primary-hover)!important}
+.curriculum-competency-card p{color:var(--nova-ink)!important}
+.curriculum-reference-note{color:var(--nova-text-secondary)!important}
+
+.topic-focus-card{
+  border:1px solid var(--nova-line)!important;
+  background:linear-gradient(145deg,#fff,var(--nova-background))!important;
+  color:var(--nova-ink)!important;
+  box-shadow:var(--nova-shadow-md)!important;
+}
+.topic-focus-icon{
+  background:var(--nova-brand-soft)!important;
+  color:var(--nova-brand-primary-hover)!important;
+}
+.topic-focus-top h1{color:var(--nova-ink)!important}
+.topic-learning-grid article{
+  border:1px solid var(--nova-line)!important;
+  background:#fff!important;
+}
+.topic-learning-grid article small{color:var(--nova-text-secondary)!important}
+.topic-learning-grid article p{color:var(--nova-ink)!important}
+.topic-learning-grid .topic-skill strong{color:var(--nova-brand-primary-hover)!important}
+
+.topic-nova-card{
+  border:1px solid #dcd7ff!important;
+  background:linear-gradient(145deg,var(--nova-brand-soft),#fff)!important;
+  color:var(--nova-ink)!important;
+  box-shadow:none!important;
+}
+.topic-nova-copy small{color:var(--nova-brand-primary-hover)!important}
+.topic-nova-copy h2{color:var(--nova-ink)!important}
+.topic-nova-copy p{color:var(--nova-text-secondary)!important}
+.topic-primary-btn{
+  background:var(--nova-brand-primary)!important;
+  color:#fff!important;
+  box-shadow:var(--nova-shadow-brand)!important;
+}
+.topic-primary-btn:hover,.topic-primary-btn:active{background:var(--nova-brand-primary-hover)!important;color:#fff!important}
+.topic-secondary-btn{color:var(--nova-brand-primary-hover)!important}
+.topic-secondary-btn:hover,.topic-secondary-btn:active{color:var(--nova-brand-primary-hover)!important;background:var(--nova-brand-soft)!important;text-decoration:none}
+
+.division-lab-card{
+  border:1px solid var(--nova-line)!important;
+  background:#fff!important;
+  color:var(--nova-ink)!important;
+}
+.division-lab-card:hover,.division-lab-card:active{
+  border-color:#c9c3ef!important;
+  background:var(--nova-hover-surface)!important;
+  color:var(--nova-ink)!important;
+}
+.division-lab-card>span{
+  background:var(--nova-subject-math-soft)!important;
+  color:var(--nova-subject-math-strong)!important;
+}
+.division-lab-card small,.division-lab-card b{color:var(--nova-subject-math-strong)!important}
+.division-lab-card strong{color:var(--nova-ink)!important}
+.division-lab-card em{color:var(--nova-text-secondary)!important}
+
+@media(max-width:620px){
+  .curriculum-subject-hero,.topic-focus-card{border-radius:var(--nova-radius-lg)!important}
+}

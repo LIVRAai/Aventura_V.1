@@ -1,0 +1,202 @@
+/* V24.3 · Superficies de aprendizaje bajo el mismo lenguaje NOVA */
+
+/* Tutor general */
+.nova-tutor-hub{
+  background:var(--nova-background)!important;
+  color:var(--nova-ink)!important;
+}
+.nova-tutor-page-head :where(.hierarchy-back,.nova-new-conversation){
+  min-height:var(--nova-control-md)!important;
+  border:1px solid var(--nova-line)!important;
+  border-radius:var(--nova-control-radius)!important;
+  background:#fff!important;
+  color:var(--nova-ink)!important;
+  box-shadow:none!important;
+}
+.nova-tutor-page-head :where(.hierarchy-back,.nova-new-conversation):hover{
+  border-color:#c9c3ef!important;
+  background:#fbfaff!important;
+}
+.nova-tutor-hero{
+  border:1px solid var(--nova-line)!important;
+  border-radius:var(--nova-radius-lg)!important;
+  background:linear-gradient(145deg,#fff,var(--nova-background))!important;
+  color:var(--nova-ink)!important;
+  box-shadow:var(--nova-shadow-sm)!important;
+}
+.nova-tutor-orb{
+  background:var(--nova-brand-primary)!important;
+  color:#fff!important;
+  box-shadow:var(--nova-shadow-brand)!important;
+}
+.nova-tutor-hero .eyebrow{color:var(--nova-brand-primary)!important}
+.nova-tutor-hero h1{color:var(--nova-ink)!important}
+.nova-tutor-hero p:last-child{color:var(--nova-text-secondary)!important}
+
+.nova-general-card{
+  border:1px solid var(--nova-line)!important;
+  border-radius:var(--nova-radius-lg)!important;
+  background:#fff!important;
+  color:var(--nova-ink)!important;
+  box-shadow:var(--nova-shadow-md)!important;
+}
+.nova-general-chat{background:var(--nova-background)!important}
+.nova-general-card .tutor-message{
+  border:1px solid var(--nova-line)!important;
+  color:var(--nova-ink)!important;
+  box-shadow:none!important;
+}
+.nova-general-card .nova-message{
+  background:var(--nova-brand-soft)!important;
+  border-color:#dcd7ff!important;
+}
+.nova-general-card .emi-message{
+  background:var(--nova-subject-math-soft)!important;
+  border-color:#d8e6ff!important;
+}
+.nova-general-card .tutor-message p{color:var(--nova-ink)!important}
+.nova-general-card .tutor-message span{color:var(--nova-brand-primary-hover)!important}
+.nova-general-form{
+  border:1px solid var(--nova-line)!important;
+  border-radius:var(--nova-radius-md)!important;
+  background:var(--nova-background)!important;
+}
+.nova-general-form textarea{
+  border:1px solid var(--nova-line-strong)!important;
+  border-radius:var(--nova-control-radius)!important;
+  background:#fff!important;
+  color:var(--nova-ink)!important;
+  box-shadow:none!important;
+}
+.nova-general-form textarea::placeholder{color:#9893a9!important}
+.nova-general-form textarea:focus{
+  background:#fff!important;
+  border-color:var(--nova-brand-primary)!important;
+  box-shadow:0 0 0 4px rgba(91,75,255,.10)!important;
+}
+.nova-general-form button{
+  min-height:var(--nova-control-lg)!important;
+  border:0!important;
+  border-radius:var(--nova-control-radius)!important;
+  background:var(--nova-brand-primary)!important;
+  color:#fff!important;
+  box-shadow:var(--nova-shadow-brand)!important;
+}
+.nova-general-form button:hover:not(:disabled){background:var(--nova-brand-primary-hover)!important}
+.nova-general-note{color:var(--nova-text-secondary)!important}
+
+/* Lanzamiento de una misión de aprendizaje */
+.topic-game-launch-card{
+  border:1px solid var(--nova-line)!important;
+  background:linear-gradient(145deg,#fff,var(--nova-background))!important;
+  color:var(--nova-ink)!important;
+  box-shadow:var(--nova-shadow-sm)!important;
+}
+.topic-game-launch-card::after{background:var(--nova-brand-soft)!important}
+.topic-game-launch-icon{
+  background:var(--nova-brand-soft)!important;
+  color:var(--nova-brand-primary-hover)!important;
+  box-shadow:none!important;
+}
+.topic-game-launch-copy small{color:var(--nova-brand-primary)!important}
+.topic-game-launch-copy h2{color:var(--nova-ink)!important}
+.topic-game-launch-copy p,.topic-game-best small{color:var(--nova-text-secondary)!important}
+.topic-game-launch-meta span{
+  background:#fff!important;
+  color:var(--nova-text-secondary)!important;
+  border:1px solid var(--nova-line)!important;
+}
+.topic-game-start-btn{
+  background:var(--nova-brand-primary)!important;
+  color:#fff!important;
+  box-shadow:var(--nova-shadow-brand)!important;
+}
+.topic-game-start-btn:hover{background:var(--nova-brand-primary-hover)!important}
+.topic-game-best{color:var(--nova-brand-primary)!important}
+
+/* Reto curricular: claro, enfocado y consistente con la prueba gratuita */
+.curriculum-game-modal{
+  background:rgba(248,247,255,.96)!important;
+  backdrop-filter:blur(16px)!important;
+}
+.curriculum-game-shell{
+  border:1px solid var(--nova-line)!important;
+  background:#fff!important;
+  color:var(--nova-ink)!important;
+  box-shadow:var(--nova-shadow-lg)!important;
+}
+.curriculum-game-close,.curriculum-game-done{
+  border:1px solid var(--nova-line)!important;
+  background:#fff!important;
+  color:var(--nova-ink)!important;
+}
+.curriculum-game-close:hover,.curriculum-game-done:hover{
+  border-color:#c9c3ef!important;
+  background:#fbfaff!important;
+}
+.curriculum-game-context small{color:var(--nova-brand-primary)!important}
+.curriculum-game-context strong{color:var(--nova-ink)!important}
+.curriculum-game-stars{
+  background:var(--nova-subject-social-soft)!important;
+  border-color:#f3ddb0!important;
+  color:var(--nova-subject-social-strong)!important;
+}
+.curriculum-game-progress{background:var(--nova-line)!important}
+.curriculum-game-progress span{background:var(--nova-brand-primary)!important;box-shadow:none!important}
+.curriculum-game-round{color:var(--nova-text-secondary)!important}
+.curriculum-game-round span:last-child{color:var(--nova-brand-primary)!important}
+.curriculum-game-emoji{
+  background:var(--nova-brand-soft)!important;
+  border-color:#dcd7ff!important;
+  box-shadow:none!important;
+}
+.curriculum-game-prompt{color:var(--nova-ink)!important}
+.curriculum-game-option{
+  border:1px solid var(--nova-line)!important;
+  background:#fff!important;
+  color:var(--nova-ink)!important;
+  box-shadow:none!important;
+}
+.curriculum-game-option:hover:not(:disabled){
+  border-color:#c8c1fa!important;
+  background:#faf9ff!important;
+}
+.curriculum-game-option>span{
+  background:var(--nova-brand-soft)!important;
+  color:var(--nova-brand-primary-hover)!important;
+}
+.curriculum-game-option.correct{
+  border-color:rgba(36,122,77,.30)!important;
+  background:var(--nova-state-success-soft)!important;
+}
+.curriculum-game-option.correct>span{background:#dff2e8!important;color:var(--nova-state-success)!important}
+.curriculum-game-option.wrong{
+  border-color:rgba(179,58,58,.28)!important;
+  background:var(--nova-state-error-soft)!important;
+}
+.curriculum-game-option.wrong>span{background:#f8dddd!important;color:var(--nova-state-error)!important}
+.curriculum-game-hint-btn{
+  border:1px solid rgba(138,90,0,.18)!important;
+  background:var(--nova-state-warning-soft)!important;
+  color:var(--nova-state-warning)!important;
+}
+.curriculum-game-hint{background:var(--nova-state-warning-soft)!important;color:var(--nova-state-warning)!important}
+.curriculum-game-feedback{border:1px solid var(--nova-line)!important;color:var(--nova-ink)!important}
+.curriculum-game-feedback.success{background:var(--nova-state-success-soft)!important;border-color:rgba(36,122,77,.22)!important}
+.curriculum-game-feedback.learn{background:var(--nova-state-warning-soft)!important;border-color:rgba(138,90,0,.18)!important}
+.curriculum-game-feedback strong{color:var(--nova-ink)!important}
+.curriculum-game-feedback p{color:var(--nova-text-secondary)!important}
+.curriculum-game-next{
+  background:var(--nova-brand-primary)!important;
+  color:#fff!important;
+  box-shadow:var(--nova-shadow-brand)!important;
+}
+.curriculum-game-next:hover{background:var(--nova-brand-primary-hover)!important}
+.curriculum-game-finish .eyebrow{color:var(--nova-brand-primary)!important}
+.curriculum-game-finish h2{color:var(--nova-ink)!important}
+.curriculum-game-finish>p:last-of-type{color:var(--nova-text-secondary)!important}
+
+@media(max-width:700px){
+  .curriculum-game-shell{border-radius:var(--nova-radius-lg)!important}
+  .nova-general-card{box-shadow:none!important}
+}

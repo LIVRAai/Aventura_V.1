@@ -1,0 +1,280 @@
+/* NOVA UI · V24.3
+   Capa compartida para que landing, prueba y app hablen el mismo idioma visual.
+   No reemplaza la lógica de negocio: normaliza componentes, estados y movimiento. */
+
+:where(body){
+  color:var(--nova-ink);
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+}
+
+:where(button,input,select,textarea){font:inherit}
+:where(button,a,input,select,textarea){-webkit-tap-highlight-color:transparent}
+
+/* Acciones: el color de texto se fija también en hover/active para evitar herencias legacy. */
+:where(.button,.trial-primary,.access-primary,.access-secondary,.demo-next,.profile-btn,.grade-selector button,.curriculum-subject-btn,.trial-option,.auth-tab,.access-owner-btn,.mp-payment-close){
+  transition:
+    background-color var(--nova-motion) var(--nova-ease),
+    border-color var(--nova-motion) var(--nova-ease),
+    color var(--nova-motion) var(--nova-ease),
+    box-shadow var(--nova-motion) var(--nova-ease),
+    transform var(--nova-motion) var(--nova-ease),
+    opacity var(--nova-motion-fast) linear;
+}
+
+:is(
+  .button-primary,
+  .trial-primary,
+  .access-primary,
+  .premium-primary-cta,
+  .topic-primary-btn,
+  .topic-game-start-btn,
+  .curriculum-game-next,
+  .nova-general-form button
+){
+  min-height:var(--nova-control-lg);
+  border:1px solid transparent!important;
+  border-radius:var(--nova-control-radius);
+  background:var(--nova-brand-primary)!important;
+  color:#fff!important;
+  font-weight:800;
+  box-shadow:var(--nova-shadow-brand);
+}
+
+:is(
+  .button-primary,
+  .trial-primary,
+  .access-primary,
+  .premium-primary-cta,
+  .topic-primary-btn,
+  .topic-game-start-btn,
+  .curriculum-game-next,
+  .nova-general-form button
+):not(:disabled):hover{
+  background:var(--nova-brand-primary-hover)!important;
+  color:#fff!important;
+  transform:translateY(-1px);
+}
+
+:is(
+  .button-primary,
+  .trial-primary,
+  .access-primary,
+  .premium-primary-cta,
+  .topic-primary-btn,
+  .topic-game-start-btn,
+  .curriculum-game-next,
+  .nova-general-form button
+):not(:disabled):active{
+  background:var(--nova-brand-primary-hover)!important;
+  color:#fff!important;
+  transform:translateY(1px);
+  box-shadow:0 8px 20px rgba(52,38,207,.18)!important;
+}
+
+:is(
+  .button-primary,
+  .trial-primary,
+  .access-primary,
+  .premium-primary-cta,
+  .topic-primary-btn,
+  .topic-game-start-btn,
+  .curriculum-game-next,
+  .nova-general-form button
+):disabled{
+  background:var(--nova-disabled-background)!important;
+  color:var(--nova-disabled-text)!important;
+  border-color:var(--nova-line)!important;
+  opacity:1!important;
+  transform:none!important;
+  box-shadow:none!important;
+  cursor:not-allowed!important;
+}
+
+:where(.button-secondary,.access-secondary){
+  min-height:var(--nova-control-lg);
+  border:1px solid var(--nova-line-strong);
+  border-radius:var(--nova-control-radius);
+  background:var(--nova-surface);
+  color:var(--nova-ink);
+  box-shadow:none;
+}
+
+:is(.button-secondary,.access-secondary):not(:disabled):hover,
+:is(.button-secondary,.access-secondary):not(:disabled):active{
+  border-color:#c9c3ef!important;
+  background:var(--nova-hover-surface)!important;
+  color:var(--nova-ink)!important;
+}
+
+.button-ghost{
+  background:var(--nova-brand-soft)!important;
+  color:var(--nova-brand-primary-hover)!important;
+  border-color:transparent!important;
+}
+.button-ghost:hover,.button-ghost:active{
+  background:#e5e1ff!important;
+  color:var(--nova-brand-primary-hover)!important;
+}
+
+.auth-tab:hover:not(.active):not([aria-selected="true"]){
+  background:#ebe8f4!important;
+  color:var(--nova-ink)!important;
+}
+
+:where(button,[role="button"]):disabled,
+:where(button,[role="button"])[aria-disabled="true"]{
+  cursor:not-allowed!important;
+  transform:none!important;
+  box-shadow:none!important;
+}
+
+/* Campos */
+:where(
+  .trial-start-form input[type="text"],
+  .access-form input,
+  .access-form select,
+  .mp-field input,
+  .mp-field select,
+  .owner-access-form input,
+  textarea
+){
+  min-height:var(--nova-control-lg);
+  border:1px solid var(--nova-line-strong)!important;
+  border-radius:var(--nova-control-radius)!important;
+  background:var(--nova-surface)!important;
+  color:var(--nova-ink)!important;
+  box-shadow:0 1px 0 rgba(23,21,42,.02);
+  transition:border-color var(--nova-motion-fast) ease,box-shadow var(--nova-motion-fast) ease,background var(--nova-motion-fast) ease;
+}
+
+:where(
+  .trial-start-form input[type="text"],
+  .access-form input,
+  .access-form select,
+  .mp-field input,
+  .mp-field select,
+  textarea
+):focus{
+  border-color:var(--nova-brand-primary)!important;
+  box-shadow:0 0 0 4px rgba(91,75,255,.12)!important;
+}
+
+:where(input,textarea)::placeholder{color:#777286;opacity:1}
+
+/* Superficies */
+:where(
+  .step-card,
+  .parent-dashboard,
+  .trial-panel,
+  .question-card,
+  .v24-mission-shell,
+  .v24-side-shell,
+  .grade-panel,
+  .grade-journey-card,
+  .curriculum-subject-section,
+  .v242-parent-summary,
+  .v242-paywall-evidence,
+  .access-plan,
+  .premium-action-column,
+  .premium-plan-column
+){
+  border-color:var(--nova-line)!important;
+}
+
+:where(.trial-panel,.parent-dashboard,.v24-mission-shell,.v24-side-shell,.v242-parent-summary){
+  box-shadow:var(--nova-shadow-md)!important;
+}
+
+:where(.step-card,.question-card,.grade-panel,.grade-journey-card,.curriculum-subject-section){
+  box-shadow:none!important;
+}
+
+/* Chips / etiquetas */
+:where(.trial-badge,.v24-route-chip,.v242-parent-title>span,.account-chip,.premium-step-label){
+  border-radius:var(--nova-radius-pill);
+}
+
+/* Estados semánticos: color + forma + texto */
+:where(.feedback-box.success,.access-status.success,.status-success){
+  background:var(--nova-state-success-soft)!important;
+  color:var(--nova-state-success)!important;
+  border-color:rgba(36,122,77,.22)!important;
+}
+
+:where(.feedback-box.review,.status-warning){
+  background:var(--nova-state-warning-soft)!important;
+  color:var(--nova-state-warning)!important;
+  border-color:rgba(138,90,0,.20)!important;
+}
+
+:where(.access-status.error,.status-error){
+  background:var(--nova-state-error-soft)!important;
+  color:var(--nova-state-error)!important;
+  border-color:rgba(179,58,58,.20)!important;
+}
+
+/* Modales */
+.modal:not([hidden]){
+  backdrop-filter:blur(8px);
+  -webkit-backdrop-filter:blur(8px);
+}
+
+.modal-card[role="dialog"]{
+  border:1px solid var(--nova-line)!important;
+  border-radius:var(--nova-radius-xl)!important;
+  box-shadow:var(--nova-shadow-lg)!important;
+}
+
+body.nova-modal-open{overflow:hidden}
+
+/* Acciones del Home */
+.v24-learning-home .profile-btn{
+  min-height:var(--nova-control-md)!important;
+  border-radius:var(--nova-control-radius)!important;
+}
+
+.v24-learning-home .grade-selector button{
+  min-width:48px;
+  min-height:48px;
+  border-radius:var(--nova-radius-sm)!important;
+  font-weight:800;
+}
+
+.v24-learning-home .curriculum-subject-btn{
+  min-height:96px;
+  border-radius:var(--nova-radius-md)!important;
+}
+
+/* Prueba y retos: nunca cambiar solo el fondo dejando texto heredado */
+.trial-option{
+  border-radius:var(--nova-control-radius)!important;
+  color:var(--nova-ink)!important;
+}
+
+.trial-option:not(:disabled):hover{
+  border-color:#c8c1fa!important;
+  background:#faf9ff!important;
+  color:var(--nova-ink)!important;
+  transform:translateY(-1px);
+}
+
+.trial-option.correct{color:var(--nova-state-success)!important}
+.trial-option.wrong{color:var(--nova-state-error)!important}
+.trial-option.correct::before{content:"✓ ";font-weight:900}
+.trial-option.wrong::before{content:"↺ ";font-weight:900}
+
+/* Interacciones reducidas: una sola personalidad de motion */
+@media (hover:hover){
+  :where(.step-card,.curriculum-subject-btn,.parent-dashboard){
+    transition:transform var(--nova-motion) var(--nova-ease),border-color var(--nova-motion) var(--nova-ease),box-shadow var(--nova-motion) var(--nova-ease);
+  }
+  .step-card:hover{transform:translateY(-2px);border-color:#dcd7f4!important}
+}
+
+/* Mobile: controles táctiles cómodos y superficies menos infladas */
+@media(max-width:640px){
+  :where(.button,.trial-primary,.access-primary,.access-secondary,.demo-next){min-height:52px}
+  :where(.trial-panel,.modal-card[role="dialog"]){border-radius:var(--nova-radius-lg)!important}
+  :where(.v24-mission-shell,.v24-side-shell){border-radius:var(--nova-radius-lg)!important}
+}
