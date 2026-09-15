@@ -15,10 +15,7 @@
 </head>
 <body>
   <header class="trial-header">
-    <a class="trial-brand" href="/" aria-label="Volver a Aprende con NOVA">
-      <span class="trial-brand-mark">N</span>
-      <span>Aprende con <strong>NOVA</strong></span>
-    </a>
+    <a class="trial-brand" href="/" aria-label="Volver a Aprende con NOVA"><span class="trial-brand-mark">N</span><span>Aprende con <strong>NOVA</strong></span></a>
     <span class="trial-badge">3 misiones gratis · sin tarjeta</span>
   </header>
 
@@ -28,12 +25,8 @@
       <p class="trial-kicker">PRIMER ENCUENTRO CON NOVA</p>
       <h1 id="trialWelcomeTitle">Veamos cómo aprende <span>contigo.</span></h1>
       <p class="trial-lead">Son tres misiones cortas. NOVA observará cómo razona y al final te mostrará una primera recomendación.</p>
-
       <form id="trialStartForm" class="trial-start-form">
-        <label>
-          <span>¿Cómo se llama quien va a aprender?</span>
-          <input id="trialChildName" type="text" maxlength="40" autocomplete="off" placeholder="Ej.: Mateo" required />
-        </label>
+        <label><span>¿Cómo se llama quien va a aprender?</span><input id="trialChildName" type="text" maxlength="40" autocomplete="off" placeholder="Ej.: Mateo" required /></label>
         <fieldset>
           <legend>¿En qué grado está?</legend>
           <div class="grade-pills" role="radiogroup" aria-label="Grado escolar">
@@ -50,21 +43,9 @@
     </section>
 
     <section id="trialMission" class="trial-panel mission-panel" hidden aria-labelledby="trialMissionTitle">
-      <div class="mission-header">
-        <div>
-          <small id="trialMissionLabel">MISIÓN 1 DE 3</small>
-          <h1 id="trialMissionTitle">Descubre cómo piensas</h1>
-        </div>
-        <div class="mission-counter"><strong id="trialQuestionCount">1/6</strong><span>retos</span></div>
-      </div>
-
+      <div class="mission-header"><div><small id="trialMissionLabel">MISIÓN 1 DE 3</small><h1 id="trialMissionTitle">Descubre cómo piensas</h1></div><div class="mission-counter"><strong id="trialQuestionCount">1/6</strong><span>retos</span></div></div>
       <div class="trial-progress" aria-label="Progreso de la prueba"><span id="trialProgressBar"></span></div>
-
-      <div class="nova-guide">
-        <span class="nova-guide-avatar">N</span>
-        <p id="trialNovaText">Vamos a mirar una idea a la vez. Puedes equivocarte: eso también me ayuda a saber qué conviene practicar.</p>
-      </div>
-
+      <div class="nova-guide"><span class="nova-guide-avatar">N</span><p id="trialNovaText">Vamos a mirar una idea a la vez. Puedes equivocarte: eso también me ayuda a saber qué conviene practicar.</p></div>
       <article class="question-card">
         <div class="question-meta"><span id="trialSkillLabel">PENSAMIENTO NUMÉRICO</span><b id="trialSubjectBadge">Matemáticas</b></div>
         <h2 id="trialQuestionPrompt">Pregunta</h2>
@@ -81,27 +62,16 @@
       <p class="trial-kicker">PRIMERA LECTURA DE NOVA</p>
       <h1 id="trialResultTitle">Ya tenemos un punto de partida.</h1>
       <p id="trialResultIntro" class="trial-lead"></p>
-
-      <div class="result-score">
-        <div><strong id="trialScore">0%</strong><span>comprensión observada</span></div>
-        <div><strong>3</strong><span>misiones completadas</span></div>
-      </div>
-
-      <div class="result-insights">
-        <article class="insight strength"><small>FORTALEZA OBSERVADA</small><strong id="trialStrength">—</strong><p id="trialStrengthText"></p></article>
-        <article class="insight focus"><small>CONVIENE REFORZAR</small><strong id="trialFocus">—</strong><p id="trialFocusText"></p></article>
-      </div>
-
-      <div class="result-recommendation">
-        <span class="nova-guide-avatar">N</span>
-        <div><small>RECOMENDACIÓN DE NOVA</small><p id="trialRecommendation"></p></div>
-      </div>
-
+      <div class="result-score"><div><strong id="trialScore">0%</strong><span>comprensión observada</span></div><div><strong>3</strong><span>misiones completadas</span></div></div>
+      <div class="result-insights"><article class="insight strength"><small>FORTALEZA OBSERVADA</small><strong id="trialStrength">—</strong><p id="trialStrengthText"></p></article><article class="insight focus"><small>CONVIENE REFORZAR</small><strong id="trialFocus">—</strong><p id="trialFocusText"></p></article></div>
+      <div class="result-recommendation"><span class="nova-guide-avatar">N</span><div><small>RECOMENDACIÓN DE NOVA</small><p id="trialRecommendation"></p></div></div>
       <a id="trialContinueBtn" class="trial-primary trial-link" href="/app?trial=done">Crear su ruta en NOVA →</a>
       <p class="result-note">La prueba termina aquí. Crear la cuenta te permitirá conservar una ruta de aprendizaje y continuar con todas las materias.</p>
     </section>
   </main>
 
+  <script src="/analytics-client.js" defer></script>
   <script src="/trial.js" defer></script>
+  <script src="/trial-v24-2.js" defer></script>
 </body>
 </html>
