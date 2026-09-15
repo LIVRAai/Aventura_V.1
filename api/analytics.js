@@ -22,7 +22,9 @@ const ALLOWED_EVENTS = new Set([
   'skill_state_changed',
   'badge_unlocked',
   'parent_summary_viewed',
-  'weekly_goal_viewed'
+  'weekly_goal_viewed',
+  'achievement_shared',
+  'weekly_summary_shared'
 ]);
 
 function cleanText(value, max = 240) {
