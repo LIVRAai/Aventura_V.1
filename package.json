@@ -5,7 +5,7 @@
   "type": "module",
   "description": "Aprende con NOVA - refuerzo escolar personalizado para primaria, tutor guiado, progreso por habilidades y experiencia familiar",
   "engines": {
-    "node": ">=22"
+    "node": "22.x"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.0.0"
