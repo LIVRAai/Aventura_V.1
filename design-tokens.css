@@ -1,3 +1,5 @@
+@import url('/nova-ui.css');
+
 :root {
   /* Marca NOVA */
   --nova-brand-primary: #5b4bff;
@@ -108,34 +110,13 @@
   color: #fff;
 }
 
-.button-primary:hover {
-  background: var(--nova-brand-primary-hover);
-}
+.button-primary:hover { background: var(--nova-brand-primary-hover); }
 
-.subject.math i {
-  background: var(--nova-subject-math-soft);
-  color: var(--nova-subject-math-strong);
-}
-
-.subject.language i {
-  background: var(--nova-subject-language-soft);
-  color: var(--nova-subject-language-strong);
-}
-
-.subject.science i {
-  background: var(--nova-subject-science-soft);
-  color: var(--nova-subject-science-strong);
-}
-
-.subject.social i {
-  background: var(--nova-subject-social-soft);
-  color: var(--nova-subject-social-strong);
-}
-
-.subject.english i {
-  background: var(--nova-subject-english-soft);
-  color: var(--nova-subject-english-strong);
-}
+.subject.math i { background: var(--nova-subject-math-soft); color: var(--nova-subject-math-strong); }
+.subject.language i { background: var(--nova-subject-language-soft); color: var(--nova-subject-language-strong); }
+.subject.science i { background: var(--nova-subject-science-soft); color: var(--nova-subject-science-strong); }
+.subject.social i { background: var(--nova-subject-social-soft); color: var(--nova-subject-social-strong); }
+.subject.english i { background: var(--nova-subject-english-soft); color: var(--nova-subject-english-strong); }
 
 .dashboard-skill.success > span { background: var(--nova-state-success); }
 .dashboard-skill.progress > span { background: var(--nova-state-warning); }
