@@ -34,7 +34,7 @@
   color:#fff!important;
   box-shadow:var(--nova-shadow-brand)!important;
 }
-.access-brand .eyebrow,.premium-step-label{color:var(--nova-brand-primary)!important}
+.access-brand .eyebrow,.premium-step-label{color:var(--nova-brand-primary-hover)!important}
 .access-brand h1{color:var(--nova-ink)!important}
 .access-brand h1 span{color:var(--nova-brand-primary)!important;text-shadow:none!important}
 .access-lead{color:var(--nova-text-secondary)!important}
@@ -70,7 +70,7 @@
   border:1px solid var(--nova-line)!important;
   color:var(--nova-ink)!important;
 }
-.account-chip small{color:var(--nova-brand-primary)!important}
+.account-chip small{color:var(--nova-brand-primary-hover)!important}
 .account-chip strong,.account-chip em{color:var(--nova-ink)!important}
 .account-chip>span{background:var(--nova-brand-soft)!important;color:var(--nova-brand-primary-hover)!important}
 
@@ -79,7 +79,7 @@
 .premium-plan-intro h2 span{color:var(--nova-brand-primary)!important}
 .premium-plan-intro p{color:var(--nova-text-secondary)!important}
 .premium-account-chip{background:var(--nova-background)!important;border-color:var(--nova-line)!important}
-.premium-account-chip small{color:var(--nova-brand-primary)!important}
+.premium-account-chip small{color:var(--nova-brand-primary-hover)!important}
 
 .premium-plan-card{
   background:linear-gradient(145deg,#fff,var(--nova-background))!important;
@@ -113,7 +113,7 @@
   color:#fff!important;
   box-shadow:var(--nova-shadow-brand)!important;
 }
-.premium-primary-cta:hover:not(:disabled){background:var(--nova-brand-primary-hover)!important}
+.premium-primary-cta:hover:not(:disabled),.premium-primary-cta:active:not(:disabled){background:var(--nova-brand-primary-hover)!important;color:#fff!important}
 
 .premium-payment-panel{color:var(--nova-ink)!important}
 .premium-payment-head{border-color:var(--nova-line)!important}
@@ -122,10 +122,11 @@
 .premium-payment-head p{color:var(--nova-text-secondary)!important}
 .premium-payment-foot{background:var(--nova-background)!important;color:var(--nova-text-secondary)!important}
 .premium-signout,.access-text-btn{color:var(--nova-text-secondary)!important}
+.premium-signout:hover,.access-text-btn:hover{color:var(--nova-brand-primary-hover)!important}
 
 .account-loading-copy h2{color:var(--nova-ink)!important}
 .account-loading-copy p{color:var(--nova-text-secondary)!important}
-.account-loading-copy .premium-step-label{color:var(--nova-brand-primary)!important}
+.account-loading-copy .premium-step-label{color:var(--nova-brand-primary-hover)!important}
 .account-loading-core{
   background:var(--nova-brand-primary)!important;
   color:#fff!important;
@@ -137,8 +138,121 @@
 
 .access-divider{color:var(--nova-text-secondary)!important}
 .access-divider::before,.access-divider::after{background:var(--nova-line)!important}
-.access-owner-btn{color:var(--nova-text-secondary)!important;border-color:var(--nova-line)!important;background:transparent!important}
-.access-note{color:var(--nova-text-secondary)!important}
+.access-owner-btn{
+  opacity:1!important;
+  color:var(--nova-text-secondary)!important;
+  border-color:var(--nova-line)!important;
+  background:transparent!important;
+}
+.access-owner-btn:hover,.access-owner-btn:active{
+  opacity:1!important;
+  color:var(--nova-brand-primary-hover)!important;
+  border-color:#d5cfff!important;
+  background:var(--nova-brand-soft)!important;
+}
+.access-note{opacity:1!important;color:var(--nova-text-secondary)!important}
+
+/* Gestión del plan: el legacy usaba texto pastel pensado para un modal oscuro. */
+.plan-management-card{
+  background:#fff!important;
+  color:var(--nova-ink)!important;
+}
+.plan-management-view{color:var(--nova-ink)!important}
+.plan-status-premium-card,
+.plan-includes-card,
+.plan-cancel-summary{
+  border:1px solid var(--nova-line)!important;
+  background:var(--nova-background)!important;
+  color:var(--nova-ink)!important;
+  box-shadow:none!important;
+}
+.plan-status-premium-top h3,.plan-cancel-view h3{color:var(--nova-ink)!important}
+.plan-status-premium-top p,.plan-cancel-view>p,.plan-management-actions p{color:var(--nova-text-secondary)!important}
+.plan-status-price strong{color:var(--nova-ink)!important}
+.plan-status-price small{color:var(--nova-brand-primary-hover)!important}
+.plan-status-facts{border-color:var(--nova-line)!important}
+.plan-status-facts span,.plan-includes-card>span,.plan-cancel-summary span{color:var(--nova-text-secondary)!important}
+.plan-status-facts strong,.plan-cancel-summary strong{color:var(--nova-ink)!important}
+
+.plan-status-badge{
+  color:var(--nova-text-secondary)!important;
+  background:#fff!important;
+  border-color:var(--nova-line)!important;
+}
+.plan-status-badge.active{
+  color:var(--nova-state-success)!important;
+  background:var(--nova-state-success-soft)!important;
+  border-color:rgba(36,122,77,.24)!important;
+}
+.plan-status-badge.canceled{
+  color:var(--nova-disabled-text)!important;
+  background:var(--nova-disabled-background)!important;
+  border-color:var(--nova-line)!important;
+}
+
+.plan-includes-grid>div{
+  background:#fff!important;
+  border:1px solid var(--nova-line)!important;
+}
+.plan-includes-grid b{
+  background:var(--nova-brand-soft)!important;
+  color:var(--nova-brand-primary-hover)!important;
+}
+.plan-includes-grid strong{color:var(--nova-ink)!important}
+.plan-includes-grid small{color:var(--nova-text-secondary)!important}
+
+.plan-canceled-notice{
+  background:var(--nova-state-success-soft)!important;
+  border-color:rgba(36,122,77,.22)!important;
+  color:var(--nova-state-success)!important;
+}
+.plan-canceled-notice strong{color:var(--nova-state-success)!important}
+.plan-canceled-notice p{color:var(--nova-ink)!important}
+
+.plan-cancel-link{
+  opacity:1!important;
+  color:var(--nova-state-error)!important;
+  border-radius:var(--nova-control-radius)!important;
+}
+.plan-cancel-link:hover,.plan-cancel-link:active{
+  color:var(--nova-state-error)!important;
+  background:var(--nova-state-error-soft)!important;
+}
+.plan-cancel-icon{
+  background:var(--nova-state-warning-soft)!important;
+  border-color:rgba(138,90,0,.18)!important;
+  color:var(--nova-state-warning)!important;
+}
+
+.plan-keep-btn{
+  border:1px solid transparent!important;
+  background:var(--nova-brand-primary)!important;
+  color:#fff!important;
+  box-shadow:var(--nova-shadow-brand)!important;
+}
+.plan-keep-btn:hover,.plan-keep-btn:active{
+  background:var(--nova-brand-primary-hover)!important;
+  color:#fff!important;
+}
+.plan-confirm-cancel-btn{
+  border:1px solid rgba(179,58,58,.24)!important;
+  background:var(--nova-state-error-soft)!important;
+  color:var(--nova-state-error)!important;
+  box-shadow:none!important;
+}
+.plan-confirm-cancel-btn:hover,.plan-confirm-cancel-btn:active{
+  border-color:rgba(179,58,58,.40)!important;
+  background:#fbe4e4!important;
+  color:var(--nova-state-error)!important;
+}
+.plan-keep-btn:disabled,.plan-confirm-cancel-btn:disabled{
+  opacity:1!important;
+  background:var(--nova-disabled-background)!important;
+  color:var(--nova-disabled-text)!important;
+  border-color:var(--nova-line)!important;
+  box-shadow:none!important;
+}
+.plan-cancel-status{color:var(--nova-text-secondary)!important}
 
 @media(max-width:720px){
   .access-shell{border-radius:var(--nova-radius-lg)!important}
