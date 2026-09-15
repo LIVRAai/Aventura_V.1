@@ -1,0 +1,30 @@
+/* NOVA V24.4 · Shell de navegación para experiencias heredadas */
+body.content-focus{
+  background:var(--nova-background)!important;
+  color:var(--nova-ink)!important;
+}
+body.content-focus .stars{opacity:.025!important}
+body.content-focus footer{color:var(--nova-text-secondary)!important}
+
+/* La revisión adulta no debe reintroducir el chrome oscuro. */
+body.content-focus.review-active .review-mode-bar{
+  border-color:var(--nova-line)!important;
+  background:rgba(255,255,255,.96)!important;
+  color:var(--nova-ink)!important;
+  box-shadow:var(--nova-shadow-md)!important;
+}
+body.content-focus.review-active .review-mode-info small{color:var(--nova-text-secondary)!important}
+body.content-focus.review-active .review-mode-actions button{
+  border-color:var(--nova-line)!important;
+  background:#fff!important;
+  color:var(--nova-ink)!important;
+}
+body.content-focus.review-active .review-mode-actions button:hover{
+  background:var(--nova-hover-surface)!important;
+  color:var(--nova-ink)!important;
+}
+body.content-focus.review-active .review-mode-actions .review-exit{
+  border-color:rgba(179,58,58,.20)!important;
+  background:var(--nova-state-error-soft)!important;
+  color:var(--nova-state-error)!important;
+}
