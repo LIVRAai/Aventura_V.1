@@ -80,4 +80,5 @@
   });
 
   document.documentElement.dataset.novaUi = '24.3';
+  document.documentElement.dataset.novaVersion = '24.3';
 })();
