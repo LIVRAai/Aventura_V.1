@@ -1,16 +1,256 @@
 (() => {
-  const legacy = document.createElement('script');
-  legacy.src = '/app-legacy.js';
-  legacy.async = false;
-  legacy.onload = () => window.setTimeout(initV24, 0);
-  legacy.onerror = () => console.error('No fue posible cargar la experiencia base de NOVA.');
-  document.body.appendChild(legacy);
+  const CURRICULUM_GRADE_PREFIX = 'novaCurriculumGradeV1:';
+  const CURRICULUM_ACTIVITY_PREFIX = 'novaCurriculumActivityV1:';
+  const CURRICULUM_GAME_PREFIX = 'novaCurriculumGameProgressV1:';
+  const CURRICULUM_META_PREFIX = 'novaCurriculumLocalUpdatedAtV1:';
+  const TRIAL_KEY = 'novaTrialV24';
+  let suppressProgressTracking = false;
+  let cloudConfig = null;
+  let cachedCloudContext = null;
+
+  installProgressTracker();
+  prepareCurriculumCloud()
+    .catch((error) => console.warn('NOVA curriculum hydrate skipped:', error?.message || error))
+    .finally(loadLegacyApp);
+
+  function loadLegacyApp() {
+    const legacy = document.createElement('script');
+    legacy.src = '/app-legacy.js';
+    legacy.async = false;
+    legacy.onload = () => window.setTimeout(initV24, 0);
+    legacy.onerror = () => console.error('No fue posible cargar la experiencia base de NOVA.');
+    document.body.appendChild(legacy);
+  }
+
+  function installProgressTracker() {
+    const nativeSetItem = Storage.prototype.setItem;
+    if (Storage.prototype.__novaV24Tracked) return;
+
+    Object.defineProperty(Storage.prototype, '__novaV24Tracked', { value: true, configurable: true });
+    Storage.prototype.setItem = function(key, value) {
+      nativeSetItem.call(this, key, value);
+      if (suppressProgressTracking || this !== window.localStorage || typeof key !== 'string') return;
+      if (![CURRICULUM_GRADE_PREFIX, CURRICULUM_ACTIVITY_PREFIX, CURRICULUM_GAME_PREFIX].some(prefix => key.startsWith(prefix))) return;
+      const childId = key.split(':').pop();
+      if (!childId) return;
+      nativeSetItem.call(this, `${CURRICULUM_META_PREFIX}${childId}`, new Date().toISOString());
+    };
+  }
+
+  function readJson(key) {
+    try {
+      const value = JSON.parse(localStorage.getItem(key) || 'null');
+      return value && typeof value === 'object' ? value : null;
+    } catch { return null; }
+  }
+
+  function normalizedName(value) {
+    return String(value || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim().toLowerCase();
+  }
+
+  function authSessionFromStorage(projectRef) {
+    const stored = readJson(`sb-${projectRef}-auth-token`);
+    if (stored?.access_token) return stored;
+    if (stored?.currentSession?.access_token) return stored.currentSession;
+    return null;
+  }
+
+  function jwtSub(token) {
+    try {
+      const part = String(token || '').split('.')[1];
+      if (!part) return '';
+      const normalized = part.replace(/-/g, '+').replace(/_/g, '/').padEnd(Math.ceil(part.length / 4) * 4, '=');
+      const binary = atob(normalized);
+      const json = decodeURIComponent(Array.from(binary).map(ch => `%${ch.charCodeAt(0).toString(16).padStart(2, '0')}`).join(''));
+      return String(JSON.parse(json)?.sub || '');
+    } catch { return ''; }
+  }
+
+  async function getCloudContext() {
+    if (!window.supabase?.createClient) return null;
+    if (!cloudConfig) {
+      const response = await fetch('/api/public-config', { cache: 'no-store' });
+      if (!response.ok) return null;
+      cloudConfig = await response.json();
+    }
+
+    const url = String(cloudConfig?.supabase?.url || '').trim();
+    const key = String(cloudConfig?.supabase?.publishableKey || '').trim();
+    if (!url || !key) return null;
+    const projectRef = new URL(url).hostname.split('.')[0];
+    const session = authSessionFromStorage(projectRef);
+    if (!session?.access_token) return null;
+    const userId = jwtSub(session.access_token);
+    if (!userId) return null;
+
+    if (cachedCloudContext?.token === session.access_token) return cachedCloudContext;
+    const client = window.supabase.createClient(url, key, {
+      auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false },
+      global: { headers: { Authorization: `Bearer ${session.access_token}` } }
+    });
+    cachedCloudContext = { client, userId, token: session.access_token };
+    return cachedCloudContext;
+  }
+
+  async function activeCloudChild(ctx) {
+    const { data, error } = await ctx.client
+      .from('children')
+      .select('id,name,parent_id,created_at')
+      .eq('parent_id', ctx.userId)
+      .eq('is_active', true)
+      .order('created_at', { ascending: true })
+      .limit(1);
+    if (error) throw error;
+    return Array.isArray(data) ? data[0] || null : null;
+  }
+
+  function captureCurriculumLocal(userId, child) {
+    const gradeKey = `${CURRICULUM_GRADE_PREFIX}${userId}:${child.id}`;
+    const activityKey = `${CURRICULUM_ACTIVITY_PREFIX}${userId}:${child.id}`;
+    const gameKey = `${CURRICULUM_GAME_PREFIX}${child.id}`;
+    const grade = Number(localStorage.getItem(gradeKey) || 0);
+    const activity = readJson(activityKey) || { started: {} };
+    const gameProgress = readJson(gameKey) || {};
+    const trial = readJson(TRIAL_KEY);
+    const diagnostic = trial?.completed && normalizedName(trial.child) === normalizedName(child.name) ? trial : null;
+    const metaStamp = localStorage.getItem(`${CURRICULUM_META_PREFIX}${child.id}`) || '';
+
+    let latest = Date.parse(metaStamp) || 0;
+    Object.values(gameProgress).forEach(item => {
+      latest = Math.max(latest, Date.parse(item?.lastPlayedAt || '') || 0);
+    });
+    latest = Math.max(latest, Date.parse(diagnostic?.completedAt || '') || 0);
+
+    const hasContent = (grade >= 1 && grade <= 5)
+      || Object.keys(activity?.started || {}).length > 0
+      || Object.keys(gameProgress).length > 0
+      || Boolean(diagnostic);
+
+    return {
+      gradeKey, activityKey, gameKey,
+      hasContent,
+      updatedAtMs: latest,
+      state: {
+        version: 1,
+        grade: grade >= 1 && grade <= 5 ? grade : 0,
+        activity,
+        gameProgress,
+        diagnostic
+      }
+    };
+  }
+
+  function applyRemoteCurriculum(userId, child, remoteState, remoteUpdatedAt) {
+    if (!remoteState || typeof remoteState !== 'object') return;
+    const gradeKey = `${CURRICULUM_GRADE_PREFIX}${userId}:${child.id}`;
+    const activityKey = `${CURRICULUM_ACTIVITY_PREFIX}${userId}:${child.id}`;
+    const gameKey = `${CURRICULUM_GAME_PREFIX}${child.id}`;
+    suppressProgressTracking = true;
+    try {
+      if (Number(remoteState.grade) >= 1 && Number(remoteState.grade) <= 5) {
+        localStorage.setItem(gradeKey, String(Number(remoteState.grade)));
+      }
+      if (remoteState.activity && typeof remoteState.activity === 'object') {
+        localStorage.setItem(activityKey, JSON.stringify(remoteState.activity));
+      }
+      if (remoteState.gameProgress && typeof remoteState.gameProgress === 'object') {
+        localStorage.setItem(gameKey, JSON.stringify(remoteState.gameProgress));
+      }
+      if (remoteState.diagnostic && typeof remoteState.diagnostic === 'object') {
+        localStorage.setItem(TRIAL_KEY, JSON.stringify(remoteState.diagnostic));
+      }
+      if (remoteUpdatedAt) localStorage.setItem(`${CURRICULUM_META_PREFIX}${child.id}`, remoteUpdatedAt);
+    } finally {
+      suppressProgressTracking = false;
+    }
+  }
+
+  async function prepareCurriculumCloud() {
+    const ctx = await getCloudContext();
+    if (!ctx) return;
+    const child = await activeCloudChild(ctx);
+    if (!child) return;
+
+    const local = captureCurriculumLocal(ctx.userId, child);
+    const { data: remote, error } = await ctx.client
+      .from('child_progress')
+      .select('child_id,curriculum_state,updated_at')
+      .eq('child_id', child.id)
+      .maybeSingle();
+    if (error) throw error;
+
+    const remoteState = remote?.curriculum_state && typeof remote.curriculum_state === 'object' ? remote.curriculum_state : {};
+    const remoteHas = Object.keys(remoteState).length > 0;
+    const remoteUpdatedMs = Date.parse(remote?.updated_at || '') || 0;
+
+    if (!remote) {
+      if (!local.hasContent) return;
+      const { error: insertError } = await ctx.client.from('child_progress').insert({
+        child_id: child.id,
+        curriculum_state: { ...local.state, clientUpdatedAt: new Date().toISOString() },
+        last_device: String(navigator.userAgent || '').slice(0, 240)
+      });
+      if (insertError) throw insertError;
+      localStorage.setItem(`${CURRICULUM_META_PREFIX}${child.id}`, new Date().toISOString());
+      return;
+    }
+
+    if (!remoteHas && local.hasContent) {
+      await uploadCurriculum(ctx, child, local.state);
+      return;
+    }
+
+    if (remoteHas && local.hasContent && local.updatedAtMs > remoteUpdatedMs) {
+      await uploadCurriculum(ctx, child, local.state);
+      return;
+    }
+
+    if (remoteHas) {
+      const merged = { ...remoteState };
+      if (!merged.diagnostic && local.state.diagnostic) merged.diagnostic = local.state.diagnostic;
+      applyRemoteCurriculum(ctx.userId, child, merged, remote?.updated_at || new Date().toISOString());
+      if (!remoteState.diagnostic && local.state.diagnostic) await uploadCurriculum(ctx, child, merged);
+    }
+  }
+
+  async function uploadCurriculum(ctx, child, state) {
+    const payload = { ...state, clientUpdatedAt: new Date().toISOString() };
+    const { error } = await ctx.client
+      .from('child_progress')
+      .upsert({
+        child_id: child.id,
+        curriculum_state: payload,
+        last_device: String(navigator.userAgent || '').slice(0, 240)
+      }, { onConflict: 'child_id' });
+    if (error) throw error;
+    localStorage.setItem(`${CURRICULUM_META_PREFIX}${child.id}`, payload.clientUpdatedAt);
+  }
+
+  async function syncCurriculumIfChanged() {
+    try {
+      cachedCloudContext = null;
+      const ctx = await getCloudContext();
+      if (!ctx) return;
+      const child = await activeCloudChild(ctx);
+      if (!child) return;
+      const local = captureCurriculumLocal(ctx.userId, child);
+      if (!local.hasContent || !local.updatedAtMs) return;
+      const { data: remote, error } = await ctx.client
+        .from('child_progress')
+        .select('updated_at')
+        .eq('child_id', child.id)
+        .maybeSingle();
+      if (error) throw error;
+      const remoteUpdatedMs = Date.parse(remote?.updated_at || '') || 0;
+      if (local.updatedAtMs > remoteUpdatedMs) await uploadCurriculum(ctx, child, local.state);
+    } catch (error) {
+      console.warn('NOVA curriculum sync skipped:', error?.message || error);
+    }
+  }
 
   function readTrial(){
-    try {
-      const value = JSON.parse(localStorage.getItem('novaTrialV24') || 'null');
-      return value && value.completed ? value : null;
-    } catch { return null; }
+    const value = readJson(TRIAL_KEY);
+    return value?.completed ? value : null;
   }
 
   function setupTrialHandoff(){
@@ -26,11 +266,7 @@
     const shell = document.querySelector('#accessGate .access-shell');
     if (!shell || shell.querySelector('.v24-trial-result')) return;
 
-    const strongNames = {
-      numbers:'números y cantidades',
-      operations:'operaciones',
-      problems:'problemas escritos'
-    };
+    const strongNames = { numbers:'números y cantidades', operations:'operaciones', problems:'problemas escritos' };
     const focus = strongNames[trial.focus] || 'su ruta escolar';
     const banner = document.createElement('section');
     banner.className = 'v24-trial-result';
@@ -126,5 +362,7 @@
     setupTrialHandoff();
     setupTodayHome();
     reinforcePersonalization();
+    window.setInterval(syncCurriculumIfChanged, 15000);
+    document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden') syncCurriculumIfChanged(); });
   }
 })();
