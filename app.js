@@ -9,7 +9,14 @@
 
   load('/analytics-client.js', () => {
     load('/app-v24.js', () => {
-      load('/app-v24-2.js');
+      let attempts = 0;
+      const timer = window.setInterval(() => {
+        attempts += 1;
+        if (document.documentElement.dataset.novaVersion === '24.1' || attempts > 100) {
+          window.clearInterval(timer);
+          load('/app-v24-2.js');
+        }
+      }, 100);
     });
   });
 })();
