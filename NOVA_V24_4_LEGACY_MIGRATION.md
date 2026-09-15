@@ -30,7 +30,11 @@ Se migran:
 - recompensa;
 - final de recorrido;
 - mapa y bestiario;
-- tutor contextual.
+- tutor contextual;
+- consola matemática;
+- problemas narrativos;
+- reto final;
+- feedback de NOVA y siguiente misión.
 
 La aventura conserva animales, historia y personalidad, pero ya no depende del fondo azul oscuro para ser legible.
 
@@ -112,7 +116,8 @@ Capas nuevas:
 
 - `nova-legacy-learning-v24-4.css`: migración visual de Atlas, Academia y Cuaderno;
 - `nova-legacy-states-v24-4.css`: estados semánticos, disabled, foco y tutor contextual;
-- `nova-legacy-shell-v24-4.css`: fondo y chrome global de vistas históricas.
+- `nova-legacy-shell-v24-4.css`: fondo y chrome global de vistas históricas;
+- `nova-legacy-detail-v24-4.css`: consola, boss, feedback NOVA y microestados que aún asumían fondo oscuro.
 
 No se elimina `styles-legacy.css`; se mantiene como rollback y fuente de estructura histórica.
 
@@ -126,7 +131,7 @@ npm run audit:ui
 ```
 
 `audit:contrast` valida combinaciones críticas del Design System.  
-`audit:ui` confirma que las capas V24.4, estados obligatorios, foco, disabled, reduced-motion y shell están presentes.
+`audit:ui` confirma que las capas V24.4, estados obligatorios, foco, disabled, reduced-motion, shell y subcomponentes históricos están presentes.
 
 ## Criterio de certificación V24.4
 
@@ -139,4 +144,5 @@ El pack se considera listo cuando:
 5. Cuaderno conserva la secuencia pedagógica y los estados de procedimiento.
 6. Tutor contextual mantiene la misma identidad de NOVA.
 7. Desktop y mobile no presentan texto blanco sobre superficies claras ni opacidades que reduzcan legibilidad.
-8. Build y rutas permanecen estables.
+8. Consola, reto final, feedback NOVA y microprocedimiento no reintroducen superficies oscuras aisladas.
+9. Build y rutas permanecen estables.
