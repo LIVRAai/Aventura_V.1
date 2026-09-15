@@ -104,6 +104,43 @@ Se fija explícitamente el color de texto en cada estado para impedir que una re
 | Hover / active | `#3426CF` | blanco | 9.04:1 |
 | Disabled | `#EEECF4` | `#5F5A70` | 5.64:1 |
 
+### 9. Texto secundario dentro de botones
+
+El CTA de pago tenía su línea secundaria con `opacity: .72`. Sobre el morado principal, el contraste efectivo se reducía aproximadamente de 5.39:1 a 3.57:1.
+
+Corrección:
+- el texto interno del CTA mantiene `opacity: 1`;
+- la jerarquía se expresa con tamaño y peso, no reduciendo contraste.
+
+### 10. Etiquetas del tutor
+
+Las etiquetas pequeñas de los mensajes heredaban `opacity: .72`. Sobre fondos `brand-soft` y `math-soft` podían caer alrededor de 4.3–4.4:1.
+
+Corrección:
+- en la superficie clara de Pregúntale a NOVA se fuerza opacidad completa;
+- las superficies oscuras históricas conservan su tratamiento hasta que se migren como módulo.
+
+### 11. Panel familiar
+
+Los estados `mastered`, `progress`, `reinforce` y `not-started` utilizaban texto pastel pensado para una superficie oscura. Sobre blanco resultaban insuficientes.
+
+Corrección:
+- dominado → success / success-soft;
+- en progreso → warning / warning-soft;
+- reforzar → info / info-soft;
+- no iniciado → disabled-text / disabled-background.
+
+### 12. Landing y microtexto
+
+Se detectaron etiquetas de 9–11 px con grises entre ~2.6 y 3.5:1 sobre blanco. También el CTA final usaba un gradiente cuyo extremo más claro dejaba incluso el blanco cerca del límite.
+
+Corrección:
+- microtexto funcional pasa a `--nova-text-secondary`;
+- badge semanal usa warning semántico;
+- CTA final usa gradiente `brand-primary-hover → brand-primary`;
+- textos dentro del CTA final son blancos;
+- checks de confianza usan success semántico, no el verde vivo de Ciencias.
+
 ## Regla de implementación
 
 Todo control nuevo debe definir como una unidad:
@@ -118,6 +155,8 @@ Todo control nuevo debe definir como una unidad:
 8. selected/semantic state, cuando exista.
 
 No se acepta un hover que cambie únicamente `background` cuando el color del texto provenga de otra capa CSS.
+
+Tampoco se acepta reducir la opacidad del texto de un control como mecanismo principal de jerarquía.
 
 ## Auditoría automatizada
 
