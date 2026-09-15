@@ -1,4 +1,16 @@
 (() => {
+  const heroPrimary = document.querySelector('.hero-actions .button-primary');
+  if (heroPrimary) {
+    heroPrimary.href = '/prueba';
+    heroPrimary.textContent = 'Probar NOVA gratis';
+  }
+
+  const bottomPrimary = document.querySelector('.cta-actions .button-light');
+  if (bottomPrimary) {
+    bottomPrimary.href = '/prueba';
+    bottomPrimary.textContent = 'Probar 3 misiones gratis';
+  }
+
   const phone = document.querySelector('.demo-phone');
   const stepLabel = document.querySelector('#demoStepLabel');
   const kicker = document.querySelector('#demoKicker');
