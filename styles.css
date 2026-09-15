@@ -8,8 +8,10 @@
 @import url('/nova-legacy-states-v24-4.css');
 @import url('/nova-legacy-shell-v24-4.css');
 @import url('/nova-legacy-detail-v24-4.css');
+@import url('/styles-v25.css');
+@import url('/styles-v25-growth.css');
 
-/* V24.4 · Todas las capas de aprendizaje histórico se cargan después del sistema V24.3.1. */
+/* V25 · Las capas adaptativas se montan después del sistema visual certificado V24.4. */
 .nova-general-card .tutor-message span{opacity:1!important}
 .curriculum-grade-inline .grade-selector button span,
 .v24-learning-home .grade-selector button span{opacity:1!important}

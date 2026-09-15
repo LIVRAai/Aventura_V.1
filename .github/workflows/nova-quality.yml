@@ -1,0 +1,39 @@
+name: NOVA Quality Gate
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches:
+      - feature/nova-v25-evolucion-integral
+
+permissions:
+  contents: read
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node 24
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+
+      - name: Syntax check
+        run: |
+          node --check app-v25.js
+          node --check app-v25-growth.js
+          node --check app-v25-cloud.js
+          node --check api/analytics.js
+
+      - name: Contrast audit
+        run: npm run audit:contrast
+
+      - name: Legacy UI audit
+        run: npm run audit:ui
+
+      - name: V25 integral audit
+        run: npm run audit:v25
