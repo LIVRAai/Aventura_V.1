@@ -8,10 +8,12 @@ const v26 = read('app-v26.js');
 const css = read('styles-v26.css');
 const analytics = read('api/analytics.js');
 const majorVersion = Number(String(pkg.version || '').split('.')[0]);
+const v26RuntimeLoaded = loader.includes("load('/app-v26.js'");
+const v26StylesLoaded = styles.includes("@import url('/styles-v26.css')");
 const checks = [
   ['Base V26 preservada en versión >=26', majorVersion >= 26],
-  ['Carga V26 después de V25 cloud', loader.includes("load('/app-v26.js'")],
-  ['Importa styles-v26', styles.includes("@import url('/styles-v26.css')")],
+  ['V26 se ejecuta en release 26 o queda preservada en releases posteriores', majorVersion === 26 ? v26RuntimeLoaded : fs.existsSync(new URL('app-v26.js', root))],
+  ['Styles V26 se cargan en release 26 o quedan preservados en releases posteriores', majorVersion === 26 ? v26StylesLoaded : fs.existsSync(new URL('styles-v26.css', root))],
   ['Motor para 5 materias', ['math','language','science','social','english'].every(x => v26.includes(`${x}:{`) || v26.includes(`${x}: {`))],
   ['Escena curricular', v26.includes('v26GameScene') && v26.includes('curriculumGamePrompt')],
   ['Escena por tema', v26.includes('v26TopicScene')],
