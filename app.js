@@ -18,7 +18,9 @@
             load('/nova-ui.js', () => {
               load('/app-v25.js', () => {
                 load('/app-v25-growth.js', () => {
-                  load('/app-v25-cloud.js', () => load('/app-v26.js'));
+                  load('/app-v25-cloud.js', () => {
+                    load('/app-v26.js', () => load('/app-v27.js'));
+                  });
                 });
               });
             });

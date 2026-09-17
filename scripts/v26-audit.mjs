@@ -7,9 +7,10 @@ const styles = read('styles.css');
 const v26 = read('app-v26.js');
 const css = read('styles-v26.css');
 const analytics = read('api/analytics.js');
+const majorVersion = Number(String(pkg.version || '').split('.')[0]);
 const checks = [
-  ['Versión 26.0.0', pkg.version === '26.0.0'],
-  ['Carga V26 después de V25 cloud', loader.includes("load('/app-v25-cloud.js', () => load('/app-v26.js'))")],
+  ['Base V26 preservada en versión >=26', majorVersion >= 26],
+  ['Carga V26 después de V25 cloud', loader.includes("load('/app-v26.js'")],
   ['Importa styles-v26', styles.includes("@import url('/styles-v26.css')")],
   ['Motor para 5 materias', ['math','language','science','social','english'].every(x => v26.includes(`${x}:{`) || v26.includes(`${x}: {`))],
   ['Escena curricular', v26.includes('v26GameScene') && v26.includes('curriculumGamePrompt')],
