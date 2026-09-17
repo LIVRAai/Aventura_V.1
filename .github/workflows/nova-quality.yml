@@ -7,6 +7,7 @@ on:
     branches:
       - feature/nova-v25-evolucion-integral
       - feature/nova-v26-visual-narrative
+      - feature/nova-v27-visual-first
 
 permissions:
   contents: read
@@ -29,6 +30,9 @@ jobs:
           node --check app-v25-growth.js
           node --check app-v25-cloud.js
           node --check app-v26.js
+          node --check app-v27.js
+          node --check app-v27-intent.js
+          node --check app-v27-coherence-guardian.js
           node --check api/analytics.js
 
       - name: Contrast audit
@@ -42,3 +46,6 @@ jobs:
 
       - name: V26 visual narrative audit
         run: npm run audit:v26
+
+      - name: V27 visual-first audit
+        run: npm run audit:v27
