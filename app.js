@@ -26,7 +26,8 @@
     '/app-v25-growth.js',
     '/app-v25-cloud.js',
     '/app-v27.js',
-    '/app-v27-intent.js'
+    '/app-v27-intent.js',
+    '/app-v27-coherence-guardian.js'
   ].forEach(preload);
 
   // Analytics no debe bloquear el arranque de la experiencia infantil.
@@ -40,7 +41,9 @@
           load('/app-v25.js', () => {
             load('/app-v25-growth.js', () => {
               load('/app-v25-cloud.js', () => {
-                load('/app-v27.js', () => load('/app-v27-intent.js'));
+                load('/app-v27.js', () => {
+                  load('/app-v27-intent.js', () => load('/app-v27-coherence-guardian.js'));
+                });
               });
             });
           });
