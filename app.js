@@ -25,7 +25,8 @@
     '/app-v25.js',
     '/app-v25-growth.js',
     '/app-v25-cloud.js',
-    '/app-v27.js'
+    '/app-v27.js',
+    '/app-v27-intent.js'
   ].forEach(preload);
 
   // Analytics no debe bloquear el arranque de la experiencia infantil.
@@ -38,7 +39,9 @@
         load('/nova-ui.js', () => {
           load('/app-v25.js', () => {
             load('/app-v25-growth.js', () => {
-              load('/app-v25-cloud.js', () => load('/app-v27.js'));
+              load('/app-v25-cloud.js', () => {
+                load('/app-v27.js', () => load('/app-v27-intent.js'));
+              });
             });
           });
         });
