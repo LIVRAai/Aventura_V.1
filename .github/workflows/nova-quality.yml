@@ -7,6 +7,7 @@ on:
     branches:
       - feature/nova-v25-evolucion-integral
       - feature/nova-v26-visual-narrative
+      - feature/nova-v27-immersive-learning
 
 permissions:
   contents: read
@@ -29,6 +30,13 @@ jobs:
           node --check app-v25-growth.js
           node --check app-v25-cloud.js
           node --check app-v26.js
+          node --check app-v27-core.js
+          node --check app-v27-math.js
+          node --check app-v27-language.js
+          node --check app-v27-science.js
+          node --check app-v27-social.js
+          node --check app-v27-english.js
+          node --check app-v27-boot.js
           node --check api/analytics.js
 
       - name: Contrast audit
@@ -42,3 +50,6 @@ jobs:
 
       - name: V26 visual narrative audit
         run: npm run audit:v26
+
+      - name: V27 immersive learning audit
+        run: npm run audit:v27

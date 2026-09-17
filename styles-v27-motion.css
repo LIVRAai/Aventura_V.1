@@ -1,0 +1,39 @@
+/* Motion */
+@keyframes v27Reveal{from{opacity:0;transform:scale(.96)}to{opacity:1;transform:scale(1)}}
+@keyframes v27Spark{0%{opacity:1;transform:translate(0,0) scale(1)}100%{opacity:0;transform:translate(var(--dx),var(--dy)) scale(.2)}}
+@keyframes v27Float{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
+@keyframes v27Spin{to{transform:rotate(360deg)}}
+@keyframes v27Bob{0%,100%{transform:translateY(0) rotate(-5deg)}50%{transform:translateY(-8px) rotate(5deg)}}
+@keyframes v27Cloud{0%{transform:translateX(-15px)}50%{transform:translateX(18px)}100%{transform:translateX(-15px)}}
+@keyframes v27Rain{to{background-position:0 32px}}
+@keyframes v27Tree{0%,100%{transform:rotate(-1deg)}50%{transform:rotate(2deg)}}
+@keyframes v27Target{0%,100%{box-shadow:0 0 0 5px rgba(91,75,255,.05)}50%{box-shadow:0 0 0 13px rgba(91,75,255,.13)}}
+@keyframes v27Bounce{0%,100%{transform:translateY(0)}45%{transform:translateY(-13px) scale(1.06)}}
+@keyframes v27Pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
+@keyframes v27Lantern{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-9px) rotate(2deg)}}
+@keyframes v27Flash{0%{transform:scale(.7);opacity:.3}70%{transform:scale(1.25)}100%{transform:scale(1)}}
+@keyframes v27Shake{0%,100%{transform:translateX(0)}30%{transform:translateX(-7px)}65%{transform:translateX(7px)}}
+@keyframes v27Grow{from{transform:translateY(15px) scale(.2);opacity:0}to{transform:none;opacity:1}}
+@keyframes v27Bar{from{transform:scaleY(0)}to{transform:scaleY(1)}}
+@keyframes v27Run{0%,100%{transform:translateX(-60px)}50%{transform:translateX(80px)}}
+@keyframes v27Motion{to{background-position:60px 0}}
+@keyframes v27Talk{0%,100%{transform:scale(1)}50%{transform:scale(1.15)}}
+@keyframes v27Drop{0%,100%{transform:translateY(-8px) rotate(22deg)}50%{transform:translateY(28px) rotate(22deg);opacity:.35}}
+@keyframes v27Wave{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-8px) rotate(3deg)}}
+@keyframes v27Steam{0%{transform:translateY(-50px) scale(.7);opacity:.25}100%{transform:translateY(-145px) scale(1.2);opacity:0}}
+@keyframes v27Wind{to{transform:translateX(20px)}}
+@keyframes v27Ball{0%,100%{transform:translateY(0)}50%{transform:translateY(-45px)}}
+
+@media (max-width:760px){
+  .v27-scene{border-radius:22px;margin:8px 0 14px}.v27-world{min-height:310px}.v27-topbar{height:50px;padding:0 12px}.v27-topbar strong{max-width:68%;font-size:12px}.v27-hud{padding:11px 12px}.v27-hud strong{font-size:12px}
+  .v27-home-portal{grid-template-columns:120px 1fr;padding:13px 14px;border-radius:22px}.v27-portal-world{transform:scale(.78);transform-origin:left center}
+  .v27-place-grid{left:4%;right:4%;gap:6px}.v27-place-grid button{height:128px}.v27-cargo{right:3%;gap:4px}.v27-cargo button{font-size:9px;padding:6px}
+  .v27-story-cards button{width:88px;height:135px}.v27-picnic .friend{transform:scale(.8)}.v27-picnic .f0{left:10%}.v27-picnic .f1{left:34%}.v27-picnic .f2{left:58%}.v27-picnic .f3{left:78%}
+  .v27-dialog .speaker.a{left:9%}.v27-dialog .speaker.b{right:9%}.v27-evidence-cards{right:4%;width:42%}.v27-claim{left:4%;width:45%}
+  .v27-town>div{width:68px;height:78px;font-size:30px}.v27-town .house{left:3%}.v27-town .school{left:27%}.v27-town .clinic{right:27%}.v27-town .park{right:3%}.v27-town-actions button{font-size:9px;padding:7px 9px}
+  .v27-english-room{inset:18px 14px 28px}.v27-role-row button,.v27-dialog-actions button,.v27-choice-row button{font-size:10px;padding:8px 10px}
+}
+
+@media (prefers-reduced-motion:reduce){
+  .nova-v27 *, .nova-v27 *::before, .nova-v27 *::after{animation-duration:.001ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.001ms!important}
+}

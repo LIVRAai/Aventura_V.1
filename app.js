@@ -18,7 +18,21 @@
             load('/nova-ui.js', () => {
               load('/app-v25.js', () => {
                 load('/app-v25-growth.js', () => {
-                  load('/app-v25-cloud.js', () => load('/app-v26.js'));
+                  load('/app-v25-cloud.js', () => {
+                    load('/app-v26.js', () => {
+                      load('/app-v27-core.js', () => {
+                        load('/app-v27-math.js', () => {
+                          load('/app-v27-language.js', () => {
+                            load('/app-v27-science.js', () => {
+                              load('/app-v27-social.js', () => {
+                                load('/app-v27-english.js', () => load('/app-v27-boot.js'));
+                              });
+                            });
+                          });
+                        });
+                      });
+                    });
+                  });
                 });
               });
             });

@@ -26,7 +26,10 @@ const ALLOWED_EVENTS = new Set([
   'achievement_shared',
   'weekly_summary_shared',
   'visual_narrative_enabled',
-  'narrative_scene_viewed'
+  'narrative_scene_viewed',
+  'immersive_learning_enabled',
+  'immersive_scene_viewed',
+  'immersive_interaction'
 ]);
 
 function cleanText(value, max = 240) {
